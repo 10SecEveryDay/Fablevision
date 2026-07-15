@@ -75,6 +75,14 @@
   .mark .m-pupil{fill:var(--accent)}
   .brand .mark{width:20px; height:22px}
   .mod h3 .mark, .fv-hero h1 .mark{width:30px; height:33px; flex:none}
+  /* The FablePortal mark: a blocky nether-portal frame — every new tab is a portal. */
+  .pmark{display:block; overflow:visible}
+  .pmark .p-shadow{fill:var(--extrude)}
+  .pmark .p-body{fill:var(--panel); stroke:var(--accent); stroke-width:3; stroke-linejoin:round}
+  .pmark .p-glow{fill:var(--accent); opacity:.2}
+  .pmark .p-swirl{fill:none; stroke:var(--accent); stroke-width:2.5; stroke-linecap:round; opacity:.8}
+  .mod h3 .pmark{width:23px; height:28px; flex:none}
+  .fv-hero h1 .pmark{width:33px; height:40px; flex:none}
   nav.links{display:flex; gap:26px; align-items:center; font-size:14px; color:var(--muted); font-weight:600}
   nav.links a:hover{color:var(--ink)}
   nav.links .tag{font-family:var(--mono); font-size:12px; color:var(--accent); border:1px solid var(--line); padding:3px 8px; border-radius:2px}
@@ -227,6 +235,7 @@
       <nav class="links">
         <a href="#/mods">Mods &amp; tools</a>
         <a href="#/fablevision">FableVision</a>
+        <a href="#/fableportal">FablePortal</a>
         <span class="tag">by 10SecEveryDay</span>
       </nav>
     </div>
@@ -239,7 +248,7 @@
         <div class="hero-copy">
           <p class="eyebrow">Minecraft mods &amp; tools</p>
           <h1 class="wordmark">Fable<span>.</span></h1>
-          <p class="lede">Minecraft mods and tools by <b>10SecEveryDay</b> — survival-fair, open-source, and running entirely on <b>your own machine</b>. One mod is out now, a Chrome extension is releasing, and more are on the way.</p>
+          <p class="lede">Minecraft mods and tools by <b>10SecEveryDay</b> — survival-fair, open-source, and running entirely on <b>your own machine</b>. One mod is out now, the <b>FablePortal</b> new-tab extension is releasing, and more are on the way.</p>
           <div class="cta">
             <a class="btn primary" href="#/fablevision">Explore FableVision →</a>
             <a class="btn ghost" href="FableVision.jar" download="FableVision.jar" data-dl>⬇ Download the mod</a>
@@ -263,7 +272,7 @@
         <div class="head">
           <p class="eyebrow">The collection</p>
           <h2>Everything Fable, at a glance.</h2>
-          <p>Click a card to see its full page. One Fabric mod is out today, the new-tab extension is releasing now, and FableBots is on the way.</p>
+          <p>Click a card to see its full page. One Fabric mod is out today, FablePortal is releasing now, and FableBots is on the way.</p>
         </div>
         <div class="rail">
           <article class="mod flag">
@@ -291,8 +300,8 @@
           </article>
 
           <article class="mod">
-            <h3>🧭 Minecraft Dashboard <span class="pill ok">New — releasing</span></h3>
-            <p>A Minecraft-themed new-tab page for Chrome. <b>Steve Bot</b> answers your Minecraft questions with your own free Gemini key (stored only on your device), next to a to-do list, notes, waypoint book, timers, quick links, wiki search and daily Minecraft news.</p>
+            <h3><svg class="pmark" viewBox="0 0 36 44" aria-hidden="true"><rect class="p-shadow" x="5" y="5" width="31" height="39" rx="2"/><rect class="p-body" x="2" y="2" width="31" height="39" rx="2"/><rect class="p-glow" x="9" y="9" width="17" height="25"/><path class="p-swirl" d="M12 25c2.5-6 8.5 2 11-4"/></svg>FablePortal <span class="pill ok">New — releasing</span></h3>
+            <p>Every new tab is a portal. A Minecraft dashboard for Chrome: <b>Steve Bot</b> answers your Minecraft questions with your own free Gemini key, next to notes, a waypoint book, timers, a to-do list, quick links and daily Minecraft news.</p>
             <div class="toolrow">
               <span class="tt">Steve Bot AI chat</span>
               <span class="tt">Notes</span>
@@ -301,9 +310,9 @@
               <span class="tt">Daily MC news</span>
             </div>
             <div class="cta" style="margin:2px 0 0">
-              <a class="btn ghost" href="MinecraftDashboard.zip" download="MinecraftDashboard.zip" data-dl-ext>⬇ Download for Chrome (zip)</a>
+              <a class="btn primary" href="#/fableportal">Open the FablePortal page →</a>
+              <a class="btn ghost" href="FablePortal.zip" download="FablePortal.zip" data-dl-ext>⬇ zip</a>
             </div>
-            <p style="font-size:13.5px;color:var(--faint)">Install: unzip → open <span style="font-family:var(--mono)">chrome://extensions</span> → turn on Developer mode → Load unpacked → pick the folder. Same Fable rules: your key stays on your machine. Chrome Web Store listing coming.</p>
           </article>
 
           <article class="mod soon">
@@ -371,6 +380,7 @@
         <a href="#/fablevision/tools">Inside</a>
         <a href="#/fablevision/commands">Commands</a>
         <a href="#/fablevision/install">Install</a>
+        <a href="#/keys">AI key</a>
         <span class="tag">MC&nbsp;26.1.2</span>
       </nav>
     </div>
@@ -412,6 +422,7 @@
               <li>The screenshot rides with that one question, then detaches.</li>
               <li>It can see your inventory too — ask "what should I craft?"</li>
               <li>It knows the whole mod — ask it how any command works.</li>
+              <li>No key yet? Gemini and Groq give free ones — <a class="cardlink" href="#/keys">2-minute tutorial</a>.</li>
             </ul>
           </article>
           <article class="tool">
@@ -566,25 +577,324 @@
   </footer>
 </div>
 
+<!-- ════════════════════════ VIEW 3 · THE FABLEPORTAL PAGE ════════════════════════ -->
+<div id="view-fableportal" hidden>
+  <header class="top">
+    <div class="wrap">
+      <a class="backlink" href="#/">◀ All mods &amp; tools</a>
+      <nav class="links">
+        <a href="#/fableportal/tools">Inside</a>
+        <a href="#/fableportal/install">Install</a>
+        <a href="#/keys">AI key</a>
+        <span class="tag">Chrome</span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- FP HERO -->
+    <div class="fv-hero">
+      <div class="wrap">
+        <p class="eyebrow">A Fable extension · Chrome · new tab</p>
+        <h1><svg class="pmark" viewBox="0 0 36 44" aria-hidden="true"><rect class="p-shadow" x="5" y="5" width="31" height="39" rx="2"/><rect class="p-body" x="2" y="2" width="31" height="39" rx="2"/><rect class="p-glow" x="9" y="9" width="17" height="25"/><path class="p-swirl" d="M12 25c2.5-6 8.5 2 11-4"/></svg>FablePortal <span class="pill ok" style="font-size:12px">New — releasing</span></h1>
+        <p class="lede">Every new tab you open is a portal: a Minecraft dashboard with <b>Steve Bot</b> AI chat, notes, waypoints and timers — running entirely in your browser, on <b>your own free key</b>.</p>
+        <div class="cta">
+          <a class="btn primary" href="FablePortal.zip" download="FablePortal.zip" data-dl-ext>⬇ Download for Chrome (zip)</a>
+          <a class="btn ghost" href="#/fableportal/install">How to install</a>
+        </div>
+        <div class="chips">
+          <span class="chip">Free</span>
+          <span class="chip">Works <b>without</b> an AI key</span>
+          <span class="chip">Your key stays <b>yours</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FP TOOLS -->
+    <section id="fp-tools">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Inside FablePortal</p>
+          <h2>Open a tab, land in Minecraft.</h2>
+          <p>Clock, search and a Minecraft sky up top — six tools underneath. Everything saves in your browser and is right there on the next tab.</p>
+        </div>
+        <div class="tools">
+          <article class="tool">
+            <span class="cmd">Steve Bot</span>
+            <h3>An AI that talks Minecraft</h3>
+            <p>Chat about builds, redstone, or "what should I do next" — powered by your own free Gemini key.</p>
+            <ul>
+              <li>The chat lives in that one tab and resets when you close it.</li>
+              <li>Memory toggle: let it remember this tab's last few messages.</li>
+              <li>No key yet? <a class="cardlink" href="#/keys">Grab a free one in 2 minutes.</a></li>
+            </ul>
+          </article>
+          <article class="tool">
+            <span class="cmd">🗒 Notes</span>
+            <h3>A notebook that stays</h3>
+            <p>Farm ideas, trade lists, the coordinates you'd "definitely remember" — write them down instead.</p>
+            <ul>
+              <li>As many notes as you want; a back button walks the list.</li>
+              <li>Autosaves as you type.</li>
+            </ul>
+          </article>
+          <article class="tool">
+            <span class="cmd">📍 Waypoints</span>
+            <h3>Never lose a base again</h3>
+            <p>Save a name plus x / y / z and the dimension for every place that matters.</p>
+            <ul>
+              <li>One tap copies the coords, ready to paste in chat.</li>
+              <li>Overworld, Nether or End on each waypoint.</li>
+            </ul>
+          </article>
+          <article class="tool">
+            <span class="cmd">⏱ Timers</span>
+            <h3>Stopwatch &amp; countdown</h3>
+            <p>Time a speedrun split or a smelting batch without leaving the tab.</p>
+            <ul>
+              <li>Presets for 10s · 1m · 5m · 10m.</li>
+              <li>Keeps counting even if you close the tab.</li>
+            </ul>
+          </article>
+          <article class="tool">
+            <span class="cmd">📰 News</span>
+            <h3>Daily Minecraft news</h3>
+            <p>Fresh Minecraft headlines every day, pulled straight from Google News.</p>
+            <ul>
+              <li>Add a key and Steve Bot writes a short daily summary too.</li>
+            </ul>
+          </article>
+          <article class="tool">
+            <span class="cmd">✅ To-do + links</span>
+            <h3>Your day, one tab away</h3>
+            <p>A to-do list, quick links you pick yourself — none forced on you — plus wiki search.</p>
+            <ul>
+              <li>Three themes: Sky · Sunset · Night.</li>
+              <li>Links and searches open right in the same tab.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FP SAFETY -->
+    <section class="safety">
+      <div class="wrap">
+        <div class="grid">
+          <div>
+            <p class="eyebrow">Safe by design</p>
+            <h2>It's a page in your browser — and that's all.</h2>
+            <p class="sub">No accounts, no tracking, no "our server". The same Fable rules as the mod.</p>
+          </div>
+          <div class="safelist">
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Your Gemini key stays on your device</h4><p>It lives in Chrome's local storage and is sent only to Google, in a request header — never shown, never logged, never sent anywhere else.</p></div>
+            </div>
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Only two sites are ever contacted</h4><p>Google's Gemini API (your chats and news summaries — and only if you added a key) and Google News (the headlines). Nothing else, ever.</p></div>
+            </div>
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>The chat forgets on purpose</h4><p>Steve Bot's conversation lives in that one tab. Close the tab and it's gone — nothing is kept.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FP INSTALL -->
+    <section class="install" id="fp-install" style="background:var(--bg)">
+      <div class="wrap">
+        <div class="grid">
+          <div>
+            <p class="eyebrow">Install</p>
+            <h2 style="margin:10px 0 0;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.02em">Two minutes, no store needed.</h2>
+            <p style="color:var(--muted);margin:14px 0 0;max-width:36ch">FablePortal installs straight from this site while the Chrome Web Store listing is on its way.</p>
+            <div class="reqs">
+              <span class="req">Google <span>Chrome</span></span>
+              <span class="req">Free</span>
+              <span class="req">No <span>account</span></span>
+              <span class="req">AI key <span>optional</span></span>
+            </div>
+          </div>
+          <div>
+            <a class="btn primary" href="FablePortal.zip" download="FablePortal.zip" data-dl-ext style="margin-bottom:18px">⬇ Download FablePortal.zip</a>
+            <ol class="steps">
+              <li><b>Unzip</b> the download somewhere you'll keep it — Chrome loads the extension from that folder, so don't delete it later.</li>
+              <li>Open <code>chrome://extensions</code> and switch on <b>Developer mode</b> (top right).</li>
+              <li>Click <b>Load unpacked</b> and pick the unzipped <code>FablePortal</code> folder.</li>
+              <li>Open a new tab — you're in. Optional: click <b>🔑 API Key</b> on the page and paste a free Gemini key to wake up Steve Bot and the news summaries. <a class="cardlink" href="#/keys">Get a free key →</a></li>
+            </ol>
+            <p class="note">Chrome may mention "developer mode extensions" on launch — that's normal for anything installed outside the Web Store, and the store listing is coming. Everything except Steve Bot and the news summaries works with <b>no key at all</b>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="brand"><svg class="mark" viewBox="0 0 40 44" aria-hidden="true"><path class="m-shadow" d="M23 5 41 15v20L23 45 5 35V15Z"/><path class="m-body" d="M20 2 38 12v20L20 42 2 32V12Z"/><path class="m-edges" d="M2 12l18 10m0 0 18-10M20 22v20"/><path class="m-iris" d="M20 5.5 31.5 12 20 18.5 8.5 12Z"/><circle class="m-pupil" cx="20" cy="12" r="3.4"/></svg><b>Fable</b> — mods &amp; tools by 10SecEveryDay</div>
+      <div class="meta">FablePortal · MIT License · a Chrome new-tab extension</div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════ VIEW 4 · GET A FREE AI KEY ════════════════════════ -->
+<div id="view-keys" hidden>
+  <header class="top">
+    <div class="wrap">
+      <a class="backlink" href="#/">◀ All mods &amp; tools</a>
+      <nav class="links">
+        <a href="#/keys/gemini">Gemini</a>
+        <a href="#/keys/groq">Groq</a>
+        <span class="tag">free · 2 min</span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- KEYS HERO -->
+    <div class="fv-hero">
+      <div class="wrap">
+        <p class="eyebrow">Tutorial · takes about 2 minutes</p>
+        <h1>🔑 Get a free AI key.</h1>
+        <p class="lede">Fable's AI features run on <b>your own key</b> — that's the whole privacy model: your account talks straight to the AI, with no middleman server. Both options below are <b>free</b> and need <b>no credit card</b>.</p>
+        <div class="chips">
+          <span class="chip"><b>Gemini</b> — works in FableVision + FablePortal</span>
+          <span class="chip"><b>Groq</b> — works in FableVision</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEMINI -->
+    <section class="install" id="keys-gemini">
+      <div class="wrap">
+        <div class="grid">
+          <div>
+            <p class="eyebrow">Option 1 · Gemini</p>
+            <h2 style="margin:10px 0 0;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.02em">One key for everything.</h2>
+            <p style="color:var(--muted);margin:14px 0 0;max-width:36ch">Google's free key powers every Fable AI feature — and it's the only provider FablePortal speaks.</p>
+            <div class="reqs">
+              <span class="req">FableVision <span>✔</span></span>
+              <span class="req">FablePortal <span>✔</span></span>
+              <span class="req">Free <span>· no card</span></span>
+            </div>
+            <div class="cta" style="margin-top:24px">
+              <a class="btn primary" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Open Google AI Studio ↗</a>
+            </div>
+          </div>
+          <div>
+            <ol class="steps">
+              <li>Go to <b>aistudio.google.com/apikey</b> (Google AI Studio) and sign in with any Google account.</li>
+              <li>Click <b>Create API key</b> — if it asks about a project, just let it create one for you.</li>
+              <li><b>Copy</b> the key. It starts with <code>AIza…</code> — treat it like a password.</li>
+              <li>Paste it in. <b>FableVision:</b> press <b>G</b> → <b>⚙</b> → provider <b>Gemini</b> → paste. The ✨ Custom-spawn screen has its own ⚙ with a one-tap <b>copy my G-menu key</b> button. <b>FablePortal:</b> click <b>🔑 API Key</b> on the new tab → paste.</li>
+            </ol>
+            <p class="note">The free tier gives you a daily allowance at no cost — FableVision even shows a <b>used-today counter</b> for Gemini, and it resets at midnight.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GROQ -->
+    <section class="install" id="keys-groq" style="background:var(--bg)">
+      <div class="wrap">
+        <div class="grid">
+          <div>
+            <p class="eyebrow">Option 2 · Groq</p>
+            <h2 style="margin:10px 0 0;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.02em">The fast one.</h2>
+            <p style="color:var(--muted);margin:14px 0 0;max-width:36ch">Groq runs open models ridiculously fast. In FableVision it defaults to <b>Llama 4 Scout</b>, which can even see your screenshots. FablePortal is Gemini-only.</p>
+            <div class="reqs">
+              <span class="req">FableVision <span>✔</span></span>
+              <span class="req">FablePortal <span>—</span></span>
+              <span class="req">Free <span>· no card</span></span>
+            </div>
+            <div class="cta" style="margin-top:24px">
+              <a class="btn primary" href="https://console.groq.com/keys" target="_blank" rel="noopener">Open the Groq console ↗</a>
+            </div>
+          </div>
+          <div>
+            <ol class="steps">
+              <li>Go to <b>console.groq.com</b> and create a free account — Google, GitHub or email.</li>
+              <li>Open <b>API Keys</b> in the menu and click <b>Create API Key</b>.</li>
+              <li>Name it anything, then <b>copy it right away</b> — Groq shows it only once. It starts with <code>gsk_…</code>.</li>
+              <li>Paste it in. <b>FableVision:</b> press <b>G</b> → <b>⚙</b> → switch provider to <b>Groq</b> → paste.</li>
+            </ol>
+            <p class="note">Lost a Groq key? Delete it in the console and make a new one — it takes ten seconds.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEY SAFETY -->
+    <section class="safety">
+      <div class="wrap">
+        <div class="grid">
+          <div>
+            <p class="eyebrow">Key safety</p>
+            <h2>Three rules for any AI key.</h2>
+            <p class="sub">A key is a password to your free allowance. Fable treats it that way — you should too.</p>
+          </div>
+          <div class="safelist">
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Never share or screenshot it</h4><p>Anyone who has your key can spend your daily allowance. If one leaks, delete it on the same page where you made it and create a fresh one.</p></div>
+            </div>
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>It stays on your machine</h4><p>FableVision keeps keys in a local config file; FablePortal keeps yours in Chrome's storage. Both send it only in the request header, straight to the provider — never shown on screen, never logged.</p></div>
+            </div>
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Free means daily limits</h4><p>If the AI says you've hit the cap, it resets daily — FableVision's Gemini counter resets at midnight — or just switch providers in FableVision.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="brand"><svg class="mark" viewBox="0 0 40 44" aria-hidden="true"><path class="m-shadow" d="M23 5 41 15v20L23 45 5 35V15Z"/><path class="m-body" d="M20 2 38 12v20L20 42 2 32V12Z"/><path class="m-edges" d="M2 12l18 10m0 0 18-10M20 22v20"/><path class="m-iris" d="M20 5.5 31.5 12 20 18.5 8.5 12Z"/><circle class="m-pupil" cx="20" cy="12" r="3.4"/></svg><b>Fable</b> — mods &amp; tools by 10SecEveryDay</div>
+      <div class="meta">Free AI key tutorial · Gemini + Groq</div>
+    </div>
+  </footer>
+</div>
+
 <script>
-// ── Hash router: "#/" = home, "#/fablevision" = the mod's own page. Behaves like real
-//    pages: content swaps entirely, the title changes, you land at the top, and the
-//    browser back button walks between them. "#/mods" scrolls home to a section;
-//    "#/fablevision/install" opens the mod page at a section (ids are fv-prefixed).
+// ── Hash router: "#/" = home; "#/fablevision", "#/fableportal" and "#/keys" are their
+//    own pages. Behaves like real pages: content swaps entirely, the title changes, you
+//    land at the top, and the browser back button walks between them. "#/mods" scrolls
+//    home to a section; "#/fablevision/install" opens a page at a section (section ids
+//    carry the page's prefix: fv- / fp- / keys-). "#/extension" is a FablePortal alias.
 (function(){
-  var home = document.getElementById('view-home');
-  var fv = document.getElementById('view-fablevision');
+  var views = {
+    home:        document.getElementById('view-home'),
+    fablevision: document.getElementById('view-fablevision'),
+    fableportal: document.getElementById('view-fableportal'),
+    keys:        document.getElementById('view-keys')
+  };
+  var titles = {
+    home:        'FABLE — Minecraft mods & tools by 10SecEveryDay',
+    fablevision: 'FableVision — a Fable mod by 10SecEveryDay',
+    fableportal: 'FablePortal — the Minecraft new tab by 10SecEveryDay',
+    keys:        'Get a free AI key — a 2-minute Fable tutorial'
+  };
+  var prefix = { fablevision:'fv-', fableportal:'fp-', keys:'keys-' };
   function route(){
     var parts = location.hash.replace(/^#\/?/, '').split('/');
-    var isFV = parts[0] === 'fablevision';
-    home.hidden = isFV;
-    fv.hidden = !isFV;
-    document.title = isFV ? 'FableVision — a Fable mod by 10SecEveryDay'
-                          : 'FABLE — Minecraft mods & tools by 10SecEveryDay';
-    var target = isFV ? (parts[1] ? 'fv-' + parts[1] : '') : (parts[0] || '');
+    var name = parts[0] === 'extension' ? 'fableportal' : parts[0];
+    if (!(name in prefix)) name = 'home';
+    for (var k in views) { views[k].hidden = (k !== name); }
+    document.title = titles[name];
+    var target = name === 'home' ? (parts[0] || '') : (parts[1] ? prefix[name] + parts[1] : '');
     var el = target && document.getElementById(target);
     if (el) { el.scrollIntoView(); } else { window.scrollTo(0, 0); }
-    if (!isFV && window.__fableBoot) window.__fableBoot(); // canvas may have loaded hidden
+    if (name === 'home' && window.__fableBoot) window.__fableBoot(); // canvas may have loaded hidden
   }
   window.addEventListener('hashchange', route);
   route();
