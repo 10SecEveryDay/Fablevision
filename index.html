@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FABLE — Minecraft mods & tools by 10SecEveryDay</title>
+<style>
+  /* ============ Tokens — light is the base; dark overrides below ============ */
+  :root{
+    --bg:#eef3f4; --bg-2:#e6eef0; --panel:#ffffff; --panel-2:#f5f9fa;
+    --line:#d2dde0; --line-soft:#e3ebed;
+    --ink:#0f181e; --muted:#54687a; --faint:#8194a1;
+    --accent:#0c9488; --accent-ink:#ffffff; --accent-2:#b3670f;
+    --ok:#1f9b46; --ok-bg:rgba(31,155,70,.12);
+    --extrude:#c9d6d9;
+    --grid:rgba(12,148,136,.07);
+    --shadow:0 1px 0 rgba(20,40,50,.04), 0 18px 40px -24px rgba(20,40,50,.35);
+    --sans:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Mono","Cascadia Code",Consolas,"Courier New",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0a0e13; --bg-2:#0d141b; --panel:#111b23; --panel-2:#152029;
+      --line:#243542; --line-soft:#1a2731;
+      --ink:#e9eff3; --muted:#8ea0ad; --faint:#5f7382;
+      --accent:#2fd4c6; --accent-ink:#04241f; --accent-2:#ffb454;
+      --ok:#5bd66b; --ok-bg:rgba(91,214,107,.12);
+      --extrude:#05090d;
+      --grid:rgba(47,212,198,.06);
+      --shadow:0 1px 0 rgba(255,255,255,.02), 0 24px 50px -28px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#eef3f4; --bg-2:#e6eef0; --panel:#ffffff; --panel-2:#f5f9fa;
+    --line:#d2dde0; --line-soft:#e3ebed;
+    --ink:#0f181e; --muted:#54687a; --faint:#8194a1;
+    --accent:#0c9488; --accent-ink:#ffffff; --accent-2:#b3670f;
+    --ok:#1f9b46; --ok-bg:rgba(31,155,70,.12);
+    --extrude:#c9d6d9; --grid:rgba(12,148,136,.07);
+    --shadow:0 1px 0 rgba(20,40,50,.04), 0 18px 40px -24px rgba(20,40,50,.35);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a0e13; --bg-2:#0d141b; --panel:#111b23; --panel-2:#152029;
+    --line:#243542; --line-soft:#1a2731;
+    --ink:#e9eff3; --muted:#8ea0ad; --faint:#5f7382;
+    --accent:#2fd4c6; --accent-ink:#04241f; --accent-2:#ffb454;
+    --ok:#5bd66b; --ok-bg:rgba(91,214,107,.12);
+    --extrude:#05090d; --grid:rgba(47,212,198,.06);
+    --shadow:0 1px 0 rgba(255,255,255,.02), 0 24px 50px -28px rgba(0,0,0,.8);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans); font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:1140px; margin:0 auto; padding:0 24px}
+  a{color:inherit; text-decoration:none}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+  section{border-top:1px solid var(--line-soft)}
+  [hidden]{display:none !important}
+
+  /* ============ Header ============ */
+  header.top{position:sticky; top:0; z-index:20; background:color-mix(in srgb,var(--bg) 82%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line-soft)}
+  .top .wrap{display:flex; align-items:center; justify-content:space-between; height:60px}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.02em}
+  .brand b{font-size:18px; text-transform:uppercase; letter-spacing:.06em}
+  /* The Fable mark: an isometric ghost block with an eye on top — block + vision. */
+  .mark{display:block; overflow:visible}
+  .mark .m-shadow{fill:var(--extrude)}
+  .mark .m-body{fill:var(--panel); stroke:var(--accent); stroke-width:2.5; stroke-linejoin:round}
+  .mark .m-edges{fill:none; stroke:var(--accent); stroke-width:2.5; stroke-linejoin:round}
+  .mark .m-iris{fill:var(--accent); opacity:.18}
+  .mark .m-pupil{fill:var(--accent)}
+  .brand .mark{width:20px; height:22px}
+  .mod h3 .mark, .fv-hero h1 .mark{width:30px; height:33px; flex:none}
+  nav.links{display:flex; gap:26px; align-items:center; font-size:14px; color:var(--muted); font-weight:600}
+  nav.links a:hover{color:var(--ink)}
+  nav.links .tag{font-family:var(--mono); font-size:12px; color:var(--accent); border:1px solid var(--line); padding:3px 8px; border-radius:2px}
+  @media (max-width:640px){ nav.links a:not(.tag){display:none} }
+
+  /* ============ Hero (landing) ============ */
+  .hero{position:relative; overflow:hidden}
+  .hero::before{content:""; position:absolute; inset:0;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:34px 34px; mask-image:radial-gradient(120% 90% at 78% 20%, #000 25%, transparent 72%); pointer-events:none}
+  .hero .wrap{position:relative; display:grid; grid-template-columns:1.15fr .85fr; gap:36px; align-items:center; padding:64px 24px 72px}
+  @media (max-width:860px){ .hero .wrap{grid-template-columns:1fr; padding:44px 24px 52px} }
+
+  .eyebrow{display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 22px}
+  .eyebrow::before{content:""; width:8px; height:8px; background:var(--accent); box-shadow:2px 2px 0 var(--extrude)}
+
+  .wordmark{
+    margin:0; font-weight:800; text-transform:uppercase; letter-spacing:-.02em; line-height:.86;
+    font-size:clamp(56px,11vw,116px); color:var(--ink);
+    text-shadow:2px 2px 0 var(--extrude), 4px 4px 0 var(--extrude), 6px 6px 0 color-mix(in srgb,var(--accent) 55%, var(--extrude));
+  }
+  .wordmark span{color:var(--accent); text-shadow:2px 2px 0 var(--extrude), 4px 4px 0 var(--extrude)}
+  .lede{max-width:34em; color:var(--muted); font-size:clamp(16px,1.9vw,19px); margin:22px 0 0}
+  .lede b{color:var(--ink); font-weight:600}
+  .cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:30px}
+  .btn{display:inline-flex; align-items:center; gap:9px; font-weight:700; font-size:15px; padding:12px 20px; border-radius:3px; border:1px solid transparent; cursor:pointer}
+  .btn.primary{background:var(--accent); color:var(--accent-ink); box-shadow:3px 3px 0 var(--extrude)}
+  .btn.primary:hover{transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--extrude)}
+  .btn.ghost{background:transparent; color:var(--ink); border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--accent); color:var(--accent)}
+  .btn{transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, color .12s ease}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:26px}
+  .chip{font-family:var(--mono); font-size:12.5px; color:var(--muted); border:1px solid var(--line); border-radius:2px; padding:5px 10px; background:var(--panel)}
+  .chip b{color:var(--ink); font-weight:600}
+
+  .stage{position:relative; min-height:340px; display:flex; align-items:center; justify-content:center}
+  #build{width:100%; height:380px; max-width:460px}
+  @media (max-width:860px){ #build{height:300px} .stage{min-height:0} }
+  .stage figcaption{position:absolute; bottom:2px; left:0; right:0; text-align:center; font-family:var(--mono); font-size:11.5px; color:var(--faint); letter-spacing:.04em}
+
+  /* ============ Generic section head ============ */
+  .head{padding:66px 0 8px}
+  .head h2{margin:10px 0 0; font-size:clamp(26px,4vw,38px); letter-spacing:-.02em; text-wrap:balance}
+  .head p{color:var(--muted); max-width:60ch; margin:12px 0 0}
+
+  /* ============ Product rail (landing) ============ */
+  .rail{display:grid; grid-template-columns:repeat(2,1fr); gap:18px; padding:26px 0 72px}
+  @media (max-width:760px){ .rail{grid-template-columns:1fr} }
+  .mod{position:relative; background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:24px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:14px}
+  .mod.flag{grid-column:1 / -1; display:grid; grid-template-columns:1.1fr 1fr; gap:28px}
+  @media (max-width:760px){ .mod.flag{grid-template-columns:1fr} }
+  .mod h3{margin:0; font-size:24px; letter-spacing:-.01em; display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .pill{font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; padding:4px 9px; border-radius:2px; border:1px solid transparent}
+  .pill.ok{color:var(--ok); background:var(--ok-bg); border-color:color-mix(in srgb,var(--ok) 35%, transparent)}
+  .pill.soon{color:var(--accent-2); background:color-mix(in srgb,var(--accent-2) 12%, transparent); border-color:color-mix(in srgb,var(--accent-2) 32%, transparent)}
+  .mod p{margin:0; color:var(--muted)}
+  .mod .toolrow{display:flex; flex-wrap:wrap; gap:8px; margin-top:2px}
+  .tt{font-size:12.5px; font-weight:600; color:var(--ink); background:var(--panel-2); border:1px solid var(--line-soft); border-radius:2px; padding:5px 10px}
+  .mod.soon{opacity:.9}
+  .mod.soon h3{color:var(--muted)}
+  .mod.future{grid-column:1 / -1; border-style:dashed; background:transparent; box-shadow:none; align-items:center; justify-content:center; text-align:center; color:var(--faint); min-height:100px}
+  .mod.future .cube-mini{width:18px;height:18px;background:transparent;border:2px solid var(--faint);box-shadow:4px 4px 0 var(--line-soft);margin-bottom:6px}
+  .cardlink{font-weight:700; color:var(--accent)}
+  .cardlink:hover{text-decoration:underline}
+
+  /* ============ FableVision page hero ============ */
+  .fv-hero{position:relative; overflow:hidden}
+  .fv-hero::before{content:""; position:absolute; inset:0;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:34px 34px; mask-image:radial-gradient(110% 100% at 20% 0%, #000 25%, transparent 75%); pointer-events:none}
+  .fv-hero .wrap{position:relative; padding:56px 24px 60px}
+  .fv-hero h1{margin:14px 0 0; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    font-weight:800; letter-spacing:-.02em; line-height:1; font-size:clamp(38px,7vw,64px);
+    text-shadow:2px 2px 0 var(--extrude), 4px 4px 0 color-mix(in srgb,var(--accent) 45%, var(--extrude))}
+  .fv-hero .lede{margin-top:18px}
+  .backlink{display:inline-flex; align-items:center; gap:7px; font-weight:700; font-size:14px; color:var(--muted)}
+  .backlink:hover{color:var(--accent)}
+
+  /* ============ Tools ============ */
+  .tools{display:grid; grid-template-columns:repeat(2,1fr); gap:18px; padding:26px 0 72px}
+  @media (max-width:760px){ .tools{grid-template-columns:1fr} }
+  .tool{background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:24px; display:flex; flex-direction:column; gap:12px}
+  .tool .cmd{align-self:flex-start; font-family:var(--mono); font-size:13px; color:var(--accent); background:color-mix(in srgb,var(--accent) 9%, transparent); border:1px solid color-mix(in srgb,var(--accent) 28%, transparent); border-radius:2px; padding:5px 10px}
+  .tool h3{margin:2px 0 0; font-size:20px; letter-spacing:-.01em}
+  .tool p{margin:0; color:var(--muted)}
+  .tool ul{margin:4px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px}
+  .tool li{position:relative; padding-left:18px; color:var(--muted); font-size:14.5px}
+  .tool li::before{content:""; position:absolute; left:0; top:8px; width:7px; height:7px; background:var(--accent); box-shadow:2px 2px 0 var(--extrude)}
+  .soonline{margin:2px 0 0; font-size:14px; color:var(--muted); display:flex; align-items:center; gap:9px; line-height:1.5}
+  .soonbadge{flex:none; font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--accent-2); background:color-mix(in srgb,var(--accent-2) 13%, transparent); border:1px solid color-mix(in srgb,var(--accent-2) 34%, transparent); border-radius:2px; padding:3px 7px; white-space:nowrap}
+
+  /* ============ Safety ============ */
+  .safety{background:var(--bg-2)}
+  .safety .grid{display:grid; grid-template-columns:.9fr 1.1fr; gap:34px; padding:66px 0}
+  @media (max-width:760px){ .safety .grid{grid-template-columns:1fr; gap:20px} }
+  .safety h2{margin:10px 0 0; font-size:clamp(24px,3.6vw,34px); letter-spacing:-.02em; text-wrap:balance}
+  .safety .sub{color:var(--muted); margin:14px 0 0; max-width:34ch}
+  .safelist{display:flex; flex-direction:column; gap:16px}
+  .safelist .item{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start}
+  .safelist .k{width:30px; height:30px; flex:none; display:grid; place-items:center; border:1px solid var(--line); border-radius:3px; background:var(--panel); color:var(--accent)}
+  .safelist .k b{width:12px;height:12px;background:var(--accent);box-shadow:2px 2px 0 var(--extrude)}
+  .safelist h4{margin:0 0 3px; font-size:16px}
+  .safelist p{margin:0; color:var(--muted); font-size:14.5px}
+
+  /* ============ Commands ============ */
+  .cmdtable{padding:26px 0 72px}
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:4px; background:var(--panel)}
+  table{border-collapse:collapse; width:100%; min-width:520px}
+  caption{caption-side:top; text-align:left; padding:14px 18px; font-family:var(--mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--line-soft)}
+  td{padding:11px 18px; border-bottom:1px solid var(--line-soft); vertical-align:top; font-size:14.5px}
+  tr:last-child td{border-bottom:none}
+  td.c{font-family:var(--mono); color:var(--accent); white-space:nowrap; width:1%}
+  td.d{color:var(--muted)}
+  tr.grp td{background:var(--panel-2); font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); padding:8px 18px}
+
+  /* ============ Install ============ */
+  .install{background:var(--bg-2)}
+  .install .grid{display:grid; grid-template-columns:1fr 1fr; gap:34px; padding:66px 0}
+  @media (max-width:760px){ .install .grid{grid-template-columns:1fr; gap:26px} }
+  .reqs{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px}
+  .req{font-family:var(--mono); font-size:12.5px; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:2px; padding:6px 11px}
+  .req span{color:var(--faint)}
+  .steps{counter-reset:s; display:flex; flex-direction:column; gap:14px; margin:6px 0 0; padding:0; list-style:none}
+  .steps li{counter-increment:s; position:relative; padding-left:42px; color:var(--muted)}
+  .steps li::before{content:counter(s); position:absolute; left:0; top:-2px; width:28px; height:28px; display:grid; place-items:center; font-family:var(--mono); font-weight:700; color:var(--accent-ink); background:var(--accent); border-radius:3px; box-shadow:3px 3px 0 var(--extrude)}
+  .steps li b{color:var(--ink); font-weight:600}
+  .steps code{font-family:var(--mono); font-size:13px; background:var(--panel); border:1px solid var(--line-soft); border-radius:2px; padding:1px 6px; color:var(--ink)}
+  .note{margin-top:20px; font-size:14px; color:var(--faint)}
+  .note b{color:var(--accent-2)}
+
+  /* ============ Footer ============ */
+  footer{border-top:1px solid var(--line-soft); padding:34px 0 46px}
+  footer .wrap{display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; color:var(--faint); font-size:13.5px}
+  footer .brand b{font-size:15px}
+  footer .meta{font-family:var(--mono); font-size:12.5px}
+
+  @keyframes fvRise{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+  .stage{animation:fvRise .8s cubic-bezier(.2,.7,.2,1) both}
+  @media (prefers-reduced-motion:reduce){ .btn{transition:none} .stage{animation:none} }
+</style>
+
+<!-- ════════════════════════ VIEW 1 · THE FABLE HOME PAGE ════════════════════════
+     The landing is the SHOWCASE: brand + every product as a card. Each product's
+     details live on its own page (hash-routed, so back/forward work like real pages). -->
+<div id="view-home">
+  <header class="top">
+    <div class="wrap">
+      <div class="brand"><svg class="mark" viewBox="0 0 40 44" aria-hidden="true"><path class="m-shadow" d="M23 5 41 15v20L23 45 5 35V15Z"/><path class="m-body" d="M20 2 38 12v20L20 42 2 32V12Z"/><path class="m-edges" d="M2 12l18 10m0 0 18-10M20 22v20"/><path class="m-iris" d="M20 5.5 31.5 12 20 18.5 8.5 12Z"/><circle class="m-pupil" cx="20" cy="12" r="3.4"/></svg><b>Fable</b></div>
+      <nav class="links">
+        <a href="#/mods">Mods &amp; tools</a>
+        <a href="#/fablevision">FableVision</a>
+        <span class="tag">by 10SecEveryDay</span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <div class="hero">
+      <div class="wrap">
+        <div class="hero-copy">
+          <p class="eyebrow">Minecraft mods &amp; tools</p>
+          <h1 class="wordmark">Fable<span>.</span></h1>
+          <p class="lede">Minecraft mods and tools by <b>10SecEveryDay</b> — survival-fair, open-source, and running entirely on <b>your own machine</b>. One mod is out now, a Chrome extension is releasing, and more are on the way.</p>
+          <div class="cta">
+            <a class="btn primary" href="#/fablevision">Explore FableVision →</a>
+            <a class="btn ghost" href="FableVision.jar" download="FableVision.jar" data-dl>⬇ Download the mod</a>
+          </div>
+          <div class="chips">
+            <span class="chip">Free &amp; open-source</span>
+            <span class="chip">License <b>MIT</b></span>
+            <span class="chip">Your data stays <b>yours</b></span>
+          </div>
+        </div>
+        <figure class="stage">
+          <canvas id="build" width="460" height="380" aria-label="An isometric structure of translucent blocks assembling one at a time — a nod to FableVision's schematic auto-builder."></canvas>
+          <figcaption>ghost-block preview — how FableVision's builder shows each block</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <section id="mods">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">The collection</p>
+          <h2>Everything Fable, at a glance.</h2>
+          <p>Click a card to see its full page. One Fabric mod is out today, the new-tab extension is releasing now, and FableBots is on the way.</p>
+        </div>
+        <div class="rail">
+          <article class="mod flag">
+            <div class="left">
+              <h3><svg class="mark" viewBox="0 0 40 44" aria-hidden="true"><path class="m-shadow" d="M23 5 41 15v20L23 45 5 35V15Z"/><path class="m-body" d="M20 2 38 12v20L20 42 2 32V12Z"/><path class="m-edges" d="M2 12l18 10m0 0 18-10M20 22v20"/><path class="m-iris" d="M20 5.5 31.5 12 20 18.5 8.5 12Z"/><circle class="m-pupil" cx="20" cy="12" r="3.4"/></svg>FableVision <span class="pill ok">Available</span></h3>
+              <p style="margin-top:14px">The flagship: four tools in one client-side Fabric mod. An on-screen AI helper, a survival-fair schematic auto-builder, a real-seed custom-spawn finder, and crystal-PvP vision tweaks. Nothing is spawned in — everything plays fair.</p>
+              <div class="toolrow" style="margin-top:16px">
+                <span class="tt">Ask AI · press G</span>
+                <span class="tt">Auto-builder · /build</span>
+                <span class="tt">Seed Finder</span>
+                <span class="tt">PvP vision · /client</span>
+              </div>
+            </div>
+            <div class="right" style="display:flex;flex-direction:column;justify-content:center;gap:12px">
+              <div class="chips" style="margin:0">
+                <span class="chip">Minecraft <b>26.1.2</b></span>
+                <span class="chip"><b>Fabric</b> + Fabric API</span>
+                <span class="chip"><b>MIT</b> license</span>
+              </div>
+              <div class="cta" style="margin:0">
+                <a class="btn primary" href="#/fablevision">Open the FableVision page →</a>
+                <a class="btn ghost" href="FableVision.jar" download="FableVision.jar" data-dl>⬇ Download</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="mod">
+            <h3>🧭 Minecraft Dashboard <span class="pill ok">New — releasing</span></h3>
+            <p>A Minecraft-themed new-tab page for Chrome. <b>Steve Bot</b> answers your Minecraft questions with your own free Gemini key (stored only on your device), next to a to-do list, notes, waypoint book, timers, quick links, wiki search and daily Minecraft news.</p>
+            <div class="toolrow">
+              <span class="tt">Steve Bot AI chat</span>
+              <span class="tt">Notes</span>
+              <span class="tt">Waypoints</span>
+              <span class="tt">Timers</span>
+              <span class="tt">Daily MC news</span>
+            </div>
+            <div class="cta" style="margin:2px 0 0">
+              <a class="btn ghost" href="MinecraftDashboard.zip" download="MinecraftDashboard.zip" data-dl-ext>⬇ Download for Chrome (zip)</a>
+            </div>
+            <p style="font-size:13.5px;color:var(--faint)">Install: unzip → open <span style="font-family:var(--mono)">chrome://extensions</span> → turn on Developer mode → Load unpacked → pick the folder. Same Fable rules: your key stays on your machine. Chrome Web Store listing coming.</p>
+          </article>
+
+          <article class="mod soon">
+            <h3>FableBots <span class="pill soon">Coming soon</span></h3>
+            <p>Player-looking combat bots with coded brains — no AI at runtime, zero network. A <b>Hunter</b> that chases you and a <b>Runner</b> that flees, both fighting back when hit. Spawn squads of up to ten and hand them gear by id.</p>
+            <div class="toolrow">
+              <span class="tt">/bot hunter</span>
+              <span class="tt">/bot runner</span>
+              <span class="tt">/bot gear</span>
+              <span class="tt">/bot item</span>
+            </div>
+            <p style="font-size:13.5px;color:var(--faint)">A separate mod — arriving after FableVision settles in.</p>
+          </article>
+
+          <article class="mod future">
+            <span class="cube-mini"></span>
+            <p style="margin:0">More Fable projects<br>in the works</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROMISE -->
+    <section class="safety">
+      <div class="wrap">
+        <div class="grid">
+          <div>
+            <p class="eyebrow">The Fable rules</p>
+            <h2>Every project keeps the same promises.</h2>
+            <p class="sub">Whatever ships under the Fable name follows these, and each product page spells out exactly how.</p>
+          </div>
+          <div class="safelist">
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Your keys and data stay on your machine</h4><p>AI features always use your own key, stored locally, sent only to the provider you picked — never to us, because there is no "us" server at all.</p></div>
+            </div>
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Survival-fair by design</h4><p>Nothing is spawned in, teleported, or cheated. Builders pay from real chests; the seed finder just picks a real seed.</p></div>
+            </div>
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Open-source, MIT</h4><p>Free to use, read, and modify — just keep the credit.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="brand"><svg class="mark" viewBox="0 0 40 44" aria-hidden="true"><path class="m-shadow" d="M23 5 41 15v20L23 45 5 35V15Z"/><path class="m-body" d="M20 2 38 12v20L20 42 2 32V12Z"/><path class="m-edges" d="M2 12l18 10m0 0 18-10M20 22v20"/><path class="m-iris" d="M20 5.5 31.5 12 20 18.5 8.5 12Z"/><circle class="m-pupil" cx="20" cy="12" r="3.4"/></svg><b>Fable</b> — mods &amp; tools by 10SecEveryDay</div>
+      <div class="meta">Made by 10SecEveryDay · MIT License</div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════ VIEW 2 · THE FABLEVISION PAGE ════════════════════════ -->
+<div id="view-fablevision" hidden>
+  <header class="top">
+    <div class="wrap">
+      <a class="backlink" href="#/">◀ All mods &amp; tools</a>
+      <nav class="links">
+        <a href="#/fablevision/tools">Inside</a>
+        <a href="#/fablevision/commands">Commands</a>
+        <a href="#/fablevision/install">Install</a>
+        <span class="tag">MC&nbsp;26.1.2</span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- FV HERO -->
+    <div class="fv-hero">
+      <div class="wrap">
+        <p class="eyebrow">A Fable mod · Fabric · client-side</p>
+        <h1><svg class="mark" viewBox="0 0 40 44" aria-hidden="true"><path class="m-shadow" d="M23 5 41 15v20L23 45 5 35V15Z"/><path class="m-body" d="M20 2 38 12v20L20 42 2 32V12Z"/><path class="m-edges" d="M2 12l18 10m0 0 18-10M20 22v20"/><path class="m-iris" d="M20 5.5 31.5 12 20 18.5 8.5 12Z"/><circle class="m-pupil" cx="20" cy="12" r="3.4"/></svg>FableVision <span class="pill ok" style="font-size:12px">Available</span></h1>
+        <p class="lede">Ask AI about your screen, auto-build any schematic block-by-block, and find the <b>exact seed</b> you want — survival-fair, and running entirely on <b>your own machine</b>.</p>
+        <div class="cta">
+          <a class="btn primary" href="FableVision.jar" download="FableVision.jar" data-dl>⬇ Download FableVision</a>
+          <a class="btn ghost" href="#/fablevision/tools">See what's inside</a>
+        </div>
+        <div class="chips">
+          <span class="chip">Free download</span>
+          <span class="chip">Client-side</span>
+          <span class="chip">License <b>MIT</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <section id="fv-tools">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Inside FableVision</p>
+          <h2>Four tools that do the tedious part.</h2>
+          <p>Each one is opt-in, plainly explained in-game under <span style="font-family:var(--mono);color:var(--accent)">/client → ❓ How it works</span>, and single-player wherever it could ever affect other players.</p>
+        </div>
+        <div class="tools">
+          <article class="tool">
+            <span class="cmd">press G</span>
+            <h3>Ask AI about your screen</h3>
+            <p>Capture the screen, type a question, and get an answer from the AI you choose — Gemini, GPT, Claude, or Groq (free &amp; fast) — using your own key.</p>
+            <ul>
+              <li>The screenshot rides with that one question, then detaches.</li>
+              <li>It can see your inventory too — ask "what should I craft?"</li>
+              <li>It knows the whole mod — ask it how any command works.</li>
+            </ul>
+          </article>
+          <article class="tool">
+            <span class="cmd">/build</span>
+            <h3>Auto-build any schematic</h3>
+            <p>Drop a <b>.schem</b>, <b>.litematic</b>, <b>.schematic</b> or <b>.nbt</b> file in and watch a textured ghost of every block appear where it goes.</p>
+            <ul>
+              <li>Every block is paid from one real chest — survival-fair.</li>
+              <li>Build several at once, or one-at-a-time with a stop between.</li>
+              <li>A live materials list turns green when you've got enough.</li>
+            </ul>
+          </article>
+          <article class="tool">
+            <span class="cmd">Create World → ✨ Custom spawn</span>
+            <h3>Find the exact seed you want</h3>
+            <p>Describe a spawn in your own words, or pick a structure and biome. FableVision checks <b>thousands of real seeds a second</b> with the game's own world-gen and drops the winner into your world settings.</p>
+            <ul>
+              <li>Exact aims for <b>right where you spawn</b>; Fast picks 100–800 blocks out.</li>
+              <li>"plains next to a cherry grove", "pale garden NOT next to a forest", big/huge biomes.</li>
+              <li>You spawn normally — nothing is placed or moved.</li>
+            </ul>
+            <p class="soonline"><span class="soonbadge">This week</span> Choosing the number of <b>portal eyes</b> in the end frame — releasing this week.</p>
+          </article>
+          <article class="tool">
+            <span class="cmd">/client</span>
+            <h3>Crystal-PvP vision &amp; quality of life</h3>
+            <p>The little fixes that make fights readable and worlds easier to share.</p>
+            <ul>
+              <li>Low fire &amp; shield, fullbright, no explosion particles.</li>
+              <li>AppleSkin-style food HUD; a 10-second auto-leave timer.</li>
+              <li>One-click LAN + Bedrock hosting (with Geyser) via <span style="font-family:var(--mono)">/client lan</span>.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SAFETY -->
+    <section class="safety">
+      <div class="wrap">
+        <div class="grid">
+          <div>
+            <p class="eyebrow">Safe by design</p>
+            <h2>Yours, and only yours.</h2>
+            <p class="sub">The whole mod was audited for exactly this: your data stays on your machine.</p>
+          </div>
+          <div class="safelist">
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Your AI key never leaves your PC</h4><p>It's stored locally, sent only in a request header, and never shown on screen or written to any log. The custom-spawn wish even keeps its own separate key.</p></div>
+            </div>
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Only the AI you pick is ever contacted</h4><p>Four endpoints exist — one per AI provider — and only the one you chose is used. The seed finder, builder and everything else make zero network calls.</p></div>
+            </div>
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Nothing is spawned in or teleported</h4><p>The seed finder just finds a real seed with real world-gen — you spawn exactly as vanilla would.</p></div>
+            </div>
+            <div class="item">
+              <span class="k"><b></b></span>
+              <div><h4>Multiplayer-safe</h4><p>Building and LAN sharing switch themselves off on servers, so nothing touches a world you don't host.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMANDS -->
+    <section class="cmdtable" id="fv-commands">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Reference</p>
+          <h2>Every command.</h2>
+          <p>Type these in chat. The same list lives in-game under the “How it works” guide.</p>
+        </div>
+        <div class="tablewrap">
+          <table>
+            <caption>FableVision commands</caption>
+            <tbody>
+              <tr class="grp"><td colspan="2">Menu &amp; vision</td></tr>
+              <tr><td class="c">/client</td><td class="d">Open the settings menu (all the vision toggles).</td></tr>
+              <tr><td class="c">/client on · off</td><td class="d">Turn all the vision features on or off at once.</td></tr>
+              <tr><td class="c">/client lan</td><td class="d">Open your world to LAN + Bedrock right now.</td></tr>
+              <tr class="grp"><td colspan="2">10-second timer</td></tr>
+              <tr><td class="c">/10sec</td><td class="d">Switch the on-screen timer size (BIG / small).</td></tr>
+              <tr><td class="c">/10sec on · off</td><td class="d">Turn the 10-second auto-leave timer on or off.</td></tr>
+              <tr><td class="c">/10sec here</td><td class="d">Bind the timer to this world and turn it on.</td></tr>
+              <tr><td class="c">/10sec any</td><td class="d">Let the timer run in every world.</td></tr>
+              <tr class="grp"><td colspan="2">Schematic builder — single-player</td></tr>
+              <tr><td class="c">/build</td><td class="d">Open the builder panel.</td></tr>
+              <tr><td class="c">/build load &lt;name&gt;</td><td class="d">Stage a schematic where you stand (Tab lists your files).</td></tr>
+              <tr><td class="c">/build unload &lt;name|all&gt;</td><td class="d">Remove a staged build (Tab lists them).</td></tr>
+              <tr><td class="c">/build chest</td><td class="d">Use the chest you're looking at for materials.</td></tr>
+              <tr><td class="c">/build start · pause · resume</td><td class="d">Control the build.</td></tr>
+              <tr><td class="c">/build status</td><td class="d">List every loaded build and its progress.</td></tr>
+              <tr><td class="c">/build ghost</td><td class="d">Toggle the ghost-block preview.</td></tr>
+              <tr class="grp"><td colspan="2">AI</td></tr>
+              <tr><td class="c">press G</td><td class="d">Open the Ask-AI panel.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSTALL -->
+    <section class="install" id="fv-install">
+      <div class="wrap">
+        <div class="grid">
+          <div>
+            <p class="eyebrow">Install</p>
+            <h2 style="margin:10px 0 0;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.02em">Drop it in and go.</h2>
+            <p style="color:var(--muted);margin:14px 0 0;max-width:36ch">FableVision is a client-side Fabric mod. You only need it on your own game.</p>
+            <div class="reqs">
+              <span class="req">Minecraft <span>26.1.2</span></span>
+              <span class="req">Fabric Loader <span>≥ 0.19.3</span></span>
+              <span class="req">Fabric API</span>
+              <span class="req">Java <span>25</span></span>
+              <span class="req">MIT <span>license</span></span>
+            </div>
+          </div>
+          <div>
+            <a class="btn primary" id="fv-verdl" href="FableVision.jar" download="FableVision.jar" data-dl style="margin-bottom:18px">⬇ Download FableVision.jar</a>
+            <ol class="steps">
+              <li>Install <b>Fabric Loader</b> for 26.1.2 and add <b>Fabric API</b> to your <code>mods</code> folder.</li>
+              <li>Drop <code>FableVision.jar</code> into the same <code>mods</code> folder.</li>
+              <li>Launch, then type <code>/client</code> — or press <b>G</b> to ask AI, and open <b>Create World</b> for a custom spawn.</li>
+            </ol>
+            <p class="note" id="dl-note"><b>The Download button serves the mod right from this site.</b> Also coming to Modrinth. Open-source under the <b>MIT license</b> — free to use and modify, just keep the credit.</p>
+            <div style="margin-top:22px">
+              <p class="eyebrow" style="margin:0 0 10px">Pick your version</p>
+              <select id="fv-ver" aria-label="FableVision version"
+                      style="width:100%; max-width:360px; font-family:var(--mono); font-size:13.5px; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:3px; padding:11px 12px">
+                <option value="FableVision.jar" selected>Minecraft 26.1.2 · Fabric — main build</option>
+                <option value="FableVision-mc26.1.jar">Minecraft 26.1 · Fabric — beta, not play-tested yet</option>
+                <option value="" disabled>Minecraft 26.2 · Fabric — coming soon</option>
+                <option value="" disabled>Forge — coming soon</option>
+              </select>
+              <p class="note" style="margin-top:12px">The Download button follows your pick. <b>26.2</b> changed too many client APIs for a straight rebuild and <b>Forge</b> is a different loader — both are coming as their own release.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="brand"><svg class="mark" viewBox="0 0 40 44" aria-hidden="true"><path class="m-shadow" d="M23 5 41 15v20L23 45 5 35V15Z"/><path class="m-body" d="M20 2 38 12v20L20 42 2 32V12Z"/><path class="m-edges" d="M2 12l18 10m0 0 18-10M20 22v20"/><path class="m-iris" d="M20 5.5 31.5 12 20 18.5 8.5 12Z"/><circle class="m-pupil" cx="20" cy="12" r="3.4"/></svg><b>Fable</b> — mods &amp; tools by 10SecEveryDay</div>
+      <div class="meta">FableVision · MIT License · built for Minecraft 26.1.2</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ── Hash router: "#/" = home, "#/fablevision" = the mod's own page. Behaves like real
+//    pages: content swaps entirely, the title changes, you land at the top, and the
+//    browser back button walks between them. "#/mods" scrolls home to a section;
+//    "#/fablevision/install" opens the mod page at a section (ids are fv-prefixed).
+(function(){
+  var home = document.getElementById('view-home');
+  var fv = document.getElementById('view-fablevision');
+  function route(){
+    var parts = location.hash.replace(/^#\/?/, '').split('/');
+    var isFV = parts[0] === 'fablevision';
+    home.hidden = isFV;
+    fv.hidden = !isFV;
+    document.title = isFV ? 'FableVision — a Fable mod by 10SecEveryDay'
+                          : 'FABLE — Minecraft mods & tools by 10SecEveryDay';
+    var target = isFV ? (parts[1] ? 'fv-' + parts[1] : '') : (parts[0] || '');
+    var el = target && document.getElementById(target);
+    if (el) { el.scrollIntoView(); } else { window.scrollTo(0, 0); }
+    if (!isFV && window.__fableBoot) window.__fableBoot(); // canvas may have loaded hidden
+  }
+  window.addEventListener('hashchange', route);
+  route();
+})();
+
+(function(){
+  var canvas = document.getElementById('build');
+  if(!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Stepped structure of translucent cubes — the mod's ghost-block preview, assembling block by block.
+  var layers = [4,3,2,1], cubes = [];
+  for(var z=0; z<layers.length; z++){
+    var n = layers[z], off = z*0.5;
+    for(var gx=0; gx<n; gx++) for(var gy=0; gy<n; gy++){
+      cubes.push({gx:gx+off, gy:gy+off, gz:z});
+    }
+  }
+  var order = cubes.slice().sort(function(a,b){ return a.gz-b.gz || (a.gx+a.gy)-(b.gx+b.gy) || a.gx-b.gx; });
+  order.forEach(function(c,i){ c.order = i; });                    // reveal order: bottom-up
+  var paint = cubes.slice().sort(function(a,b){ return a.gz-b.gz || (a.gx+a.gy)-(b.gx+b.gy); }); // back-to-front
+
+  var DPR = Math.min(window.devicePixelRatio||1, 2), U = 26, cx, cy;
+  function accent(){ return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2fd4c6'; }
+  function rgba(hex, a){
+    hex = hex.replace('#','');
+    if(hex.length===3) hex = hex.split('').map(function(c){return c+c;}).join('');
+    return 'rgba('+parseInt(hex.substr(0,2),16)+','+parseInt(hex.substr(2,2),16)+','+parseInt(hex.substr(4,2),16)+','+a+')';
+  }
+  function measure(){
+    var rect = canvas.getBoundingClientRect();
+    if(rect.width < 2) return false;
+    canvas.width = Math.round(rect.width * DPR);
+    canvas.height = Math.round(rect.height * DPR);
+    U = Math.max(18, Math.min(32, rect.width/16));
+    cx = canvas.width/2; cy = canvas.height*0.62;
+    return true;
+  }
+  function render(progress){                                       // progress = how many cubes are in (float)
+    var acc = accent(), hw = U*DPR, qh = U*0.5*DPR, vh = U*0.92*DPR;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = Math.max(1, 1.4*DPR);
+    function face(pts, fill, stroke){
+      ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+      for(var i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
+      ctx.closePath();
+      ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = stroke; ctx.stroke();
+    }
+    paint.forEach(function(c){
+      var t = Math.max(0, Math.min(1, progress - c.order));        // this cube's fade-in 0..1
+      if(t <= 0) return;
+      var rise = (1 - t) * 9 * DPR;                                // drop-into-place
+      var px = cx + (c.gx - c.gy)*hw, py = cy + (c.gx + c.gy)*qh - c.gz*vh - rise;
+      var L={x:px-hw,y:py}, T={x:px,y:py-qh}, R={x:px+hw,y:py}, B={x:px,y:py+qh};
+      var Bl={x:B.x,y:B.y+vh}, Ll={x:L.x,y:L.y+vh}, Rl={x:R.x,y:R.y+vh};
+      face([L,B,Bl,Ll], rgba(acc,0.05*t), rgba(acc,0.50*t));
+      face([R,B,Bl,Rl], rgba(acc,0.10*t), rgba(acc,0.62*t));
+      face([L,T,R,B],  rgba(acc,0.16*t), rgba(acc,0.90*t));
+    });
+  }
+
+  var TOTAL = cubes.length, startT = null, frames = 0, done = false, running = false;
+  function animate(ts){
+    frames++;
+    if(startT === null) startT = ts;
+    var progress = (ts - startT) / 70;                             // ~70ms per block
+    render(progress);
+    if(progress < TOTAL + 2){ requestAnimationFrame(animate); }
+    else { done = true; running = false; }                         // finished → leave static
+  }
+  function boot(){
+    if(running || done){ if(done && measure()) render(TOTAL + 2); return; }
+    if(!measure()) return;                                         // hidden view → try again on route
+    if(reduce){ render(TOTAL + 2); done = true; return; }          // reduced motion → static
+    startT = null; frames = 0; running = true;
+    requestAnimationFrame(animate);
+    // If rAF is throttled (pane backgrounded), just show the finished structure so it's never blank.
+    setTimeout(function(){ if(frames < 3 && !done){ measure(); render(TOTAL + 2); done = true; running = false; } }, 1600);
+  }
+  window.__fableBoot = boot;                                       // the router re-boots it when home shows
+  var rt;
+  window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ if(measure() && done) render(TOTAL + 2); }, 150); });
+  if(window.matchMedia){ try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(){ if(measure() && done) render(TOTAL + 2); }); }catch(e){} }
+  boot();
+})();
+
+// Gentle scroll-reveal: fade cards up as they enter view. Only hides what's below the
+// fold in the CURRENTLY shown view (hidden-view elements measure 0 and are skipped),
+// and stays fully visible without JS/motion.
+(function(){
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(!('IntersectionObserver' in window)) return;
+  var vh = window.innerHeight || document.documentElement.clientHeight;
+  var targets = [];
+  Array.prototype.forEach.call(document.querySelectorAll('.mod, .tool, .safelist .item, .tablewrap, .install .grid > div, .head'), function(el){
+    if(el.getBoundingClientRect().top > vh * 0.85){
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(16px)';
+      el.style.transition = 'opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1)';
+      el.style.willChange = 'opacity, transform';
+      targets.push(el);
+    }
+  });
+  if(!targets.length) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.style.opacity = '1'; e.target.style.transform = 'none'; io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  targets.forEach(function(el){ io.observe(el); });
+})();
+
+// Version picker: the big Download button follows the selection. The disabled options
+// are the honest "coming soon" ones — 26.2 / Forge need a real port, so no fake links.
+(function(){
+  var sel = document.getElementById('fv-ver');
+  var btn = document.getElementById('fv-verdl');
+  if(!sel || !btn) return;
+  sel.addEventListener('change', function(){
+    if(!sel.value || btn.dataset.degraded) return;
+    btn.href = sel.value;
+    btn.setAttribute('download', sel.value);
+    btn.textContent = '⬇ Download ' + sel.value;
+  });
+})();
+
+// Download buttons point at FableVision.jar sitting next to this page. On the real (hosted)
+// site that file exists and the click downloads the mod. On the claude.ai preview the jar
+// isn't hosted — a same-origin HEAD check notices and swaps the buttons to an honest state
+// instead of a broken click. file:// (opened straight from the folder) keeps the real link.
+(function(){
+  if(location.protocol !== 'http:' && location.protocol !== 'https:') return;
+  fetch('FableVision.jar', { method:'HEAD' }).then(function(r){
+    if(r.ok) return;
+    degrade();
+  }).catch(degrade);
+  function degrade(){
+    Array.prototype.forEach.call(document.querySelectorAll('[data-dl]'), function(a){
+      a.dataset.degraded = '1'; // the version picker leaves degraded buttons alone
+      a.removeAttribute('download');
+      a.href = '#/fablevision/install';
+      a.textContent = '⬇ Download — going live with the domain';
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-dl-ext]'), function(a){
+      a.removeAttribute('download');
+      a.removeAttribute('href');
+      a.textContent = '⬇ zip — with the domain';
+    });
+    var note = document.getElementById('dl-note');
+    if(note){ note.innerHTML = '<b>This is the preview.</b> The download goes live when the site is hosted on its domain (the jar sits next to index.html). Also coming to Modrinth. Open-source under the <b>MIT license</b>.'; }
+  }
+})();
+</script>
+
+</html>
