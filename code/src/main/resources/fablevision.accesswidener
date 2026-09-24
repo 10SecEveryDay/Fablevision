@@ -1,0 +1,49 @@
+accessWidener v2 official
+
+# TemplateStructurePiece.templateName is the only record of WHICH template a piece is, and it
+# has no getter. Layout searches exist to answer "does this structure contain room X", so the
+# name is the whole answer. Reflection would work but would fail silently on a remapping change;
+# widening fails loudly at build time instead.
+#
+# Needed by every non-jigsaw template structure: Woodland Mansion, Igloo, Ocean Ruins,
+# Ruined Portal, Shipwreck. Jigsaw structures (villages, outposts, cities) expose their id
+# through SinglePoolElement.getTemplateLocation() and do not need this.
+accessible	field	net/minecraft/world/level/levelgen/structure/TemplateStructurePiece	templateName	Ljava/lang/String;
+
+# templateName is the BARE name ("1x1_b3"); each subclass prepends its own folder when it builds
+# the real location ("mansion/1x1_b3"). Widening the method too means every structure reports a
+# true, fully-qualified id instead of one this code guessed the prefix for.
+accessible	method	net/minecraft/world/level/levelgen/structure/TemplateStructurePiece	makeTemplateLocation	()Lnet/minecraft/resources/Identifier;
+
+# WHETHER A RUINED PORTAL IS ON THE SURFACE OR BURIED is not in its template id — portal_1 is the
+# same file whether it ends up in the open air, half-sunk in sand, on the ocean floor, inside a
+# mountain or in a cave. The difference is one enum chosen during generation and kept on the piece,
+# with no getter, exactly like templateName above. Widening it lets the finder answer "a portal I
+# can actually see" instead of sending people to a portal thirty blocks under a hill.
+accessible	field	net/minecraft/world/level/levelgen/structure/structures/RuinedPortalPiece	verticalPlacement	Lnet/minecraft/world/level/levelgen/structure/structures/RuinedPortalPiece$VerticalPlacement;
+
+# ...and the SETUPS the structure was configured with, which is where that enum comes from.
+# portalDiag proved the placement is not a per-seed roll at all: the piece is built with
+# setup.placement() straight from the config, and each ruined-portal variant in this version ships
+# exactly ONE setup. So "is it on the surface" can be answered from the structure alone, with no
+# assembly and no cost — but only if the answer is read from the data rather than typed from the
+# measurement, which would silently rot the day a datapack changes it.
+accessible	field	net/minecraft/world/level/levelgen/structure/structures/RuinedPortalStructure	setups	Ljava/util/List;
+accessible	method	net/minecraft/world/level/levelgen/structure/structures/RuinedPortalStructure$Setup	placement	()Lnet/minecraft/world/level/levelgen/structure/structures/RuinedPortalPiece$VerticalPlacement;
+
+# THE CREATE WORLD SCREEN'S OWN SEED BOX (1.44.3). WorldCreationUiState.setSeed changes the seed the world
+# will be made with, but the World tab's EditBox is filled once when the tab is built and never listens
+# for changes — so a seed put there by "Use this seed" or a search was real but invisible, and the box
+# went on showing the old text. SeedBox reaches the tab through the navigation bar and sets the box too.
+accessible	field	net/minecraft/client/gui/screens/worldselection/CreateWorldScreen	tabNavigationBar	Lnet/minecraft/client/gui/components/tabs/TabNavigationBar;
+accessible	class	net/minecraft/client/gui/screens/worldselection/CreateWorldScreen$WorldTab
+accessible	field	net/minecraft/client/gui/screens/worldselection/CreateWorldScreen$WorldTab	seedEdit	Lnet/minecraft/client/gui/components/EditBox;
+
+# THE BIOME LOOKUP'S PER-THREAD HINT (1.44.3). Climate.RTree remembers each thread's last answer and starts
+# the next search from it, so at an exact tie between two biomes the answer depends on what that thread
+# looked up just before. The map's cheap gate samples biomes right before the real structure check, and
+# on a tie that decided the check: mapTruthDiag caught two Nether fossils drawn on a nether_wastes /
+# soul_sand_valley tie that a cold lookup (and the game) put in nether_wastes. SeedMapData clears the
+# hint before every real check, so the verdict no longer depends on what was sampled first.
+accessible	field	net/minecraft/world/level/biome/Climate$ParameterList	index	Lnet/minecraft/world/level/biome/Climate$RTree;
+accessible	field	net/minecraft/world/level/biome/Climate$RTree	lastResult	Ljava/lang/ThreadLocal;

@@ -1,0 +1,24 @@
+# Build output and Gradle caches (every module)
+build/
+.gradle/
+out/
+
+# Loom dev-runtime folder. If you ever launch the game from a project here (runClient), this folder
+# gets a REAL config/aiscreen.json and aiscreen-keys.dat holding YOUR AI key. Never commit it.
+run/
+
+# Diagnostic output
+logs/
+*.log
+bench-out*/
+
+# IDE and OS clutter
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+Thumbs.db
+Desktop.ini
+.DS_Store

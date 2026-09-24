@@ -1,0 +1,497 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    // Loom adds the Fabric + Mojang repos automatically.
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    // MC 26.1.2 ships de-obfuscated (Mojang names are already baked in), so Loom needs NO
+    // mappings layer. Declaring one throws "Cannot use Mojang mappings in a non-obfuscated
+    // environment". This matches the official Fabric 26.1.2 template, which omits mappings
+    // and uses plain `implementation` (nothing to remap).
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+// ── Java version ───────────────────────────────────────────────────────────
+// MC 26.1.2 is compiled for Java 25 (matches the official Fabric template), so
+// we target 25. The foojay resolver in settings.gradle auto-downloads JDK 25
+// if it isn't installed, so you don't have to install it yourself.
+def targetJavaVersion = 25
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release.set(targetJavaVersion)
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+// ── Headless worldgen diagnostic (dev-only, never shipped) ───────────────────
+// Runs the seed-finder's real world-gen code OUTSIDE the game so results can be
+// verified without launching Minecraft. VanillaRegistries.createLookup() is on the
+// deobf compile jar even though it's absent from the shipped client jar.
+// eyeDiag REMOVED (1.36.0) along with StrongholdEyes and CountingLevel. Portal eyes are dropped
+// for good: a stronghold is ring-placed 1300+ blocks out, so no seed has one near spawn and the
+// eye count is a property of a portal nobody reaches at spawn anyway. The classes were still being
+// compiled into the shipped jar with no production caller at all.
+
+// Layout searches need TemplateStructurePiece.templateName, which vanilla keeps package-private.
+// See the widener file for why this is preferred over reflection.
+loom {
+    accessWidenerPath = file("src/main/resources/fablevision.accesswidener")
+}
+tasks.register('villageDiag', JavaExec) {
+    group = 'verification'
+    description = 'Headless check that village layout assembly returns a real piece list.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.VillageDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// Unlike villageDiag (which assembles at chunk 0,0 to prove the ASSEMBLY code works), this one
+// runs the real placement funnel against the seed's spawn, so its predictions name structures that
+// actually exist, at coordinates you TELEPORT to. It deliberately does not tell you to use
+// /locate: that goes to the nearest one, which is not the one any row is about.
+// Subjects: (default) igloo, portal, wreck, ruin, outpost, butcher, librarian, cartographer,
+// trail, chamber, city, bastion, endcity
+// — e.g. --args="trail 1 3 400". Nether/End subjects print coordinates in THEIR world, with an
+// /execute in wrapper on the teleport line, and are measured from spawn/8 and 0,0 respectively.
+tasks.register('iglooWalk', JavaExec) {
+    group = 'verification'
+    description = 'Exact-coordinate layout predictions to teleport to and check, with controls.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.IglooWalkDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// Opens up ONE structure at ONE coordinate: every assembled piece with its real position, the
+// structure's true bounding box, and how far that is from the locate position every prediction
+// prints. --args="<seed> <x> <z> [row label] [token]"
+tasks.register('inspect', JavaExec) {
+    group = 'verification'
+    description = 'Dump one structure: its pieces, its real box, and the locate-pos drift.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.InspectDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Derives and proves the token for each village PROFESSION across ALL FIVE village biomes — the
+// step that makes the armorer row work and the one a plains-only census cannot do.
+// No args = derive candidates; --args="verify" re-proves the tokens the catalog actually ships.
+tasks.register('professionDiag', JavaExec) {
+    group = 'verification'
+    description = 'Per-biome derivation and proof of village profession tokens.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.ProfessionDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// The numbers the biome size-tier and "next to" features need before either can be built: what
+// each biome really measures, and how far apart two things are when they are neighbours.
+// --args="<seeds> [size|adjacent|all]"
+tasks.register('biomeShape', JavaExec) {
+    group = 'verification'
+    description = 'Measures biome patch sizes per biome and real adjacency distances.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.BiomeShapeDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Does a multi-row search really satisfy EVERY row? Takes the seeds the finder returned and the
+// coordinates it printed, and re-asks the question at each spot with code that never touches the
+// funnel. A row the search skipped would come back empty here.
+tasks.register('multiDiag', JavaExec) {
+    group = 'verification'
+    description = 'Independently re-checks every row of a multi-structure search result.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.MultiTargetDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Bugs people reported while playing, reproduced headlessly BEFORE anything is changed — so the
+// failure is seen with the real code rather than reasoned about from the source.
+tasks.register('repro', JavaExec) {
+    group = 'verification'
+    description = 'Reproduces reported bugs against the real finder.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.ReproDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Two "should this even be built" questions, both answered by assembling real structures: how big a
+// village actually is (so "big" can be a measured number rather than a flattering one), and whether
+// a fortress's room mix varies between seeds at all (if it does not, a blaze-spawner row would
+// filter nothing and must not ship). --args="[village|blaze|all] [samples]"
+tasks.register('statsDiag', JavaExec) {
+    group = 'verification'
+    description = 'Measures village size and whether fortress rooms vary enough to be searchable.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.StructureStatsDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Slime chunks are decided by a hash of the seed, so the only thing that can be wrong is the salt —
+// and the only symptom of a wrong salt is a plausible map of the wrong chunks. This measures the
+// rate (must be 1 in 10) and then asks the question that decides whether a row is worth shipping:
+// at what radius does "n slime chunks nearby" stop being true of every seed?
+tasks.register('slimeDiag', JavaExec) {
+    group = 'verification'
+    description = 'Proves the slime-chunk rule and measures whether asking for n of them filters.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.SlimeDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// Surface or buried? A portal's template id is the same either way; the difference is an enum on
+// the piece, which the access widener exposes and this counts.
+tasks.register('portalDiag', JavaExec) {
+    group = 'verification'
+    description = 'Measures how often a ruined portal is on the surface vs underground.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.PortalPlacementDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// "Is there still a blacksmith?" answered from the template files rather than from the wiki: the
+// old lava-pit-and-chest hut is recognised by its SHAPE, not by a name no template carries.
+tasks.register('blacksmithDiag', JavaExec) {
+    group = 'verification'
+    description = 'Looks for a lava-and-chest village house distinct from the three smith houses.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.BlacksmithDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Fast mode measures from 0,0 and the player spawns somewhere else, so "within 100" was not the
+// number the player asked for. How to fix that depends entirely on how far the spawn really
+// wanders and how many hits each candidate re-check would throw away — this measures both.
+// --args="<seeds>"
+tasks.register('spawnDrift', JavaExec) {
+    group = 'verification'
+    description = 'Spawn drift from 0,0, and what each Fast-mode re-check would cost in rejections.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.SpawnDriftDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// "within 500" was reporting 508. The A/B for fix 7, run against the SAME seeds in one process
+// with SeedFunnel.EXACT_RADIUS flipped, so a difference is the fix and not the machine. Fails
+// loudly on a "false drop" - a seed that was reporting a legitimate distance and is now rejected.
+// --args="<seeds> <radius>"
+tasks.register('radiusDiag', JavaExec) {
+    group = 'verification'
+    description = 'A/B: does a "within N" search ever report a find further than N away?'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.RadiusDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Terrain height is the expensive half of world-gen and "flat land near spawn" would be the first
+// feature to touch it. Measures the real cost per column, the cost of vanilla's own cheap
+// approximation, and how far apart their answers are - so the feature can be costed before it is
+// built rather than after. --args="<columns>"
+tasks.register('terrainCost', JavaExec) {
+    group = 'verification'
+    description = 'What a terrain-height search would cost per column, and what a cheap one loses.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.TerrainHeightDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// "I ran the same search twice and got the same seed." Proves searches are random by default,
+// reproducible when a stream is pinned, and that the workers within one job do not re-test each
+// other's seeds. Tests SeedFinder.workerStream itself, not a copy of the formula.
+tasks.register('streamDiag', JavaExec) {
+    group = 'verification'
+    description = 'Are two runs of the same wish actually independent?'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.StreamDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// The Bridge Bastion row claimed to be "the rarest of the four types" with nothing behind it, in a
+// file whose own header says a guessed rarity is worse than a blank one. A bastion's type IS the
+// folder its pieces come from, so this assembles real bastions and counts. --args="<samples>"
+tasks.register('bastionDiag', JavaExec) {
+    group = 'verification'
+    description = 'Measures how often each bastion type turns up.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.BastionTypeDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// People look at the picture rather than reading the row, so an icon that is missing (it falls
+// back to a filled map, silently) or shared with another row is a real navigation bug. Walks the
+// LIVE catalog, not the switch, which is the only way a newly added row gets noticed.
+tasks.register('iconDiag', JavaExec) {
+    group = 'verification'
+    description = 'Checks every picker row has its own icon and that no two rows share one.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.IconDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// The spawn map's two generated layers: is every biome in this world coloured, are any two colours
+// identical, and — the one that matters — does the map's structure scan agree with the finder's own
+// search about what is where. A map that draws markers the search would not confirm is the failure
+// the "the map generates nothing of its own" rule was there to prevent, so now that the map DOES
+// generate something, this is what keeps the guarantee.
+tasks.register('mapDiag', JavaExec) {
+    group = 'verification'
+    description = 'Biome colours, and whether the map\'s structure scan agrees with the search.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.MapDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// The custom-spawn screen's geometry at two dozen window sizes, checked as arithmetic rather than
+// by dragging a game window around. WishLayout is a pure function of (width, height, pairs), so
+// "does anything overlap at 320x200" is a question that can be answered without a client.
+// HOW FAR IS THE THING THE ROW PROMISED FROM THE COORDINATE THE ROW PRINTS? Every other check
+// verifies the claim ("this village really has a weaponsmith"); this one measures the walk, which
+// is what a player experiences when a verified row still reads as a phantom.
+// --args="<seeds per row> [radius] [label substring]"
+// EVERY VERIFICATION FIX, RE-ASKED ABOUT THE NETHER. The two worst bugs this program has had were
+// both "the overworld got fixed and the other dimension did not", so the checks written for one
+// have to be run against the other. Several comments in the main code already pointed here.
+// --args="<seeds> [radius]"
+tasks.register('netherDiag', JavaExec) {
+    group = 'verification'
+    description = 'Holds every Nether find to the radius asked, from the portal-in point.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.NetherDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+tasks.register('featureDiag', JavaExec) {
+    group = 'verification'
+    description = "Measures the gap between a content row's printed coordinate and its building."
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.FeatureDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+tasks.register('layoutDiag', JavaExec) {
+    group = 'verification'
+    description = 'Checks the custom-spawn layout for overlaps at every window size.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.LayoutDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// The walk tool's strict= column, turned into a number. The finder samples the biome once, at the
+// locate position; vanilla samples it at the structure's REAL generation point and that is the last
+// word. This counts how often they disagree on the hit a player would actually be sent to.
+// --args="<seeds per structure> [radius] [label substring]"
+tasks.register('strictDiag', JavaExec) {
+    group = 'verification'
+    description = 'How often vanilla\'s biome test rejects a hit the finder confirmed.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.StrictDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// The mansion is the one structure whose piece names say nothing ("mansion/1x2_s2"), so its rooms
+// have to be derived from their BLOCK CONTENTS instead of their names. Prints every template's
+// census, the blocks rare enough to identify a room by, and how often each one really lands.
+// --args="<mansions to assemble> [blocks|rates|all]"
+tasks.register('mansionDiag', JavaExec) {
+    group = 'verification'
+    description = 'Works out which mansion room code is which, from the blocks inside it.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.MansionRoomDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// What the AI wish layer is taught, and what a reply resolves to — no AI request, no game.
+// --args="prompt" (default) also prints the full prompt; --args="cases" prints only the table.
+tasks.register('wishDiag', JavaExec) {
+    group = 'verification'
+    description = 'Prints the AI wish prompt and what example replies resolve to.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.WishDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// Does a Fast-mode content match really hold up? Runs the shipped funnel, then re-assembles the
+// structure it reported and reads its piece list a second time, with independent code. Also prints
+// what /locate would have found instead — in Fast mode that is routinely a different structure,
+// because Fast measures from 0,0 while a player spawns wherever findSpawnPosition put them.
+// --args="<row label, underscores for spaces> <radius> <seeds to scan> <seeds to show>"
+tasks.register('fastDiag', JavaExec) {
+    group = 'verification'
+    description = 'Proves or disproves that Fast mode verifies content predicates.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.FastModeDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// The repeatable A/B benchmark (fixed searches, fixed seed counts, result checksums) used to
+// measure optimisations against a saved baseline. speedDiag surveys many wishes; this one
+// compares runs.
+tasks.register('bench', JavaExec) {
+    group = 'verification'
+    description = 'Repeatable seed-finder benchmark: 3 fixed searches, Exact + Fast, with funnel stats.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.BenchDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+tasks.register('speedDiag', JavaExec) {
+    group = 'verification'
+    description = 'Headless timing + hit-rate check of the seed finder (where do the ms go?).'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.SpeedDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// The eye diagnostic above is a plain main(), not a JUnit test, so `test` finds nothing to run —
+// that's expected for this dev-only harness, not a misconfiguration.
+tasks.named('test') {
+    failOnNoDiscoveredTests = false
+}
+
+// "I picked weaponsmith and sometimes got the armorer's house." Reads the templates the row's token
+// matches straight from the jar (a weaponsmith with a blast furnace, or a weaponsmith the token
+// misses, is a failure), then runs the real search and lists the house standing at each coordinate
+// the player is handed. --args="<hits per mode> [radius] [row label, underscores for spaces]"
+tasks.register('smithDiag', JavaExec) {
+    group = 'verification'
+    description = 'Which house stands at a profession row\'s printed coordinates, checked from templates.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.SmithDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Keys never survive into text (stored or provider-shaped), the stored form is not the key, the two
+// keysets do not share a cooldown, and no "always allow capture" setting exists. No game, no network.
+tasks.register('privacyDiag', JavaExec) {
+    group = 'verification'
+    description = 'AI key redaction and storage, per-keyset cooldown, capture consent.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.tensec.aiscreen.PrivacyDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// The search screen quotes "about 1 in N seeds". This computes that estimate for several wishes and
+// counts what the real search actually needs per match, failing on anything off by more than 6x.
+// --args="[matches per wish]"
+tasks.register('etaDiag', JavaExec) {
+    group = 'verification'
+    description = 'Checks the search ETA estimate against the measured seeds-per-match.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.EtaDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+tasks.register('radiusProbe', JavaExec) {
+    group = 'verification'
+    description = 'Prints seeds where the exact-radius test turns a miss into a hit.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.RadiusProbe'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// THE MAP AGAINST THE WORLD, not against the search. Runs vanilla's own structure-start step on real
+// proto-chunks (generator taken from the Default world preset) and counts every marker the map draws
+// that the game does not build: must be zero, in every dimension including the End.
+// -Dfablevision.map.oldcheck=true reproduces the 1.43.0 map for comparison.
+// --args="<seeds> [reach]"
+tasks.register('mapTruthDiag', JavaExec) {
+    group = 'verification'
+    description = 'Every structure on the map, checked against the game\'s own structure step.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.MapTruthDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx3G'] + (project.hasProperty('oldcheck') ? ['-Dfablevision.map.oldcheck=true'] : []) + (project.hasProperty('verbose') ? ['-Dfv.verbose=true'] : []) + (project.hasProperty('dims') ? ['-Dfv.dims=' + project.property('dims')] : [])
+}
+
+// The game's own width of any string, measured from the game's font files (RealFont).
+// --args="first string|second string"
+tasks.register('fontWidth', JavaExec) {
+    group = 'verification'
+    description = 'Prints the in-game pixel width of each string.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.RealFont'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// The join message on REAL Fast searches, through the same parse -> search -> describe pipeline the
+// screen runs. joinDiag checks the rule; this checks what the rule is actually fed.
+tasks.register('joinRepro', JavaExec) {
+    group = 'verification'
+    description = 'Runs real Fast searches and reports which join message each would get, and why.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.JoinReproDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Cave biomes by height, and whether the shipped search looks at the right one. --args="[seeds] [radius]"
+tasks.register('caveDiag', JavaExec) {
+    group = 'verification'
+    description = 'How often each cave biome is near spawn at each height, vs what the search finds.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.CaveBiomeDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx2G']
+}
+
+// Short join message by default; the long one only for another dimension, a big spawn-vs-origin gap,
+// or something dropped (JoinForm). Pure logic, no game needed.
+tasks.register('joinDiag', JavaExec) {
+    group = 'verification'
+    description = 'Which join message a found seed gets, against the three agreed long-form cases.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.JoinFormDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}
+
+// DOES THE SEARCH'S STRUCTURE CHECK DEPEND ON WHAT THE THREAD LOOKED UP JUST BEFORE? (1.44.4)
+// Runs every candidate warm and cold and asks the game's own structure step about each disagreement.
+// --args="<seeds per row> [radius]"
+tasks.register('tieDiag', JavaExec) {
+    group = 'verification'
+    description = 'Search structure checks vs lookup history, settled by the game.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.TieDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx3G']
+}
+
+// THE MAP, PLAYED LIKE A PLAYER (1.44.5): open, drag far, zoom all the way out, drag far, let go —
+// against SeedMapModel, the object the screen uses, in real time — measuring black on screen and
+// cells where the game has structures and the map shows none. --args="[seed]"
+tasks.register('mapReplay', JavaExec) {
+    group = 'verification'
+    description = 'The map screen\'s logic driven like a player, with what would be on screen measured.'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.MapReplayDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true', '-Xmx3G']
+}
+
+// THE SEARCH WATCHDOG (1.44.5): real stuck threads and starved jobs, checked against what it reports.
+tasks.register('watchdogDiag', JavaExec) {
+    group = 'verification'
+    description = 'Does the search watchdog catch a stuck seed, a stalled search and one far past its estimate?'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.fablevision.client.seedfinder.WatchdogDiagnostic'
+    jvmArgs = ['-Djava.awt.headless=true']
+}

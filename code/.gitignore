@@ -1,0 +1,22 @@
+# Build output — never commit jars or intermediates
+build/
+.gradle/
+out/
+
+# Loom dev-runtime folder. IMPORTANT: if you ever launch the game from this project
+# (runClient), this folder gets a REAL config/aiscreen.json containing YOUR API key.
+# It must never be committed or zipped into a release.
+run/
+
+# IDE clutter
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# OS clutter
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,26 @@
+{
+	"schemaVersion": 1,
+	"accessWidener": "fablevision.accesswidener",
+	"id": "fablevision",
+	"version": "${version}",
+	"name": "FableVision",
+	"description": "Finds seeds for NEW worlds, and only on the Create World screen. Describe the spawn you want, like a village next to a cherry grove or a mansion in a dark forest, or pick from a list. It tests real seeds with the game's own world generation until one matches, fills in the seed, and shows it on a map before you press Create. It cannot read a server's seed or search an existing world. Typing a wish needs no AI key for common wishes; with your own key it can read any wish. The vision settings, food HUD, G-key AI panel and Bedrock LAN tip are in the separate FableVision Extras mod.",
+	"authors": [
+		"10SecEveryDay"
+	],
+	"contact": {},
+	"license": "MIT",
+	"icon": "assets/fablevision/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"com.fablevision.client.FableVisionClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
