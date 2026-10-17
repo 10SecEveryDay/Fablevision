@@ -1,0 +1,135 @@
+﻿==== coldDiag|4 map ====
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\68cc1836-d612-4df1-bc1c-1460bb6eb4e0\scratchpad\reg
+ress.ps1:20 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[01:27:52] [main/INFO]: [STDOUT]: ========== COLD TEMPLATE CACHES: WHAT RACES, AND DOES THE WARM-UP STOP IT ==========
+[01:27:52] [main/INFO]: [STDOUT]:   4 rounds per arm and setting, a fresh template manager each round
+
+[01:27:52] [main/INFO]: [STDOUT]: -- MAP: a first wide view (2800 blocks) in each dimension, cold --
+[01:27:53] [main/INFO]: [STDOUT]:   round 1 warm-up OFF  seed 961386468886398506:  OVERWORLD 400 drawn, 0 hidden  NETHER 243 drawn, 1 hidden  END 29 drawn, 0 hidden
+[01:27:54] [main/INFO]: [STDOUT]:   round 1 warm-up ON   seed 7819127766483817757:  OVERWORLD 387 drawn, 0 hidden  NETHER 243 drawn, 0 hidden  END 26 drawn, 0 hidden
+[01:27:54] [main/INFO]: [STDOUT]:   round 2 warm-up OFF  seed 2235033856304164531:  OVERWORLD 400 drawn, 0 hidden  NETHER 238 drawn, 4 hidden  END 26 drawn, 0 hidden
+[01:27:55] [main/INFO]: [STDOUT]:   round 2 warm-up ON   seed 1411155844396012252:  OVERWORLD 400 drawn, 0 hidden  NETHER 241 drawn, 0 hidden  END 34 drawn, 0 hidden
+[01:27:55] [main/INFO]: [STDOUT]:   round 3 warm-up OFF  seed 7239624673663947838:  OVERWORLD 400 drawn, 0 hidden  NETHER 237 drawn, 4 hidden  END 26 drawn, 0 hidden
+[01:27:56] [main/INFO]: [STDOUT]:   round 3 warm-up ON   seed -164715930437991450:  OVERWORLD 399 drawn, 0 hidden  NETHER 244 drawn, 0 hidden  END 24 drawn, 0 hidden
+[01:27:56] [main/INFO]: [STDOUT]:   round 4 warm-up OFF  seed 7501837970501471586:  OVERWORLD 400 drawn, 0 hidden  NETHER 234 drawn, 9 hidden  END 36 drawn, 0 hidden
+[01:27:57] [main/INFO]: [STDOUT]:   round 4 warm-up ON   seed 4137919270084593644:  OVERWORLD 400 drawn, 0 hidden  NETHER 240 drawn, 0 hidden  END 25 drawn, 0 hidden
+[01:27:57] [main/INFO]: [STDOUT]:   warm-up OFF: hidden 18; collisions retried {bastion_remnant=72}; given up {bastion_remnant=18}
+[01:27:57] [main/INFO]: [STDOUT]:   warm-up ON : hidden 0; collisions retried {}; given up {}; warm-up 1596 templates in 639 ms over 4 cold starts
+[01:27:57] [main/INFO]: [STDOUT]:   ok   map, warm-up ON: nothing hidden
+[01:27:57] [main/INFO]: [STDOUT]:   ok   map, warm-up ON: no check given up
+[01:27:57] [main/INFO]: [STDOUT]:   ok   map, warm-up OFF (control): the race happened (collisions > 0)
+
+[01:27:57] [main/INFO]: [STDOUT]: OK — with the warm-up nothing was given up or hidden, and the control raced
+==== coldDiag|3 search ====
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\68cc1836-d612-4df1-bc1c-1460bb6eb4e0\scratchpad\reg
+ress.ps1:20 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[01:28:14] [main/INFO]: [STDOUT]: ========== COLD TEMPLATE CACHES: WHAT RACES, AND DOES THE WARM-UP STOP IT ==========
+[01:28:14] [main/INFO]: [STDOUT]:   3 rounds per arm and setting, a fresh template manager each round
+
+[01:28:14] [main/INFO]: [STDOUT]: -- SEARCH: content rows through SeedFinder.consider, 6 s each, cold --
+[01:28:27] [worldsRun-8/WARN]: Seed finder: a structure assembly threw for seed 2680412427560290501 (7 so far this session); the seed was treated as not matching
+java.util.ConcurrentModificationException
+	at java.base/java.util.HashMap.computeIfAbsent(HashMap.java:1230)
+	at net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate$Palette.blocks(StructureTemplate.java:879)
+	at net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate$Palette.jigsaws(StructureTemplate.java:818)
+	at net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.getJigsaws(StructureTemplate.java:200)
+	at net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement.getShuffledJigsawBlocks(SinglePoolElement.java:118)
+	at net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement$Placer.tryPlacingChildren(JigsawPlacement.java:367)
+	at net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement.addPieces(JigsawPlacement.java:211)
+	at net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement.lambda$addPieces$2(JigsawPlacement.java:144)
+	at net.minecraft.world.level.levelgen.structure.Structure$GenerationStub.lambda$getPiecesBuilder$0(Structure.java:290)
+	at com.mojang.datafixers.util.Either$Left.map(Either.java:38)
+	at net.minecraft.world.level.levelgen.structure.Structure$GenerationStub.getPiecesBuilder(Structure.java:288)
+	at net.minecraft.world.level.levelgen.structure.Structure.generate(Structure.java:105)
+	at com.fablevision.client.seedfinder.VillageLayout.lambda$assemble$0(VillageLayout.java:613)
+	at com.fablevision.client.seedfinder.VillageLayout.retryingCacheRace(VillageLayout.java:552)
+	at com.fablevision.client.seedfinder.VillageLayout.assemble(VillageLayout.java:599)
+	at com.fablevision.client.seedfinder.VillageLayout.builtAt(VillageLayout.java:421)
+	at com.fablevision.client.seedfinder.SeedCriteria$StructureTarget.layoutMatches(SeedCriteria.java:2458)
+	at com.fablevision.client.seedfinder.SeedCriteria.test(SeedCriteria.java:959)
+	at com.fablevision.client.seedfinder.SeedCriteria.test(SeedCriteria.java:485)
+	at com.fablevision.client.seedfinder.SeedCriteria.test(SeedCriteria.java:466)
+	at com.fablevision.client.seedfinder.SeedFinder.consider(SeedFinder.java:388)
+	at com.fablevision.client.seedfinder.WorldsRun.lambda$run$0(WorldsRun.java:39)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[01:28:43] [main/INFO]: [STDOUT]:   round 1 warm-up OFF:
+[01:29:13] [main/INFO]: [STDOUT]:   round 1 warm-up ON :
+[01:29:32] [worldsRun-3/WARN]: Seed finder: a structure assembly threw for seed 6715860173443212775 (36 so far this session); the seed was treated as not matching
+java.util.ConcurrentModificationException
+	at java.base/java.util.HashMap.computeIfAbsent(HashMap.java:1230)
+	at net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate$Palette.blocks(StructureTemplate.java:879)
+	at net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate$Palette.jigsaws(StructureTemplate.java:818)
+	at net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.getJigsaws(StructureTemplate.java:200)
+	at net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement.getShuffledJigsawBlocks(SinglePoolElement.java:118)
+	at net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement$Placer.tryPlacingChildren(JigsawPlacement.java:367)
+	at net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement.addPieces(JigsawPlacement.java:215)
+	at net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement.lambda$addPieces$2(JigsawPlacement.java:144)
+	at net.minecraft.world.level.levelgen.structure.Structure$GenerationStub.lambda$getPiecesBuilder$0(Structure.java:290)
+	at com.mojang.datafixers.util.Either$Left.map(Either.java:38)
+	at net.minecraft.world.level.levelgen.structure.Structure$GenerationStub.getPiecesBuilder(Structure.java:288)
+	at net.minecraft.world.level.levelgen.structure.Structure.generate(Structure.java:105)
+	at com.fablevision.client.seedfinder.VillageLayout.lambda$assemble$0(VillageLayout.java:613)
+	at com.fablevision.client.seedfinder.VillageLayout.retryingCacheRace(VillageLayout.java:552)
+	at com.fablevision.client.seedfinder.VillageLayout.assemble(VillageLayout.java:599)
+	at com.fablevision.client.seedfinder.VillageLayout.builtAt(VillageLayout.java:421)
+	at com.fablevision.client.seedfinder.SeedCriteria$StructureTarget.layoutMatches(SeedCriteria.java:2458)
+	at com.fablevision.client.seedfinder.SeedCriteria.test(SeedCriteria.java:959)
+	at com.fablevision.client.seedfinder.SeedCriteria.test(SeedCriteria.java:485)
+	at com.fablevision.client.seedfinder.SeedCriteria.test(SeedCriteria.java:466)
+	at com.fablevision.client.seedfinder.SeedFinder.consider(SeedFinder.java:388)
+	at com.fablevision.client.seedfinder.WorldsRun.lambda$run$0(WorldsRun.java:39)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[01:29:41] [main/INFO]: [STDOUT]:   round 2 warm-up OFF:
+[01:30:11] [main/INFO]: [STDOUT]:   round 2 warm-up ON :
+[01:30:37] [worldsRun-8/WARN]: Seed finder: a structure assembly threw for seed -8265825643891042031 (74 so far this session); the seed was treated as not matching
+java.util.ConcurrentModificationException
+	at java.base/java.util.HashMap.computeIfAbsent(HashMap.java:1230)
+	at net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate$Palette.blocks(StructureTemplate.java:879)
+	at net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate$Palette.jigsaws(StructureTemplate.java:818)
+	at net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.getJigsaws(StructureTemplate.java:200)
+	at net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement.getShuffledJigsawBlocks(SinglePoolElement.java:118)
+	at net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement$Placer.tryPlacingChildren(JigsawPlacement.java:367)
+	at net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement.addPieces(JigsawPlacement.java:211)
+	at net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement.lambda$addPieces$2(JigsawPlacement.java:144)
+	at net.minecraft.world.level.levelgen.structure.Structure$GenerationStub.lambda$getPiecesBuilder$0(Structure.java:290)
+	at com.mojang.datafixers.util.Either$Left.map(Either.java:38)
+	at net.minecraft.world.level.levelgen.structure.Structure$GenerationStub.getPiecesBuilder(Structure.java:288)
+	at net.minecraft.world.level.levelgen.structure.Structure.generate(Structure.java:105)
+	at com.fablevision.client.seedfinder.VillageLayout.lambda$assemble$0(VillageLayout.java:613)
+	at com.fablevision.client.seedfinder.VillageLayout.retryingCacheRace(VillageLayout.java:552)
+	at com.fablevision.client.seedfinder.VillageLayout.assemble(VillageLayout.java:599)
+	at com.fablevision.client.seedfinder.VillageLayout.builtAt(VillageLayout.java:421)
+	at com.fablevision.client.seedfinder.SeedCriteria$StructureTarget.layoutMatches(SeedCriteria.java:2458)
+	at com.fablevision.client.seedfinder.SeedCriteria.test(SeedCriteria.java:959)
+	at com.fablevision.client.seedfinder.SeedCriteria.test(SeedCriteria.java:485)
+	at com.fablevision.client.seedfinder.SeedCriteria.test(SeedCriteria.java:466)
+	at com.fablevision.client.seedfinder.SeedFinder.consider(SeedFinder.java:388)
+	at com.fablevision.client.seedfinder.WorldsRun.lambda$run$0(WorldsRun.java:39)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[01:30:40] [main/INFO]: [STDOUT]:   round 3 warm-up OFF:
+[01:31:09] [main/INFO]: [STDOUT]:   round 3 warm-up ON :
+[01:31:09] [main/INFO]: [STDOUT]:   warm-up OFF: 749643 seeds; collisions retried {ancient_city=73, bastion_remnant=110, trial_chambers=118, village_plains=7, village_taiga=3}; given up (seeds turned down) {ancient_city=13, bastion_remnant=30, trial_chambers=42}
+[01:31:09] [main/INFO]: [STDOUT]:   warm-up ON : 793874 seeds; collisions retried {}; given up {}; warm-ups took 808 ms in all
+[01:31:09] [main/INFO]: [STDOUT]:   ok   search, warm-up ON: no check given up
+
+[01:31:09] [main/INFO]: [STDOUT]: OK — with the warm-up nothing was given up or hidden, and the control raced

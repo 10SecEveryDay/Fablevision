@@ -1,0 +1,471 @@
+﻿.\gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At line:1 char:466
++ ... StartNew(); .\gradlew.bat multiDiag --console=plain -q "--args=3 both ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[16:00:42] [main/INFO]: Seed finder: built structure templates in 16ms
+
+[16:00:42] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Exact, 1 worker) ==========
+[16:00:42] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[16:00:45] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 59 seeds checked in 3 s, stream 4587522
+
+[16:00:45] [main/INFO]: [STDOUT]:   SEED 1587639235903991331   spawn 71, 9 (the printed spawn agrees)
+[16:00:45] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          189 of 400      OK — within the distance asked, from the real spawn
+[16:00:45] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          112, -176       OK — village_taiga contains weaponsmith|weapon_smith
+[16:00:45] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          112, -176       OK — village_taiga contains weaponsmith|weapon_smith
+
+[16:00:45] [main/INFO]: [STDOUT]:   SEED -5175937199721715715   spawn 0, 0 (the printed spawn agrees)
+[16:00:45] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          208 of 400      OK — within the distance asked, from the real spawn
+[16:00:45] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          80, 192         OK — village_plains contains weaponsmith|weapon_smith
+[16:00:45] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          80, 192         OK — village_plains contains weaponsmith|weapon_smith
+
+[16:00:45] [main/INFO]: [STDOUT]:   SEED 2928251533487603223   spawn -17, 68 (the printed spawn agrees)
+[16:00:45] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          213 of 400      OK — within the distance asked, from the real spawn
+[16:00:46] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          0, -144         OK — village_taiga contains weaponsmith|weapon_smith
+[16:00:46] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          0, -144         OK — village_taiga contains weaponsmith|weapon_smith
+
+[16:00:46] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Fast, 1 worker) ==========
+[16:00:46] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[16:00:47] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 14 seeds checked in 0 s, stream 4587523
+
+[16:00:47] [main/INFO]: [STDOUT]:   SEED -971322007979628348   spawn -53, 50 (the printed spawn agrees)
+[16:00:47] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          391 of 400      OK — within the distance asked, from the real spawn
+[16:00:47] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+[16:00:47] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+
+[16:00:47] [main/INFO]: [STDOUT]:   SEED 8250022317763262707   spawn 72, -58 (the printed spawn agrees)
+[16:00:47] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          183 of 400      OK — within the distance asked, from the real spawn
+[16:00:47] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          224, -160       OK — village_taiga contains weaponsmith|weapon_smith
+[16:00:47] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          224, -160       OK — village_taiga contains weaponsmith|weapon_smith
+
+[16:00:47] [main/INFO]: [STDOUT]:   SEED -6316625817246108944   spawn 12, 41 (the printed spawn agrees)
+[16:00:47] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          266 of 400      OK — within the distance asked, from the real spawn
+[16:00:47] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -144, 256       OK — village_plains contains weaponsmith|weapon_smith
+[16:00:47] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -144, 256       OK — village_plains contains weaponsmith|weapon_smith
+
+[16:00:47] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Exact, 1 worker) ==========
+[16:00:47] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[16:00:47] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 22 seeds checked in 0 s, stream 4587524
+
+[16:00:47] [main/INFO]: [STDOUT]:   SEED -7403621761679286121   spawn -31, -38 (the printed spawn agrees)
+[16:00:47] [main/INFO]: [STDOUT]:      dist  Surface Village                   286 of 400      OK — within the distance asked, from the real spawn
+[16:00:47] [main/INFO]: [STDOUT]:      dist  Shipwreck                         290 of 400      OK — within the distance asked, from the real spawn
+[16:00:47] [main/INFO]: [STDOUT]:      line  Surface Village                   16, -320        OK — village_plains, 117 pieces
+[16:00:47] [main/INFO]: [STDOUT]:      find  Surface Village                   16, -320        OK — village_plains, 117 pieces
+[16:00:47] [main/INFO]: [STDOUT]:      line  Shipwreck                         240, 64         OK — shipwreck, 1 pieces
+[16:00:47] [main/INFO]: [STDOUT]:      find  Shipwreck                         240, 64         OK — shipwreck, 1 pieces
+
+[16:00:47] [main/INFO]: [STDOUT]:   SEED 3393898121541017679   spawn -145, 42 (the printed spawn agrees)
+[16:00:47] [main/INFO]: [STDOUT]:      dist  Surface Village                   302 of 400      OK — within the distance asked, from the real spawn
+[16:00:47] [main/INFO]: [STDOUT]:      dist  Shipwreck                         236 of 400      OK — within the distance asked, from the real spawn
+[16:00:47] [main/INFO]: [STDOUT]:      line  Surface Village                   -336, -192      OK — village_plains, 155 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      find  Surface Village                   -336, -192      OK — village_plains, 155 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      line  Shipwreck                         80, 112         OK — shipwreck, 1 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      find  Shipwreck                         80, 112         OK — shipwreck, 1 pieces
+
+[16:00:48] [main/INFO]: [STDOUT]:   SEED -8942381704682327771   spawn 0, 0 (the printed spawn agrees)
+[16:00:48] [main/INFO]: [STDOUT]:      dist  Surface Village                   209 of 400      OK — within the distance asked, from the real spawn
+[16:00:48] [main/INFO]: [STDOUT]:      dist  Shipwreck                         285 of 400      OK — within the distance asked, from the real spawn
+[16:00:48] [main/INFO]: [STDOUT]:      line  Surface Village                   112, 176        OK — village_plains, 90 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      find  Surface Village                   112, 176        OK — village_plains, 90 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      line  Shipwreck                         224, 176        OK — shipwreck_beached, 1 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      find  Shipwreck                         224, 176        OK — shipwreck_beached, 1 pieces
+
+[16:00:48] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Fast, 1 worker) ==========
+[16:00:48] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[16:00:48] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 33 seeds checked in 0 s, stream 4587525
+
+[16:00:48] [main/INFO]: [STDOUT]:   SEED -8348320925972103268   spawn 0, 0 (the printed spawn agrees)
+[16:00:48] [main/INFO]: [STDOUT]:      dist  Surface Village                   344 of 400      OK — within the distance asked, from the real spawn
+[16:00:48] [main/INFO]: [STDOUT]:      dist  Shipwreck                         165 of 400      OK — within the distance asked, from the real spawn
+[16:00:48] [main/INFO]: [STDOUT]:      line  Surface Village                   304, -160       OK — village_savanna, 102 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      find  Surface Village                   304, -160       OK — village_savanna, 102 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      line  Shipwreck                         -80, 144        OK — shipwreck, 1 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      find  Shipwreck                         -80, 144        OK — shipwreck, 1 pieces
+
+[16:00:48] [main/INFO]: [STDOUT]:   SEED 8774192721995701016   spawn -13, 20 (the printed spawn agrees)
+[16:00:48] [main/INFO]: [STDOUT]:      dist  Surface Village                   325 of 400      OK — within the distance asked, from the real spawn
+[16:00:48] [main/INFO]: [STDOUT]:      dist  Shipwreck                         170 of 400      OK — within the distance asked, from the real spawn
+[16:00:48] [main/INFO]: [STDOUT]:      line  Surface Village                   16, -304        OK — village_taiga, 139 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      find  Surface Village                   16, -304        OK — village_taiga, 139 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      line  Shipwreck                         -144, 128       OK — shipwreck, 1 pieces
+[16:00:48] [main/INFO]: [STDOUT]:      find  Shipwreck                         -144, 128       OK — shipwreck, 1 pieces
+
+[16:00:48] [main/INFO]: [STDOUT]:   SEED -5413146111241964457   spawn 0, 0 (the printed spawn agrees)
+[16:00:48] [main/INFO]: [STDOUT]:      dist  Surface Village                   68 of 400       OK — within the distance asked, from the real spawn
+[16:00:48] [main/INFO]: [STDOUT]:      dist  Shipwreck                         311 of 400      OK — within the distance asked, from the real spawn
+[16:00:49] [main/INFO]: [STDOUT]:      line  Surface Village                   48, 48          OK — village_plains, 190 pieces
+[16:00:49] [main/INFO]: [STDOUT]:      find  Surface Village                   48, 48          OK — village_plains, 190 pieces
+[16:00:49] [main/INFO]: [STDOUT]:      line  Shipwreck                         256, 176        OK — shipwreck, 1 pieces
+[16:00:49] [main/INFO]: [STDOUT]:      find  Shipwreck                         256, 176        OK — shipwreck, 1 pieces
+
+[16:00:49] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Exact, 1 worker) ==========
+[16:00:49] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[16:00:52] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 37 seeds checked in 3 s, stream 4587526
+
+[16:00:52] [main/INFO]: [STDOUT]:   SEED 3543744453118253825   spawn -13, 20 (the printed spawn agrees)
+[16:00:52] [main/INFO]: [STDOUT]:      dist  Village with Armorer              251 of 400      OK — within the distance asked, from the real spawn
+[16:00:52] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     298 of 400      OK — within the distance asked, from the real spawn
+[16:00:53] [main/INFO]: [STDOUT]:      line  Village with Armorer              -160, 224       OK — village_plains contains armorer
+[16:00:53] [main/INFO]: [STDOUT]:      find  Village with Armorer              -160, 224       OK — village_plains contains armorer
+[16:00:53] [main/INFO]: [STDOUT]:      line  Ruined Portal                     48, -272        OK — ruined_portal, 1 pieces
+[16:00:53] [main/INFO]: [STDOUT]:      find  Ruined Portal                     48, -272        OK — ruined_portal, 1 pieces
+
+[16:00:53] [main/INFO]: [STDOUT]:   SEED 7579377868130403502   spawn 0, 0 (the printed spawn agrees)
+[16:00:53] [main/INFO]: [STDOUT]:      dist  Village with Armorer              80 of 400       OK — within the distance asked, from the real spawn
+[16:00:53] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     330 of 400      OK — within the distance asked, from the real spawn
+[16:00:53] [main/INFO]: [STDOUT]:      line  Village with Armorer              64, 48          OK — village_plains contains armorer
+[16:00:53] [main/INFO]: [STDOUT]:      find  Village with Armorer              64, 48          OK — village_plains contains armorer
+[16:00:53] [main/INFO]: [STDOUT]:      line  Ruined Portal                     256, 208        OK — ruined_portal, 1 pieces
+[16:00:53] [main/INFO]: [STDOUT]:      find  Ruined Portal                     256, 208        OK — ruined_portal, 1 pieces
+
+[16:00:53] [main/INFO]: [STDOUT]:   SEED 9115970627494372145   spawn -127, -56 (the printed spawn agrees)
+[16:00:53] [main/INFO]: [STDOUT]:      dist  Village with Armorer              355 of 400      OK — within the distance asked, from the real spawn
+[16:00:53] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     337 of 400      OK — within the distance asked, from the real spawn
+[16:00:54] [main/INFO]: [STDOUT]:      line  Village with Armorer              -448, 96        OK — village_plains contains armorer
+[16:00:54] [main/INFO]: [STDOUT]:      find  Village with Armorer              -448, 96        OK — village_plains contains armorer
+[16:00:54] [main/INFO]: [STDOUT]:      line  Ruined Portal                     -336, -320      OK — ruined_portal, 1 pieces
+[16:00:54] [main/INFO]: [STDOUT]:      find  Ruined Portal                     -336, -320      OK — ruined_portal, 1 pieces
+
+[16:00:54] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Fast, 1 worker) ==========
+[16:00:54] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[16:00:55] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 28 seeds checked in 1 s, stream 4587527
+
+[16:00:55] [main/INFO]: [STDOUT]:   SEED -5137675136940946060   spawn 0, 0 (the printed spawn agrees)
+[16:00:55] [main/INFO]: [STDOUT]:      dist  Village with Armorer              179 of 400      OK — within the distance asked, from the real spawn
+[16:00:55] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     115 of 400      OK — within the distance asked, from the real spawn
+[16:00:55] [main/INFO]: [STDOUT]:      line  Village with Armorer              80, 160         OK — village_plains contains armorer
+[16:00:56] [main/INFO]: [STDOUT]:      find  Village with Armorer              80, 160         OK — village_plains contains armorer
+[16:00:56] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 96          OK — ruined_portal, 1 pieces
+[16:00:56] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 96          OK — ruined_portal, 1 pieces
+
+[16:00:56] [main/INFO]: [STDOUT]:   SEED 6817476587190715039   spawn -44, 113 (the printed spawn agrees)
+[16:00:56] [main/INFO]: [STDOUT]:      dist  Village with Armorer              117 of 400      OK — within the distance asked, from the real spawn
+[16:00:56] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     233 of 400      OK — within the distance asked, from the real spawn
+[16:00:56] [main/INFO]: [STDOUT]:      line  Village with Armorer              -160, 128       OK — village_snowy contains armorer
+[16:00:56] [main/INFO]: [STDOUT]:      find  Village with Armorer              -160, 128       OK — village_snowy contains armorer
+[16:00:56] [main/INFO]: [STDOUT]:      line  Ruined Portal                     -272, 64        OK — ruined_portal_ocean, 1 pieces
+[16:00:56] [main/INFO]: [STDOUT]:      find  Ruined Portal                     -272, 64        OK — ruined_portal_ocean, 1 pieces
+
+[16:00:56] [main/INFO]: [STDOUT]:   SEED -3165487319106366369   spawn 0, 0 (the printed spawn agrees)
+[16:00:56] [main/INFO]: [STDOUT]:      dist  Village with Armorer              226 of 400      OK — within the distance asked, from the real spawn
+[16:00:56] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     311 of 400      OK — within the distance asked, from the real spawn
+[16:00:56] [main/INFO]: [STDOUT]:      line  Village with Armorer              -160, -160      OK — village_savanna contains armorer
+[16:00:56] [main/INFO]: [STDOUT]:      find  Village with Armorer              -160, -160      OK — village_savanna contains armorer
+[16:00:56] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 304         OK — ruined_portal, 1 pieces
+[16:00:56] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 304         OK — ruined_portal, 1 pieces
+
+[16:00:56] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Exact, 12 workers) ==========
+[16:00:56] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[16:00:57] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 92 seeds checked in 1 s, stream 4587522
+
+[16:00:57] [main/INFO]: [STDOUT]:   SEED 4417295699456912946   spawn 0, 0 (the printed spawn agrees)
+[16:00:57] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          163 of 400      OK — within the distance asked, from the real spawn
+[16:00:57] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -160, 32        OK — village_taiga contains weaponsmith|weapon_smith
+[16:00:57] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -160, 32        OK — village_taiga contains weaponsmith|weapon_smith
+
+[16:00:57] [main/INFO]: [STDOUT]:   SEED 1814541481786047728   spawn -720, -33 (the printed spawn agrees)
+[16:00:57] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          363 of 400      OK — within the distance asked, from the real spawn
+[16:00:57] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -976, 224       OK — village_taiga contains weaponsmith|weapon_smith
+[16:00:58] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -976, 224       OK — village_taiga contains weaponsmith|weapon_smith
+
+[16:00:58] [main/INFO]: [STDOUT]:   SEED -7992216159604608755   spawn 147, 326 (the printed spawn agrees)
+[16:00:58] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          138 of 400      OK — within the distance asked, from the real spawn
+[16:00:58] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          16, 368         OK — village_savanna contains weaponsmith|weapon_smith
+[16:00:58] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          16, 368         OK — village_savanna contains weaponsmith|weapon_smith
+
+[16:00:58] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Fast, 12 workers) ==========
+[16:00:58] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[16:00:59] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 78 seeds checked in 1 s, stream 4587523
+
+[16:00:59] [main/INFO]: [STDOUT]:   SEED -4927764927825922250   spawn 0, 0 (the printed spawn agrees)
+[16:00:59] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          340 of 400      OK — within the distance asked, from the real spawn
+[16:00:59] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          224, -256       OK — village_taiga contains weaponsmith|weapon_smith
+[16:00:59] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          224, -256       OK — village_taiga contains weaponsmith|weapon_smith
+
+[16:00:59] [main/INFO]: [STDOUT]:   SEED -971322007979628348   spawn -53, 50 (the printed spawn agrees)
+[16:00:59] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          391 of 400      OK — within the distance asked, from the real spawn
+[16:00:59] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+[16:00:59] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+
+[16:00:59] [main/INFO]: [STDOUT]:   SEED 3959439842442258228   spawn 53, 35 (the printed spawn agrees)
+[16:00:59] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          218 of 400      OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          0, -176         OK — village_plains contains weaponsmith|weapon_smith
+[16:01:00] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          0, -176         OK — village_plains contains weaponsmith|weapon_smith
+
+[16:01:00] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Exact, 12 workers) ==========
+[16:01:00] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[16:01:00] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 64 seeds checked in 0 s, stream 4587524
+
+[16:01:00] [main/INFO]: [STDOUT]:   SEED 1587631944017370348   spawn 5, -6 (the printed spawn agrees)
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Surface Village                   250 of 400      OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Shipwreck                         354 of 400      OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      line  Surface Village                   0, -256         OK — village_plains, 143 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      find  Surface Village                   0, -256         OK — village_plains, 143 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      line  Shipwreck                         -192, 288       OK — shipwreck_beached, 1 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      find  Shipwreck                         -192, 288       OK — shipwreck_beached, 1 pieces
+
+[16:01:00] [main/INFO]: [STDOUT]:   SEED 260200656568614252   spawn 0, 0 (the printed spawn agrees)
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Surface Village                   260 of 400      OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Shipwreck                         182 of 400      OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      line  Surface Village                   48, -256        OK — village_plains, 112 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      find  Surface Village                   48, -256        OK — village_plains, 112 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      line  Shipwreck                         -112, 144       OK — shipwreck, 1 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      find  Shipwreck                         -112, 144       OK — shipwreck, 1 pieces
+
+[16:01:00] [main/INFO]: [STDOUT]:   SEED 3550795732094166247   spawn 418, 297 (the printed spawn agrees)
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Surface Village                   384 of 400      OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Shipwreck                         260 of 400      OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      line  Surface Village                   336, 672        OK — village_plains, 70 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      find  Surface Village                   336, 672        OK — village_plains, 70 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      line  Shipwreck                         672, 240        OK — shipwreck, 1 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      find  Shipwreck                         672, 240        OK — shipwreck, 1 pieces
+
+[16:01:00] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Fast, 12 workers) ==========
+[16:01:00] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[16:01:00] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 135 seeds checked in 0 s, stream 4587525
+
+[16:01:00] [main/INFO]: [STDOUT]:   SEED -1351601151890507818   spawn 0, 0 (the printed spawn agrees)
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Surface Village                   97 of 400       OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Shipwreck                         336 of 400      OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      line  Surface Village                   16, 96          OK — village_snowy, 106 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      find  Surface Village                   16, 96          OK — village_snowy, 106 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      line  Shipwreck                         -336, 16        OK — shipwreck_beached, 1 pieces
+[16:01:00] [main/INFO]: [STDOUT]:      find  Shipwreck                         -336, 16        OK — shipwreck_beached, 1 pieces
+
+[16:01:00] [main/INFO]: [STDOUT]:   SEED 4758571272822038794   spawn -42, -25 (the printed spawn agrees)
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Surface Village                   274 of 400      OK — within the distance asked, from the real spawn
+[16:01:00] [main/INFO]: [STDOUT]:      dist  Shipwreck                         342 of 400      OK — within the distance asked, from the real spawn
+[16:01:01] [main/INFO]: [STDOUT]:      line  Surface Village                   144, 176        OK — village_taiga, 110 pieces
+[16:01:01] [main/INFO]: [STDOUT]:      find  Surface Village                   144, 176        OK — village_taiga, 110 pieces
+[16:01:01] [main/INFO]: [STDOUT]:      line  Shipwreck                         272, -160       OK — shipwreck, 1 pieces
+[16:01:01] [main/INFO]: [STDOUT]:      find  Shipwreck                         272, -160       OK — shipwreck, 1 pieces
+
+[16:01:01] [main/INFO]: [STDOUT]:   SEED 3782023508115798955   spawn 0, 0 (the printed spawn agrees)
+[16:01:01] [main/INFO]: [STDOUT]:      dist  Surface Village                   324 of 400      OK — within the distance asked, from the real spawn
+[16:01:01] [main/INFO]: [STDOUT]:      dist  Shipwreck                         314 of 400      OK — within the distance asked, from the real spawn
+[16:01:01] [main/INFO]: [STDOUT]:      line  Surface Village                   -176, 272       OK — village_snowy, 175 pieces
+[16:01:01] [main/INFO]: [STDOUT]:      find  Surface Village                   -176, 272       OK — village_snowy, 175 pieces
+[16:01:01] [main/INFO]: [STDOUT]:      line  Shipwreck                         -304, -80       OK — shipwreck, 1 pieces
+[16:01:01] [main/INFO]: [STDOUT]:      find  Shipwreck                         -304, -80       OK — shipwreck, 1 pieces
+
+[16:01:01] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Exact, 12 workers) ==========
+[16:01:01] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[16:01:02] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 86 seeds checked in 0 s, stream 4587526
+
+[16:01:02] [main/INFO]: [STDOUT]:   SEED -4426847573723983027   spawn 0, 0 (the printed spawn agrees)
+[16:01:02] [main/INFO]: [STDOUT]:      dist  Village with Armorer              195 of 400      OK — within the distance asked, from the real spawn
+[16:01:02] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     72 of 400       OK — within the distance asked, from the real spawn
+[16:01:02] [main/INFO]: [STDOUT]:      line  Village with Armorer              112, 160        OK — village_taiga contains armorer
+[16:01:02] [main/INFO]: [STDOUT]:      find  Village with Armorer              112, 160        OK — village_taiga contains armorer
+[16:01:02] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 32          OK — ruined_portal, 1 pieces
+[16:01:02] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 32          OK — ruined_portal, 1 pieces
+
+[16:01:02] [main/INFO]: [STDOUT]:   SEED 3005265737208908222   spawn 74, 357 (the printed spawn agrees)
+[16:01:02] [main/INFO]: [STDOUT]:      dist  Village with Armorer              242 of 400      OK — within the distance asked, from the real spawn
+[16:01:02] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     133 of 400      OK — within the distance asked, from the real spawn
+[16:01:02] [main/INFO]: [STDOUT]:      line  Village with Armorer              16, 592         OK — village_savanna contains armorer
+[16:01:02] [main/INFO]: [STDOUT]:      find  Village with Armorer              16, 592         OK — village_savanna contains armorer
+[16:01:02] [main/INFO]: [STDOUT]:      line  Ruined Portal                     160, 256        OK — ruined_portal_ocean, 1 pieces
+[16:01:02] [main/INFO]: [STDOUT]:      find  Ruined Portal                     160, 256        OK — ruined_portal_ocean, 1 pieces
+
+[16:01:02] [main/INFO]: [STDOUT]:   SEED -2453508682600180313   spawn -28, 48 (the printed spawn agrees)
+[16:01:02] [main/INFO]: [STDOUT]:      dist  Village with Armorer              206 of 400      OK — within the distance asked, from the real spawn
+[16:01:02] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     128 of 400      OK — within the distance asked, from the real spawn
+[16:01:02] [main/INFO]: [STDOUT]:      line  Village with Armorer              -224, 112       OK — village_savanna contains armorer
+[16:01:02] [main/INFO]: [STDOUT]:      find  Village with Armorer              -224, 112       OK — village_savanna contains armorer
+[16:01:02] [main/INFO]: [STDOUT]:      line  Ruined Portal                     96, 16          OK — ruined_portal_ocean, 1 pieces
+[16:01:02] [main/INFO]: [STDOUT]:      find  Ruined Portal                     96, 16          OK — ruined_portal_ocean, 1 pieces
+
+[16:01:02] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Fast, 12 workers) ==========
+[16:01:02] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[16:01:03] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 110 seeds checked in 1 s, stream 4587527
+
+[16:01:03] [main/INFO]: [STDOUT]:   SEED 7649822100076540263   spawn 0, 0 (the printed spawn agrees)
+[16:01:03] [main/INFO]: [STDOUT]:      dist  Village with Armorer              193 of 400      OK — within the distance asked, from the real spawn
+[16:01:03] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     345 of 400      OK — within the distance asked, from the real spawn
+[16:01:03] [main/INFO]: [STDOUT]:      line  Village with Armorer              176, 80         OK — village_snowy contains armorer
+[16:01:04] [main/INFO]: [STDOUT]:      find  Village with Armorer              176, 80         OK — village_snowy contains armorer
+[16:01:04] [main/INFO]: [STDOUT]:      line  Ruined Portal                     128, -320       OK — ruined_portal, 1 pieces
+[16:01:04] [main/INFO]: [STDOUT]:      find  Ruined Portal                     128, -320       OK — ruined_portal, 1 pieces
+
+[16:01:04] [main/INFO]: [STDOUT]:   SEED -4095549723907756916   spawn 0, 0 (the printed spawn agrees)
+[16:01:04] [main/INFO]: [STDOUT]:      dist  Village with Armorer              161 of 400      OK — within the distance asked, from the real spawn
+[16:01:04] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     137 of 400      OK — within the distance asked, from the real spawn
+[16:01:04] [main/INFO]: [STDOUT]:      line  Village with Armorer              16, 160         OK — village_plains contains armorer
+[16:01:04] [main/INFO]: [STDOUT]:      find  Village with Armorer              16, 160         OK — village_plains contains armorer
+[16:01:04] [main/INFO]: [STDOUT]:      line  Ruined Portal                     48, 128         OK — ruined_portal_swamp, 1 pieces
+[16:01:04] [main/INFO]: [STDOUT]:      find  Ruined Portal                     48, 128         OK — ruined_portal_swamp, 1 pieces
+
+[16:01:04] [main/INFO]: [STDOUT]:   SEED -5137675136940946060   spawn 0, 0 (the printed spawn agrees)
+[16:01:04] [main/INFO]: [STDOUT]:      dist  Village with Armorer              179 of 400      OK — within the distance asked, from the real spawn
+[16:01:04] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     115 of 400      OK — within the distance asked, from the real spawn
+[16:01:04] [main/INFO]: [STDOUT]:      line  Village with Armorer              80, 160         OK — village_plains contains armorer
+[16:01:04] [main/INFO]: [STDOUT]:      find  Village with Armorer              80, 160         OK — village_plains contains armorer
+[16:01:04] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 96          OK — ruined_portal, 1 pieces
+[16:01:04] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 96          OK — ruined_portal, 1 pieces
+
+[16:01:04] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Exact, 16 workers) ==========
+[16:01:04] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[16:01:05] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 105 seeds checked in 1 s, stream 4587522
+
+[16:01:05] [main/INFO]: [STDOUT]:   SEED 4417295699456912946   spawn 0, 0 (the printed spawn agrees)
+[16:01:05] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          163 of 400      OK — within the distance asked, from the real spawn
+[16:01:05] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -160, 32        OK — village_taiga contains weaponsmith|weapon_smith
+[16:01:05] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -160, 32        OK — village_taiga contains weaponsmith|weapon_smith
+
+[16:01:05] [main/INFO]: [STDOUT]:   SEED 4255460277719788549   spawn -121, 499 (the printed spawn agrees)
+[16:01:05] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          235 of 400      OK — within the distance asked, from the real spawn
+[16:01:05] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -352, 544       OK — village_desert contains weaponsmith|weapon_smith
+[16:01:05] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -352, 544       OK — village_desert contains weaponsmith|weapon_smith
+
+[16:01:05] [main/INFO]: [STDOUT]:   SEED 1814541481786047728   spawn -720, -33 (the printed spawn agrees)
+[16:01:05] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          363 of 400      OK — within the distance asked, from the real spawn
+[16:01:05] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -976, 224       OK — village_taiga contains weaponsmith|weapon_smith
+[16:01:06] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -976, 224       OK — village_taiga contains weaponsmith|weapon_smith
+
+[16:01:06] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Fast, 16 workers) ==========
+[16:01:06] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[16:01:07] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 127 seeds checked in 1 s, stream 4587523
+
+[16:01:07] [main/INFO]: [STDOUT]:   SEED -4927764927825922250   spawn 0, 0 (the printed spawn agrees)
+[16:01:07] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          340 of 400      OK — within the distance asked, from the real spawn
+[16:01:07] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          224, -256       OK — village_taiga contains weaponsmith|weapon_smith
+[16:01:07] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          224, -256       OK — village_taiga contains weaponsmith|weapon_smith
+
+[16:01:07] [main/INFO]: [STDOUT]:   SEED -971322007979628348   spawn -53, 50 (the printed spawn agrees)
+[16:01:07] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          391 of 400      OK — within the distance asked, from the real spawn
+[16:01:07] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+[16:01:07] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+
+[16:01:07] [main/INFO]: [STDOUT]:   SEED 3959439842442258228   spawn 53, 35 (the printed spawn agrees)
+[16:01:07] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          218 of 400      OK — within the distance asked, from the real spawn
+[16:01:07] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          0, -176         OK — village_plains contains weaponsmith|weapon_smith
+[16:01:07] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          0, -176         OK — village_plains contains weaponsmith|weapon_smith
+
+[16:01:07] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Exact, 16 workers) ==========
+[16:01:07] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[16:01:07] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 72 seeds checked in 0 s, stream 4587524
+
+[16:01:07] [main/INFO]: [STDOUT]:   SEED 260200656568614252   spawn 0, 0 (the printed spawn agrees)
+[16:01:07] [main/INFO]: [STDOUT]:      dist  Surface Village                   260 of 400      OK — within the distance asked, from the real spawn
+[16:01:07] [main/INFO]: [STDOUT]:      dist  Shipwreck                         182 of 400      OK — within the distance asked, from the real spawn
+[16:01:07] [main/INFO]: [STDOUT]:      line  Surface Village                   48, -256        OK — village_plains, 112 pieces
+[16:01:08] [main/INFO]: [STDOUT]:      find  Surface Village                   48, -256        OK — village_plains, 112 pieces
+[16:01:08] [main/INFO]: [STDOUT]:      line  Shipwreck                         -112, 144       OK — shipwreck, 1 pieces
+[16:01:08] [main/INFO]: [STDOUT]:      find  Shipwreck                         -112, 144       OK — shipwreck, 1 pieces
+
+[16:01:08] [main/INFO]: [STDOUT]:   SEED 1587631944017370348   spawn 5, -6 (the printed spawn agrees)
+[16:01:08] [main/INFO]: [STDOUT]:      dist  Surface Village                   250 of 400      OK — within the distance asked, from the real spawn
+[16:01:08] [main/INFO]: [STDOUT]:      dist  Shipwreck                         354 of 400      OK — within the distance asked, from the real spawn
+[16:01:08] [main/INFO]: [STDOUT]:      line  Surface Village                   0, -256         OK — village_plains, 143 pieces
+[16:01:08] [main/INFO]: [STDOUT]:      find  Surface Village                   0, -256         OK — village_plains, 143 pieces
+[16:01:08] [main/INFO]: [STDOUT]:      line  Shipwreck                         -192, 288       OK — shipwreck_beached, 1 pieces
+[16:01:08] [main/INFO]: [STDOUT]:      find  Shipwreck                         -192, 288       OK — shipwreck_beached, 1 pieces
+
+[16:01:08] [main/INFO]: [STDOUT]:   SEED 3550795732094166247   spawn 418, 297 (the printed spawn agrees)
+[16:01:08] [main/INFO]: [STDOUT]:      dist  Surface Village                   384 of 400      OK — within the distance asked, from the real spawn
+[16:01:08] [main/INFO]: [STDOUT]:      dist  Shipwreck                         260 of 400      OK — within the distance asked, from the real spawn
+[16:01:08] [main/INFO]: [STDOUT]:      line  Surface Village                   336, 672        OK — village_plains, 70 pieces
+[16:01:08] [main/INFO]: [STDOUT]:      find  Surface Village                   336, 672        OK — village_plains, 70 pieces
+[16:01:08] [main/INFO]: [STDOUT]:      line  Shipwreck                         672, 240        OK — shipwreck, 1 pieces
+[16:01:08] [main/INFO]: [STDOUT]:      find  Shipwreck                         672, 240        OK — shipwreck, 1 pieces
+
+[16:01:08] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Fast, 16 workers) ==========
+[16:01:08] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[16:01:08] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 161 seeds checked in 0 s, stream 4587525
+
+[16:01:08] [main/INFO]: [STDOUT]:   SEED 3599068396287069333   spawn 0, 0 (the printed spawn agrees)
+[16:01:08] [main/INFO]: [STDOUT]:      dist  Surface Village                   396 of 400      OK — within the distance asked, from the real spawn
+[16:01:08] [main/INFO]: [STDOUT]:      dist  Shipwreck                         351 of 400      OK — within the distance asked, from the real spawn
+[16:01:08] [main/INFO]: [STDOUT]:      line  Surface Village                   -272, 288       OK — village_plains, 178 pieces
+[16:01:09] [main/INFO]: [STDOUT]:      find  Surface Village                   -272, 288       OK — village_plains, 178 pieces
+[16:01:09] [main/INFO]: [STDOUT]:      line  Shipwreck                         176, 304        OK — shipwreck_beached, 1 pieces
+[16:01:09] [main/INFO]: [STDOUT]:      find  Shipwreck                         176, 304        OK — shipwreck_beached, 1 pieces
+
+[16:01:09] [main/INFO]: [STDOUT]:   SEED 3782023508115798955   spawn 0, 0 (the printed spawn agrees)
+[16:01:09] [main/INFO]: [STDOUT]:      dist  Surface Village                   324 of 400      OK — within the distance asked, from the real spawn
+[16:01:09] [main/INFO]: [STDOUT]:      dist  Shipwreck                         314 of 400      OK — within the distance asked, from the real spawn
+[16:01:09] [main/INFO]: [STDOUT]:      line  Surface Village                   -176, 272       OK — village_snowy, 175 pieces
+[16:01:09] [main/INFO]: [STDOUT]:      find  Surface Village                   -176, 272       OK — village_snowy, 175 pieces
+[16:01:09] [main/INFO]: [STDOUT]:      line  Shipwreck                         -304, -80       OK — shipwreck, 1 pieces
+[16:01:09] [main/INFO]: [STDOUT]:      find  Shipwreck                         -304, -80       OK — shipwreck, 1 pieces
+
+[16:01:09] [main/INFO]: [STDOUT]:   SEED -6492441189746048529   spawn -28, 48 (the printed spawn agrees)
+[16:01:09] [main/INFO]: [STDOUT]:      dist  Surface Village                   344 of 400      OK — within the distance asked, from the real spawn
+[16:01:09] [main/INFO]: [STDOUT]:      dist  Shipwreck                         281 of 400      OK — within the distance asked, from the real spawn
+[16:01:09] [main/INFO]: [STDOUT]:      line  Surface Village                   48, 384         OK — village_taiga, 132 pieces
+[16:01:09] [main/INFO]: [STDOUT]:      find  Surface Village                   48, 384         OK — village_taiga, 132 pieces
+[16:01:09] [main/INFO]: [STDOUT]:      line  Shipwreck                         -144, 304       OK — shipwreck, 1 pieces
+[16:01:09] [main/INFO]: [STDOUT]:      find  Shipwreck                         -144, 304       OK — shipwreck, 1 pieces
+
+[16:01:09] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Exact, 16 workers) ==========
+[16:01:09] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[16:01:10] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 120 seeds checked in 0 s, stream 4587526
+
+[16:01:10] [main/INFO]: [STDOUT]:   SEED -4426847573723983027   spawn 0, 0 (the printed spawn agrees)
+[16:01:10] [main/INFO]: [STDOUT]:      dist  Village with Armorer              195 of 400      OK — within the distance asked, from the real spawn
+[16:01:10] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     72 of 400       OK — within the distance asked, from the real spawn
+[16:01:10] [main/INFO]: [STDOUT]:      line  Village with Armorer              112, 160        OK — village_taiga contains armorer
+[16:01:10] [main/INFO]: [STDOUT]:      find  Village with Armorer              112, 160        OK — village_taiga contains armorer
+[16:01:10] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 32          OK — ruined_portal, 1 pieces
+[16:01:10] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 32          OK — ruined_portal, 1 pieces
+
+[16:01:10] [main/INFO]: [STDOUT]:   SEED 3005265737208908222   spawn 74, 357 (the printed spawn agrees)
+[16:01:10] [main/INFO]: [STDOUT]:      dist  Village with Armorer              242 of 400      OK — within the distance asked, from the real spawn
+[16:01:10] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     133 of 400      OK — within the distance asked, from the real spawn
+[16:01:10] [main/INFO]: [STDOUT]:      line  Village with Armorer              16, 592         OK — village_savanna contains armorer
+[16:01:10] [main/INFO]: [STDOUT]:      find  Village with Armorer              16, 592         OK — village_savanna contains armorer
+[16:01:10] [main/INFO]: [STDOUT]:      line  Ruined Portal                     160, 256        OK — ruined_portal_ocean, 1 pieces
+[16:01:10] [main/INFO]: [STDOUT]:      find  Ruined Portal                     160, 256        OK — ruined_portal_ocean, 1 pieces
+
+[16:01:10] [main/INFO]: [STDOUT]:   SEED -2453508682600180313   spawn -28, 48 (the printed spawn agrees)
+[16:01:10] [main/INFO]: [STDOUT]:      dist  Village with Armorer              206 of 400      OK — within the distance asked, from the real spawn
+[16:01:10] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     128 of 400      OK — within the distance asked, from the real spawn
+[16:01:10] [main/INFO]: [STDOUT]:      line  Village with Armorer              -224, 112       OK — village_savanna contains armorer
+[16:01:11] [main/INFO]: [STDOUT]:      find  Village with Armorer              -224, 112       OK — village_savanna contains armorer
+[16:01:11] [main/INFO]: [STDOUT]:      line  Ruined Portal                     96, 16          OK — ruined_portal_ocean, 1 pieces
+[16:01:11] [main/INFO]: [STDOUT]:      find  Ruined Portal                     96, 16          OK — ruined_portal_ocean, 1 pieces
+
+[16:01:11] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Fast, 16 workers) ==========
+[16:01:11] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[16:01:12] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 128 seeds checked in 1 s, stream 4587527
+
+[16:01:12] [main/INFO]: [STDOUT]:   SEED 1214850261768750826   spawn 0, 0 (the printed spawn agrees)
+[16:01:12] [main/INFO]: [STDOUT]:      dist  Village with Armorer              294 of 400      OK — within the distance asked, from the real spawn
+[16:01:12] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     181 of 400      OK — within the distance asked, from the real spawn
+[16:01:12] [main/INFO]: [STDOUT]:      line  Village with Armorer              256, 144        OK — village_plains contains armorer
+[16:01:12] [main/INFO]: [STDOUT]:      find  Village with Armorer              256, 144        OK — village_plains contains armorer
+[16:01:12] [main/INFO]: [STDOUT]:      line  Ruined Portal                     128, 128        OK — ruined_portal, 1 pieces
+[16:01:12] [main/INFO]: [STDOUT]:      find  Ruined Portal                     128, 128        OK — ruined_portal, 1 pieces
+
+[16:01:12] [main/INFO]: [STDOUT]:   SEED 7649822100076540263   spawn 0, 0 (the printed spawn agrees)
+[16:01:12] [main/INFO]: [STDOUT]:      dist  Village with Armorer              193 of 400      OK — within the distance asked, from the real spawn
+[16:01:12] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     345 of 400      OK — within the distance asked, from the real spawn
+[16:01:12] [main/INFO]: [STDOUT]:      line  Village with Armorer              176, 80         OK — village_snowy contains armorer
+[16:01:12] [main/INFO]: [STDOUT]:      find  Village with Armorer              176, 80         OK — village_snowy contains armorer
+[16:01:12] [main/INFO]: [STDOUT]:      line  Ruined Portal                     128, -320       OK — ruined_portal, 1 pieces
+[16:01:12] [main/INFO]: [STDOUT]:      find  Ruined Portal                     128, -320       OK — ruined_portal, 1 pieces
+
+[16:01:12] [main/INFO]: [STDOUT]:   SEED -4095549723907756916   spawn 0, 0 (the printed spawn agrees)
+[16:01:12] [main/INFO]: [STDOUT]:      dist  Village with Armorer              161 of 400      OK — within the distance asked, from the real spawn
+[16:01:12] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     137 of 400      OK — within the distance asked, from the real spawn
+[16:01:12] [main/INFO]: [STDOUT]:      line  Village with Armorer              16, 160         OK — village_plains contains armorer
+[16:01:12] [main/INFO]: [STDOUT]:      find  Village with Armorer              16, 160         OK — village_plains contains armorer
+[16:01:12] [main/INFO]: [STDOUT]:      line  Ruined Portal                     48, 128         OK — ruined_portal_swamp, 1 pieces
+[16:01:12] [main/INFO]: [STDOUT]:      find  Ruined Portal                     48, 128         OK — ruined_portal_swamp, 1 pieces
+
+[16:01:12] [main/INFO]: [STDOUT]: ========== TOTAL ==========
+[16:01:12] [main/INFO]: [STDOUT]:   seeds returned by the finder : 54
+[16:01:12] [main/INFO]: [STDOUT]:   individual row claims checked: 324
+[16:01:12] [main/INFO]: [STDOUT]:   FALSE MATCHES                : 0
+[16:01:12] [main/INFO]: [STDOUT]:   could not verify either way  : 0
+[16:01:12] [main/INFO]: [STDOUT]:   N-world searches             : 18 run, 0 that did not return 3 different seeds
+[16:01:12] [main/INFO]: [STDOUT]:   A false match is a row the finder reported and that is NOT really there.
+[16:01:12] [main/INFO]: [STDOUT]: ===========================

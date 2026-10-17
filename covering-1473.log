@@ -1,0 +1,1711 @@
+﻿==== catalogDiag ====
+========== OVERLAPPING CATALOG BUILDS ==========
+  ok   an older build finishing while the newer runs is dropped
+  ok     and does not clear "building" for the newer one
+  ok   the newer build publishes
+  ok   an older build finishing AFTER the newer one does not replace it
+  ok   a build still running when the cache is emptied cannot refill it
+  ok   a stale build's error does not land
+  ok   the current build's error does
+  ok   CONTROL: without build numbers the older build lands over the newer (check 1 fails, as it must)
+  ok   CONTROL: without build numbers a forgotten build refills the cache (check 2 fails, as it must)
+ALL CHECKS PASS
+==== configDiag ====
+========== SETTINGS ON DISK ==========
+-- 1. "Ask me" (Custom spawn opens by itself) --
+  ok   the default, before any settings file is read, is OFF
+  ok   a new install (no settings file): off, and the file it writes says off
+  ok   an older file with no "Ask me" in it keeps the old default, on
+  ok   a saved ON stays on
+  ok   a saved OFF stays off
+[14:49:07] [main/WARN]: Could not read C:\Users\safia\AppData\Local\Temp\fv-configDiag3512679858227194474\broken\fablevision.json, using defaults
+com.google.gson.JsonSyntaxException: com.google.gson.stream.MalformedJsonException: Expected ':' at line 1 column 7 path $.not
+See https://github.com/google/gson/blob/main/Troubleshooting.md#malformed-json
+	at com.google.gson.internal.Streams.parse(Streams.java:60)
+	at com.google.gson.JsonParser.parseReader(JsonParser.java:144)
+	at com.google.gson.JsonParser.parseReader(JsonParser.java:110)
+	at com.google.gson.JsonParser.parseString(JsonParser.java:92)
+	at com.fablevision.client.FableVisionConfig.load(FableVisionConfig.java:95)
+	at com.fablevision.client.ConfigDiagnostic.loaded(ConfigDiagnostic.java:112)
+	at com.fablevision.client.ConfigDiagnostic.main(ConfigDiagnostic.java:47)
+Caused by: com.google.gson.stream.MalformedJsonException: Expected ':' at line 1 column 7 path $.not
+See https://github.com/google/gson/blob/main/Troubleshooting.md#malformed-json
+	at com.google.gson.stream.JsonReader.syntaxError(JsonReader.java:1817)
+	at com.google.gson.stream.JsonReader.doPeek(JsonReader.java:657)
+	at com.google.gson.stream.JsonReader.peek(JsonReader.java:545)
+	at com.google.gson.internal.bind.JsonElementTypeAdapter.read(JsonElementTypeAdapter.java:102)
+	at com.google.gson.internal.Streams.parse(Streams.java:48)
+	... 6 more
+  ok   an unreadable file (an existing install) keeps the old default, on
+  ok   CONTROL: 1.47.2's default is ON, so the new-install check fails on it, as it must
+-- 2. four threads saving while another reads --
+  ok   the real save: 21,844 reads, 0 of them NOT a whole settings object (4,548 could not open it)
+  ok   CONTROL: the old in-place write: 1,235 reads, 698 NOT whole � the check can fail
+  ok   the file is whole afterwards
+-- 3. how the key screen says keys are kept --
+  Linux: "NOT encrypted � plain text in a file only your account can read"
+  Windows without the library: "NOT encrypted (Windows encryption isn't available in this install) � plain text in your profile"
+  Windows: "encrypted to your Windows account"
+  ok   Linux and macOS say NOT encrypted, plain text
+  ok   Windows without the encryption library says NOT encrypted
+  ok   Windows with it says encrypted, and not "NOT"
+  ok   CONTROL: 1.47.2 on Linux said "kept in a file only your account can read" � no NOT encrypted, so the check fails on it
+ALL CHECKS PASS
+==== watchdogDiag ====
+========== THE SEARCH WATCHDOG ==========
+  ok   a healthy search reports nothing
+  ok   one seed held 61 s is reported
+  ok     with the seed
+  ok     with the thread's state
+  ok     and a stack that reaches the stuck code
+  ok     and the seed stream that replays the search
+  ok   not repeated a minute later
+  ok   repeated after five minutes if still stuck
+  ok   no report while it is still within the minute
+  ok   no seed finished for 61 s is reported with every worker
+  ok   19x the estimate is not reported yet
+  ok   20x the estimate with nothing found is reported
+  ok     and the search screen gets its line
+  ok     once only
+  ok   a ROUGH estimate gets more room (30x not reported)
+  ok   a search that found something is not "past its estimate"
+  ok   N=3, none found: 19x one match is not reported
+  ok   N=3, none found: past 20x one match is reported, as for one world
+  ok   a world found clears the screen's line
+  ok   N=3, one found: 39x is within the allowance for the second world
+  ok   N=3, one found: past 2 matches' worth it is reported again, for the second world
+  ok     and the report says how many of how many
+  ok   all N found: never "past its estimate"
+  ok   a world found counts as progress for "no seed has finished"
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:49:12] [main/INFO]: Seed finder: built structure templates in 78ms
+[14:49:13] [main/WARN]: Seed finder: a structure generation-point check threw for seed 0 (1 so far this session); the seed was treated as not matching
+java.lang.NullPointerException: Cannot invoke "com.fablevision.client.seedfinder.WorldgenContext.biomeSource(com.fablevision.client.seedfinder.SeedCriteria$Dim)" because "ctx" is null
+	at com.fablevision.client.seedfinder.VillageLayout.generatesHere(VillageLayout.java:691)
+	at com.fablevision.client.seedfinder.WatchdogDiagnostic.failChecks(WatchdogDiagnostic.java:252)
+	at com.fablevision.client.seedfinder.WatchdogDiagnostic.main(WatchdogDiagnostic.java:154)
+[14:49:13] [main/INFO]: [STDOUT]:   ok   real check failures are counted, for the search whose worker ran them
+[14:49:13] [main/INFO]: [STDOUT]:   ok   60 of 60 structure checks throwing stops the search
+[14:49:13] [main/INFO]: [STDOUT]:   ok     with an error the search screen shows
+[14:49:13] [main/INFO]: [STDOUT]:   ok     and the screen leaves Searching (both flags down)
+[14:49:13] [main/INFO]: [STDOUT]:   ok     and the exception's stack in the report
+[14:49:13] [main/INFO]: [STDOUT]:   ok   an odd failure among many checks does not stop a search
+[14:49:13] [main/INFO]: [STDOUT]:   ok   60 failures from the STOPPED search's worker do not stop the next search
+[14:49:13] [main/INFO]: [STDOUT]:   ok   CONTROL: the same 60 failures counted for the next search DO stop it
+[14:49:13] [FableVision-SeedFinder-1/ERROR]: Seed finder bootstrap failed
+java.lang.IllegalStateException: Missing registry: ResourceKey[minecraft:root / minecraft:worldgen/structure_set]
+	at net.minecraft.core.RegistryAccess.lambda$lookupOrThrow$0(RegistryAccess.java:22)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at net.minecraft.core.RegistryAccess.lookupOrThrow(RegistryAccess.java:22)
+	at net.minecraft.core.RegistryAccess.lookupOrThrow(RegistryAccess.java)
+	at com.fablevision.client.seedfinder.WorldgenContext.<init>(WorldgenContext.java:112)
+	at com.fablevision.client.seedfinder.WorldgenContext.get(WorldgenContext.java:103)
+	at com.fablevision.client.seedfinder.SeedFinder.search(SeedFinder.java:445)
+	at com.fablevision.client.seedfinder.SeedFinder.worker(SeedFinder.java:427)
+	at com.fablevision.client.seedfinder.WatchdogDiagnostic.lambda$main$4(WatchdogDiagnostic.java:195)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[14:49:13] [FableVision-SeedFinder-2/ERROR]: Seed finder bootstrap failed
+java.lang.IllegalStateException: Missing registry: ResourceKey[minecraft:root / minecraft:worldgen/structure_set]
+	at net.minecraft.core.RegistryAccess.lambda$lookupOrThrow$0(RegistryAccess.java:22)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at net.minecraft.core.RegistryAccess.lookupOrThrow(RegistryAccess.java:22)
+	at net.minecraft.core.RegistryAccess.lookupOrThrow(RegistryAccess.java)
+	at com.fablevision.client.seedfinder.WorldgenContext.<init>(WorldgenContext.java:112)
+	at com.fablevision.client.seedfinder.WorldgenContext.get(WorldgenContext.java:103)
+	at com.fablevision.client.seedfinder.SeedFinder.search(SeedFinder.java:445)
+	at com.fablevision.client.seedfinder.SeedFinder.worker(SeedFinder.java:427)
+	at com.fablevision.client.seedfinder.WatchdogDiagnostic.lambda$main$4(WatchdogDiagnostic.java:195)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[14:49:13] [FableVision-SeedFinder-0/ERROR]: Seed finder bootstrap failed
+java.lang.IllegalStateException: Missing registry: ResourceKey[minecraft:root / minecraft:worldgen/structure_set]
+	at net.minecraft.core.RegistryAccess.lambda$lookupOrThrow$0(RegistryAccess.java:22)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at net.minecraft.core.RegistryAccess.lookupOrThrow(RegistryAccess.java:22)
+	at net.minecraft.core.RegistryAccess.lookupOrThrow(RegistryAccess.java)
+	at com.fablevision.client.seedfinder.WorldgenContext.<init>(WorldgenContext.java:112)
+	at com.fablevision.client.seedfinder.WorldgenContext.get(WorldgenContext.java:103)
+	at com.fablevision.client.seedfinder.SeedFinder.search(SeedFinder.java:445)
+	at com.fablevision.client.seedfinder.SeedFinder.worker(SeedFinder.java:427)
+	at com.fablevision.client.seedfinder.WatchdogDiagnostic.lambda$main$4(WatchdogDiagnostic.java:195)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[14:49:13] [main/INFO]: [STDOUT]:   ok   every worker's bootstrap throwing: the search is no longer Searching
+[14:49:13] [main/INFO]: [STDOUT]:   ok     both flags down (running and bootstrapping)
+[14:49:13] [main/INFO]: [STDOUT]:   ok     with the error the screen shows
+[14:49:13] [main/INFO]: [STDOUT]:   ok     and its end time set
+[14:49:13] [main/ERROR]: Seed finder bootstrap failed
+java.lang.IllegalStateException: Missing registry: ResourceKey[minecraft:root / minecraft:worldgen/structure_set]
+	at net.minecraft.core.RegistryAccess.lambda$lookupOrThrow$0(RegistryAccess.java:22)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at net.minecraft.core.RegistryAccess.lookupOrThrow(RegistryAccess.java:22)
+	at net.minecraft.core.RegistryAccess.lookupOrThrow(RegistryAccess.java)
+	at com.fablevision.client.seedfinder.WorldgenContext.<init>(WorldgenContext.java:112)
+	at com.fablevision.client.seedfinder.WorldgenContext.get(WorldgenContext.java:103)
+	at com.fablevision.client.seedfinder.SeedFinder.worker(SeedFinder.java:379)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.fablevision.client.seedfinder.OldJar.call(OldJar.java:91)
+	at com.fablevision.client.seedfinder.WatchdogDiagnostic.oldBootstrapFailure(WatchdogDiagnostic.java:278)
+	at com.fablevision.client.seedfinder.WatchdogDiagnostic.main(WatchdogDiagnostic.java:206)
+[14:49:13] [main/INFO]: [STDOUT]:   ok   CONTROL: 1.47.2's engine on the same failure stays Searching (the bug) — running=false bootstrapping=true error=World-gen bootstrap failed: IllegalStateException
+[14:49:13] [main/INFO]: [STDOUT]:   ok   end(): the first error given is the one kept, and an end is final
+[14:49:13] [main/INFO]: [STDOUT]: ALL CHECKS PASS
+
+[14:49:13] [main/INFO]: [STDOUT]:   what a stuck-seed report looks like in logs/latest.log:
+[14:49:13] [main/INFO]: [STDOUT]:   | FableVision seed search watchdog: worker 1 has been on one seed for 61 s
+[14:49:13] [main/INFO]: [STDOUT]:   |   wish      : 
+[14:49:13] [main/INFO]: [STDOUT]:   |   mode      : Exact, 2 workers, seed stream 77 (replays this search)
+[14:49:13] [main/INFO]: [STDOUT]:   |   progress  : 20 seeds in 0 s (2,500/s), 0 found
+
+[14:49:13] [main/INFO]: [STDOUT]:   |   estimate  : none
+[14:49:13] [main/INFO]: [STDOUT]:   |   worker 1 (seed 424242 for 61000 ms)
+[14:49:13] [main/INFO]: [STDOUT]:   |     thread "FableVision-SeedFinder-1" TIMED_WAITING
+[14:49:13] [main/INFO]: [STDOUT]:   |       at com.fablevision.client.seedfinder.WatchdogDiagnostic.stuckInsideWorldgen(WatchdogDiagnostic.java:290)
+[14:49:13] [main/INFO]: [STDOUT]:   |       at com.fablevision.client.seedfinder.WatchdogDiagnostic.lambda$main$0(WatchdogDiagnostic.java:46)
+==== wishDiag ====
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:49:17] [FableVision-SeedFinder-Bootstrap/INFO]: Seed finder: built structure templates in 19ms
+[14:49:17] [main/INFO]: [STDOUT]: ========== WHAT THE AI IS TAUGHT ==========
+[14:49:17] [main/INFO]: [STDOUT]: You convert a Minecraft world wish into strict JSON for a seed search. Reply with ONLY the JSON object - no explanation, no code fences.
+Schema: {"structures":[{"name":"<allowed structure name>","distance":<blocks from spawn>,"count":<how many of it, default 1>,"spawn_inside":<true only if the wish says INSIDE>,"size":"any|big"}],"biomes":[{"name":"<allowed biome id>","size":"any|small|big|huge","distance":<blocks from spawn>}],"adjacent":[{"a":"<allowed biome id OR structure name>","b":"<allowed biome id OR structure name>","within":<blocks apart>}],"slime":{"count":<how many slime chunks>,"within":<blocks from spawn>},"exclude":[{"name":"<allowed structure OR biome that must NOT be nearby>"}],"without":[{"name":"<allowed structure name>","distance":<blocks from spawn>}],"stronghold_mentioned":<true if the wish mentions strongholds, end portals or eyes of ender>,"worlds":<how many DIFFERENT worlds the player wants, 1-10 - only when the wish gives a number of worlds/seeds/options; omit it otherwise>,"cant":"<empty, or a short plain note>"}
+Rules: "distance" is how far from spawn that ONE thing may be, in blocks. Omit it for a simple wish that names one or two things and the app will use its own close-to-spawn setting. Set it only when you are composing a BUNDLE (see below), and then give each item its own sensible number — never put everything at the same small value, because several things all within 64 blocks of spawn is a world that does not exist. 'near spawn / close to spawn / at spawn' just means include that thing — everything found ends up near spawn by definition. For 'X not next to Y' / 'X without Y nearby' / 'no Y around' put X (if any) in structures/biomes and Y in "exclude". A wish that is ONLY about avoiding something ('no deserts near spawn') is valid: leave structures/biomes empty and just fill "exclude". "exclude" AND "without" ARE DIFFERENT AND THE DIFFERENCE MATTERS. "exclude" means the thing must not be ANYWHERE near spawn. "without" means: still find this structure near spawn, but it must NOT have the feature named in the row. So 'an igloo with no basement' is "without":[{"name":"Igloo with Basement"}] — you name the FEATURE ROW and it gets flipped; putting Igloo in "exclude" would instead demand no igloo at all, which is the opposite of what was asked. Same shape for 'a village with no zombies' ("without":[{"name":"Abandoned Village"}]) and 'an outpost but no cages'. Only rows whose name reads "<structure> with <feature>", plus "Abandoned Village", can go in "without"; anything else belongs in "exclude". Never put the same row in both. "Abandoned Village" in "without" DOES combine with a village profession row in "structures" — 'a village with a library and no zombies' is both, and the app merges them into one village. The reverse does NOT work: a village cannot be abandoned AND have an armorer, mason or leatherworker, because zombie villages build from their own small house set and most profession buildings have no zombie version at all. If the wish asks for both, pick the one it cares about more and say so in "cant". "NEXT TO" IS ITS OWN FIELD NOW — this changed, and the old way is wrong.
+When the wish says one thing should be next to ANOTHER THING (not next to spawn), add an entry to "adjacent" AND still list both things in "structures"/"biomes" as usual. "a" is the thing the distance is measured OUT FROM and "b" is the other end. When one end is a biome and the other a structure, "a" must be the BIOME — so 'a village next to a cherry grove' is a="cherry_grove", b="Surface Village". TWO STRUCTURES also works now: 'a fortress next to a bastion' is a="Nether Fortress", b="Bastion Remnant", and either order is fine. Some structure pairs are placed by the same rule and can never be neighbours; the app knows which and will say so, so pair them anyway rather than refusing. Words that mean this: next to, beside, by, near (when it names a second thing), adjacent to, bordering, touching, on the edge of, right by, close to, neighbouring, on the border of, that borders, surrounded by, backing onto, overlooking, with X nearby, X and Y together, X right beside Y.
+"within" is how many blocks apart they may be. Omit it and the app uses its own measured default (256 blocks for biome-to-biome, 512 for biome-to-structure). Set it only when the wish gives a number or clearly asks for it to be tight ('right on the edge of', 'literally touching') — under 192 blocks most seeds fail, so mention that in "cant" if you go tighter.
+NEVER pair a biome with ITSELF ('plains next to plains'): a biome is always next to itself, so it is not a search at all. Leave "adjacent" empty, put the biome in "biomes" normally, and say so in "cant". Never pair things in different dimensions (an overworld biome with a Nether structure) — that has no meaning.
+HOW MANY OF SOMETHING: 'two shipwrecks', 'three villages', 'a couple of portals', 'four huts' — put the number in "count" on that ONE structure entry. Do NOT list the same structure several times; one entry with "count":3 is right and three entries are not. Words: a pair/couple/two = 2, a few/three = 3, several = 3, quad = 4. Counting several of a DETAILED row (one that names a building inside) is very slow, so if the wish wants several of those, say so in "cant".
+HOW MANY WORLDS IS NOT HOW MANY OF SOMETHING. 'give me 3 worlds with a village', '5 seeds that have a mansion', 'two options for a cherry grove' ask for that many SEPARATE worlds, each with one of what is named: put the number in "worlds" and do NOT put it in any structure's "count". A number on a structure ('2 shipwrecks') is still that many in ONE world. Both together: '3 seeds with 2 shipwrecks' is "worlds":3 and Shipwreck "count":2. At most 10 worlds; omit "worlds" when the wish gives no number of worlds, seeds or options. You only translate - the app finds and checks every world itself.
+SPAWNING INSIDE something is different from spawning NEAR it, and only counts when the wish really says inside: 'I want to spawn IN a village', 'open my eyes standing in', 'wake up inside', 'spawn on top of'. Set "spawn_inside":true on that structure. Plain 'a village at spawn' or 'near spawn' is NOT this — leave it false. It only works for overworld structures.
+SLIME CHUNKS: 'slime chunks', 'a slime farm spot', 'somewhere to build a slime farm'. Fill "slime" with how many and how far. If no number is given use count 3 and omit "within". Slime chunks are one chunk in ten, and measured over 2000 seeds EVERY seed has 3 within 128 blocks — so a wide "within" is not a search. Only set "within" when the wish gives a number, and if that number is over 64 say in "cant" that it will not narrow anything.
+A BIG VILLAGE is a real search: put "size":"big" on the structure entry. It works for villages (they vary a lot in size) and is ignored elsewhere. Do not use "size" on structures for anything else.
+BIOME SIZE — "small" now WORKS, which it did not before.
+size is for biomes only and must be EXACTLY "any", "small", "big" or "huge". Map small/tiny/little/compact/narrow to "small"; big/large/wide/broad/sprawling to "big"; huge/giant/massive/ginormous/enormous/vast to "huge". Each biome is judged against ITS OWN measured sizes, so "big" means big for a pale garden (about 64 blocks across) and big for a warm ocean (about 608) — you do not need to know the numbers, just pass the word. Structures have no size; ignore size words on structures. These biomes are all ONE SIZE and a size word on them does nothing — use "any" and mention it in "cant": jagged_peaks, river, frozen_river, beach, snowy_beach, stony_shore, nether_wastes, soul_sand_valley, crimson_forest, warped_forest, basalt_deltas.
+STRONGHOLDS CANNOT BE SEARCHED FOR AT ALL. Every seed has one about 1300+ blocks out and none are ever near spawn, so there is nothing to optimise — the same is true of the end portal inside it and of how many eyes of ender it already has. If the wish mentions any of those, set "stronghold_mentioned" true, do NOT put a stronghold in "structures", and translate the rest of the wish normally (the app shows its own note, so you need not mention it in "cant"). Only include things the wish actually asks for; NEVER invent a name not in the allowed lists - pick the closest allowed name instead.
+MANY FEATURES AT ONCE: a wish often names several things ('big portal, basement, secret room'). Translate EVERY phrase you recognise and put them all in "structures" — one entry each. Do not answer with only the first one.
+USE THE SPECIFIC ROW: when the wish names a feature, choose the row for that feature and NOT the plain row. 'igloo with a basement' is ["Igloo with Basement"], never ["Igloo","Igloo with Basement"] and never just ["Igloo"]. The feature row already includes the structure.
+ONE ROW PER STRUCTURE KIND: never list two rows about the same kind of structure (two trial chamber rows, "Warm Ocean Ruins" together with "Large Ocean Ruin", "Surface Village" together with "Village with Armorer"). Two rows would be satisfied by two DIFFERENT structures, which is not what the player pictured. Pick the single closest row and name the other feature in "cant".
+BLACKSMITH: the old lava-forge hut is now three separate houses — the armorer, the weaponsmith and the toolsmith — and each has its OWN row. If the wish names one of them, use that row. If the wish just says blacksmith, smithy, smith or forge without saying which, use "Village with Weaponsmith": that is the one with the lava and the loot chest, so it IS the building they are picturing. Do NOT put anything about the blacksmith in "cant" — this is a search that works, not a limitation, and the app writes its own one-line explanation. Leave "cant" empty unless something else in the wish genuinely could not be searched.
+COMPOSING A BUNDLE — this is the important one.
+When the wish asks for a KIND of seed rather than naming things ('a good survival seed', 'best speedrun seed', 'a cozy woodland base', 'somewhere good for a mob farm', 'a nice place to build'), do NOT return one village. Work out what would actually make that kind of spawn good, and compose a GENEROUS bundle from the allowed lists: typically 2-3 biomes plus 2-4 structures, each with its own distance. Think about what the player will really do in the first hour — wood, food, shelter, early iron, a way into the nether — and about what suits THEIR stated purpose. Two different quality wishes should produce two different bundles; there is no fixed answer.
+BUNDLE LIMITS (a bundle that cannot be found is worse than a small one):
+  - at most 6 structures and 6 biomes;
+  - IF THE WISH ASKS FOR MORE BIOMES THAN THAT ("7 wood types near spawn", "every flower biome"), do not refuse and do not stall: pick the 6 that best fit what they are after, list them, and say in "cant" which ones you left out and that a seed with all of them near one spawn gets rarer with every extra;
+  - at most TWO of the detailed feature rows — the ones that demand a particular building or room inside a structure, like "Village with Armorer", "Igloo with Basement" or "Trial Chamber with Eruption Room". Each one makes the search much slower, so spend them where they matter and use plain rows for the rest;
+  - distances: roughly 150-300 for the thing the wish is really about, 300-600 for supporting extras, 150-300 for biomes. Ocean/deep structures and anything in the Nether can be given more room.
+THE END CANNOT BE SEARCHED AT ALL, and this is absolute. There are no End structures and no End biomes in the allowed lists below; End Cities, the End Ship, the elytra, the outer islands, the dragon and every End biome are all outside what this app can do. If the wish mentions any of them, do NOT invent a name for them and do NOT put anything End-related in any field — translate whatever else the wish asks for, and say plainly in "cant" that the End isn't something the search can look at. The reason, if it helps you word it: an End structure that the seed places does not always end up generating there, so an End coordinate would be a guess. The Nether is fine and is searched normally.
+Example bundles — these are ILLUSTRATIONS of the right shape, not a menu to copy:
+  "a good survival seed" -> village(250), ruined portal(350), shipwreck(500), forest(200), plains(200)
+  "best speedrun seed" -> village(200), ruined portal(300), nether fortress(300), bastion(300), plains(200)
+  "a cozy woodland base" -> dark forest(200), river(250), village(400), pale garden(500)
+  "somewhere good for a mob farm" -> a dark/flat biome(200), ocean or deep ocean(300), village(400) for beds
+Compose your own for anything else the player asks; match the bundle to the words they used.
+THE "cant" FIELD — this is an ANSWER, not an apology. It has three parts and needs all three:
+  1. name the exact thing that cannot be checked, in the player's own words;
+  2. say WHY in one short clause a non-technical player understands;
+  3. offer the nearest thing that CAN be searched, and put that thing in the search too.
+Good: "can't check chest loot — it's rolled when you open it, not fixed by the seed — so I looked for a village with a weaponsmith instead, which is early gear you can count on". Bad: "some details can't be checked", "chest loot isn't searchable" (true, and no use to anyone). Keep it to one sentence. Leave it empty when everything asked for is searchable. Always still fill in everything you CAN — a wish is never rejected for containing an impossible part.
+THE IMPOSSIBLE LIST — what cannot be searched, why, and what to offer instead:
+  what is inside any chest, barrel or shulker
+      WHY: the loot is rolled when the container generates, long after the seed is fixed
+      OFFER INSTEAD: a village with a weaponsmith, toolsmith or armorer — an early-gear building whose PRESENCE really is fixed by the seed
+  trial chamber vault or reward-vault loot
+      WHY: vault contents are decided when you spend a key, not when the world is made
+      OFFER INSTEAD: a trial chamber with one of the rare rooms — the eruption room, the slanted room or the encounter hall — which is a real reason to pick one chamber over another
+  what suspicious sand or gravel gives up when brushed
+      WHY: brushing rolls the item then and there; the seed only fixes where the sand is
+      OFFER INSTEAD: trail ruins with the rare multi-part building groups, which is where the most suspicious gravel is
+  dungeons — the mossy cobblestone room with the spawner
+      WHY: dungeons are scattered chunk by chunk as terrain generates and have no seed-level position at all, so there is nothing to search for
+      OFFER INSTEAD: trial chambers, which are full of spawners and ARE placed by the seed, or a mineshaft if the point was a cave to explore
+  what is under a desert well's suspicious sand
+      WHY: the sand rolls its item when you brush it — but the WELL itself is searchable
+  eyes of ender, end portals and strongholds
+      WHY: every seed has exactly one stronghold, ring-placed 1300+ blocks out, so none are ever near spawn and there is nothing to optimise
+      OFFER INSTEAD: a ruined portal near spawn for a fast trip to the Nether, and a fortress close to where that portal comes out for the blaze rods
+  villager trades, professions, or a specific enchanted book
+      WHY: a villager takes his job after the world loads and rolls his trades then
+      OFFER INSTEAD: the profession BUILDING — the library, the cartographer's house, the armorer — which is part of the village and certain
+  ores, diamonds, or anything underground that is not a structure
+      WHY: ore is placed chunk by chunk as terrain generates, not fixed as a seed-level position
+      OFFER INSTEAD: a mineshaft near spawn, or an ancient city if the point was going deep
+  which mobs spawn, or any specific mob
+      WHY: mobs spawn from light and space while you play; the seed does not place them
+      OFFER INSTEAD: the few mobs that are built INTO a structure: the allays in an outpost cage, the witch's hut, or a zombie (abandoned) village
+  terrain shape — mountains, cliffs, islands, a flat area, a big cave
+      WHY: the search reads biomes and structures, not the shape of the ground
+      OFFER INSTEAD: the biome that has that shape: jagged_peaks or snowy_slopes for mountains, meadow or plains for flat, lush_caves or dripstone_caves for caves — and ask for a small, big or huge one
+  how large a structure is
+      WHY: a structure is built from a fixed set of pieces, so its size is not something the seed varies in a way that can be searched
+      OFFER INSTEAD: biome size instead — "small", "big" and "huge" all work on biomes now, each judged against that biome's own measured sizes
+  anything in the End — End Cities, the End Ship or the elytra, End biomes, the outer islands, or the dragon
+      WHY: the End is not searched at all: a structure the seed PLACES there does not always generate, so any End coordinate would be a guess dressed up as a find
+  a mansion ARENA, or a mansion room other than the four searchable ones
+      WHY: the mansion has no arena template at all, and its other rooms contain nothing distinctive enough to recognise or to search for
+      OFFER INSTEAD: one of the four rooms that ARE searchable — the secret room with the diamond block, the lava vault, the TNT trap room, or the cobweb room with the spawner
+FEATURE WORDS -> the allowed name to use:
+  basement, secret basement, lab, the trapdoor under the carpet, hidden room in an igloo, igloo with a zombie villager  ->  "Igloo with Basement"
+  armorer, armour smith, the blast furnace house  ->  "Village with Armorer"
+  toolsmith, tool smith, smithing table, the tool guy  ->  "Village with Toolsmith"
+  weaponsmith, weapon smith, grindstone house, blacksmith, smithy, forge, the lava pit house, the hut with the lava and the chest  ->  "Village with Weaponsmith"
+  butcher, butcher shop, meat shop, smoker house  ->  "Village with Butcher"
+  librarian, library, bookshop, lectern house, enchanted book villager  ->  "Village with Librarian"
+  cartographer, map maker, mapmaker, cartography table, the map guy  ->  "Village with Cartographer"
+  village stables, horse stable in a village, hay barn (PLAINS villages only — not the hoglin stable bastion and not the trail-ruins stables)  ->  "Village with Stables"
+  mason, stonemason, stonecutter house, the stone guy  ->  "Village with Mason"
+  leatherworker, leather worker, tannery, the leather guy  ->  "Village with Leatherworker"
+  fletcher, arrow maker, fletching table, the bow guy  ->  "Village with Fletcher"
+  shepherd, loom house, the wool guy, sheep farmer  ->  "Village with Shepherd"
+  fisherman, fisher, fisher cottage, the fish guy  ->  "Village with Fisherman"
+  zombie village, abandoned village, cobweb village, ruined village  ->  "Abandoned Village"
+  abandoned camp, camp, campsite, camp site, old camp, deserted camp, tent, explorer map camp (a tent site — NOT the abandoned/zombie village)  ->  "Abandoned Camp"
+  giant portal, big portal, huge portal, massive portal, large ruined portal  ->  "Giant Ruined Portal"
+  portal on the surface, above ground portal, a portal I can see, a portal I can walk to, not a buried portal, portal on land, visible ruined portal  ->  "Surface Ruined Portal"
+  buried portal, portal in the sand, half-buried portal, desert portal, sunken portal  ->  "Buried Ruined Portal"
+  underwater portal, portal in the ocean, portal on the sea bed, drowned portal, swamp portal  ->  "Underwater Ruined Portal"
+  cages, pens, the cages by the outpost tower, caged mob at an outpost  ->  "Outpost with Cages"
+  allay, allays, allay cage, outpost with allays  ->  "Outpost with Allay Cage"
+  upside down ship, upside-down shipwreck, capsized, flipped ship, overturned wreck  ->  "Capsized Shipwreck"
+  big ocean ruin, large underwater ruin, big underwater building  ->  "Large Ocean Ruin"
+  warm ocean ruins, sandstone underwater ruins  ->  "Warm Ocean Ruins"
+  cold ocean ruins, stone-brick underwater ruins  ->  "Cold Ocean Ruins"
+  eruption room, eruption chamber, the room that erupts, breeze room  ->  "Trial Chamber with Eruption Room"
+  slanted room, sloped room, ramp room, the big sloping chamber  ->  "Trial Chamber with Slanted Room"
+  encounter hall, encounter hallway, the wide fighting corridor  ->  "Trial Chamber with Encounter Hall"
+  secret room, hidden room, mansion secret room, the walled-off room, the room with the diamond block, diamond room (the COMMON one, 1 mansion in 7 — use this unless the wish clearly wants the big lava one)  ->  "Mansion with Secret Room"
+  big secret room, lava room, obsidian room, the glass and lava room, the huge hidden room (RARE — about 1 mansion in 28, a very long search)  ->  "Mansion with Lava Vault"
+  tnt room, trap room, trapped chest room, the mansion trap, silverfish room  ->  "Mansion with TNT Trap"
+  mansion spawner, cobweb room, the spider room, the room full of cobwebs  ->  "Mansion with Spawner"
+  sauna, steam room, the sealed side room in an ancient city  ->  "Ancient City with Sauna"
+  treasure bastion, gold bastion, the lava-basin bastion, the one with the gold blocks  ->  "Treasure Bastion"
+  bridge bastion, the bastion with the long walkway  ->  "Bridge Bastion"
+  hoglin stable, hoglin bastion, the bastion with the crimson pens (NETHER — not trail ruins)  ->  "Hoglin Stable Bastion"
+  housing units bastion, generic bastion, the blocky stacked-rooms bastion  ->  "Housing Units Bastion"
+  building group, house group, the multi-part houses in trail ruins  ->  "Trail Ruins with Building Group"
+  stables in trail ruins, the stable buildings by the trail-ruins tower (OVERWORLD — not the bastion)  ->  "Trail Ruins with Stables"
+BIOME WORDS -> the allowed biome id to use:
+  cherry blossom, blossom, cherry, cherry trees, pink trees, sakura, pink forest  ->  "cherry_grove"
+  dark oak, dark oak forest, roofed forest, the mansion forest, dark woods  ->  "dark_forest"
+  pale garden, pale oak, pale forest, creaking forest, the grey forest, eyeblossom  ->  "pale_garden"
+  dappled forest, autumn forest, fall forest, autumn trees, poplar, poplars, poplar forest, orange forest, red and yellow trees  ->  "dappled_forest"
+  flower forest, flowers, flowery woods, bee biome  ->  "flower_forest"
+  sunflowers, sunflower field  ->  "sunflower_plains"
+  tall birch forest, big birch forest, old growth birch  ->  "old_growth_birch_forest"
+  mega taiga, giant pines, tall pine forest  ->  "old_growth_pine_taiga"
+  mega spruce taiga, giant spruce forest  ->  "old_growth_spruce_taiga"
+  jungle edge, sparse jungle, thin jungle  ->  "sparse_jungle"
+  bamboo, bamboo forest, panda biome  ->  "bamboo_jungle"
+  mangrove, mangroves, mud swamp, muddy swamp  ->  "mangrove_swamp"
+  swamp, marsh, witch hut biome, slime biome  ->  "swamp"
+  mesa, badlands, red sand canyon  ->  "badlands"
+  wooded mesa, badlands with trees  ->  "wooded_badlands"
+  bryce, eroded mesa, hoodoos, the spiky mesa  ->  "eroded_badlands"
+  shattered savanna, windswept savanna, broken savanna  ->  "windswept_savanna"
+  savanna plateau, high savanna  ->  "savanna_plateau"
+  mountains, peaks, tall mountains, jagged peaks, high mountains  ->  "jagged_peaks"
+  icy peaks, frozen mountains  ->  "frozen_peaks"
+  stone mountains, bare peaks  ->  "stony_peaks"
+  snowy mountains, ski slopes, snowy hillside  ->  "snowy_slopes"
+  meadow, alpine meadow, flowery hilltop  ->  "meadow"
+  grove, snowy forest hill  ->  "grove"
+  ice spikes, spike biome, the icy spike field  ->  "ice_spikes"
+  snow, snowy plains, tundra, snowfield  ->  "snowy_plains"
+  coral reef, coral, tropical ocean, warm ocean  ->  "warm_ocean"
+  deep dark, sculk, warden biome, the ancient city biome  ->  "deep_dark"
+  lush caves, azalea, glow berry caves  ->  "lush_caves"
+  dripstone, stalactites, drip caves  ->  "dripstone_caves"
+  sulfur caves, sulphur caves, sulfur, sulphur, cinnabar, yellow caves, sulfur cube caves  ->  "sulfur_caves"
+  rocky shore, stone beach, cliffs by the sea  ->  "stony_shore"
+Examples:
+  "big portal, basement, secret room" -> {"structures":[{"name":"Giant Ruined Portal"},{"name":"Igloo with Basement"},{"name":"Mansion with Secret Room"}],"biomes":[],"adjacent":[],"exclude":[],"without":[],"stronghold_mentioned":false,"cant":""}
+  "village with a blacksmith next to a huge jungle" -> {"structures":[{"name":"Village with Weaponsmith"}],"biomes":[{"name":"jungle","size":"huge"}],"adjacent":[{"a":"jungle","b":"Village with Weaponsmith"}],"exclude":[],"without":[],"stronghold_mentioned":false,"cant":""}
+  "a big pale garden next to dark oak" -> {"structures":[],"biomes":[{"name":"pale_garden","size":"big"},{"name":"dark_forest","size":"any"}],"adjacent":[{"a":"pale_garden","b":"dark_forest"}],"exclude":[],"without":[],"stronghold_mentioned":false,"cant":""}
+  "cherry blossom next to a village" -> {"structures":[{"name":"Surface Village"}],"biomes":[{"name":"cherry_grove","size":"any"}],"adjacent":[{"a":"cherry_grove","b":"Surface Village"}],"exclude":[],"without":[],"stronghold_mentioned":false,"cant":""}
+  "plains next to plains" -> {"structures":[],"biomes":[{"name":"plains","size":"any"}],"adjacent":[],"exclude":[],"without":[],"stronghold_mentioned":false,"cant":"a biome is always next to itself, so 'plains next to plains' isn't something to search for — I just looked for plains near spawn"}
+  "outpost with allays and a trial chamber with the eruption room, no ocean" -> {"structures":[{"name":"Outpost with Allay Cage"},{"name":"Trial Chamber with Eruption Room"}],"biomes":[],"adjacent":[],"exclude":[{"name":"ocean"}],"without":[],"stronghold_mentioned":false,"cant":""}
+  "an igloo but not one with the basement, and a village that isn't a zombie one" -> {"structures":[],"biomes":[],"adjacent":[],"exclude":[],"without":[{"name":"Igloo with Basement"},{"name":"Abandoned Village"}],"stronghold_mentioned":false,"cant":""}
+  "3 seeds with a village and two shipwrecks" -> {"worlds":3,"structures":[{"name":"Surface Village"},{"name":"Shipwreck","count":2}],"biomes":[],"adjacent":[],"exclude":[],"without":[],"stronghold_mentioned":false,"cant":""}
+  "a chamber with loads of diamonds in the vaults" -> {"structures":[{"name":"Trial Chamber with Eruption Room"}],"biomes":[],"adjacent":[],"exclude":[],"without":[],"stronghold_mentioned":false,"cant":"can't check vault loot — it's decided when you spend a key, not when the world is made — so I looked for a chamber with the rare eruption room, which is a real reason to pick one chamber over another"}
+Allowed structure names: Surface Village, Village with Armorer, Village with Toolsmith, Village with Weaponsmith, Village with Butcher, Village with Librarian, Village with Cartographer, Village with Stables, Village with Mason, Village with Leatherworker, Village with Fletcher, Village with Shepherd, Village with Fisherman, Pillager Outpost, Outpost with Cages, Outpost with Allay Cage, Desert Pyramid, Jungle Pyramid, Woodland Mansion, Mansion with Lava Vault, Mansion with TNT Trap, Mansion with Spawner, Mansion with Secret Room, Swamp Hut, Igloo, Igloo with Basement, Ocean Monument, Shipwreck, Capsized Shipwreck, Ocean Ruins, Warm Ocean Ruins, Cold Ocean Ruins, Large Ocean Ruin, Buried Treasure, Trial Chambers, Trial Chamber with Eruption Room, Trial Chamber with Slanted Room, Trial Chamber with Encounter Hall, Ancient City, Ancient City with Sauna, Mineshaft, Nether Fortress, Bastion Remnant, Treasure Bastion, Bridge Bastion, Hoglin Stable Bastion, Housing Units Bastion, Nether Fossil, Ruined Portal, Giant Ruined Portal, Surface Ruined Portal, Buried Ruined Portal, Underwater Ruined Portal, Trail Ruins, Trail Ruins with Building Group, Trail Ruins with Stables, Abandoned Camp, Abandoned Village
+Allowed biome ids: plains, sunflower_plains, forest, flower_forest, birch_forest, old_growth_birch_forest, dark_forest, cherry_grove, pale_garden, dappled_forest, taiga, snowy_taiga, old_growth_pine_taiga, old_growth_spruce_taiga, meadow, grove, snowy_slopes, jagged_peaks, frozen_peaks, stony_peaks, ice_spikes, snowy_plains, swamp, mangrove_swamp, jungle, sparse_jungle, bamboo_jungle, desert, savanna, savanna_plateau, windswept_savanna, badlands, wooded_badlands, eroded_badlands, ocean, deep_ocean, frozen_ocean, deep_frozen_ocean, cold_ocean, deep_cold_ocean, lukewarm_ocean, deep_lukewarm_ocean, warm_ocean, river, frozen_river, beach, snowy_beach, stony_shore, deep_dark, dripstone_caves, lush_caves, sulfur_caves, nether_wastes, soul_sand_valley, crimson_forest, warped_forest, basalt_deltas
+Wish: "big portal, basement, secret room"
+[14:49:17] [main/INFO]: [STDOUT]: ===========================================
+
+[14:49:17] [main/INFO]: [STDOUT]: ========== WHAT EACH WISH RESOLVES TO ==========
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "big portal, basement, secret room"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: all three searched — the mansion room is a REAL search now, not a caveat
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Giant Ruined Portal within 64 + Igloo with Basement within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Giant Ruined Portal               piece token: giant_portal
+[14:49:17] [main/INFO]: [STDOUT]:        Igloo with Basement               piece token: igloo/bottom
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Mansion with Secret Room" was dropped — a search can only check 2 detailed building features at once without becoming too slow
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a mansion with a secret room"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the plain row is honoured as given; its stale note is passed through, not corrected
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Woodland Mansion within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Woodland Mansion                  (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: secret rooms can't be searched for
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "mansion with the big lava secret room"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the rare room row, whose own note warns it is a long search
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Mansion with Lava Vault within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Mansion with Lava Vault           piece token: woodland_mansion/2x2_s1
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "igloo with a basement"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the plain Igloo row dropped - the feature row already includes it
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Igloo with Basement within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Igloo with Basement               piece token: igloo/bottom
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a big warm ocean ruin"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: ONE ruin row kept - two would be two different ruins
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Large Ocean Ruin within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Large Ocean Ruin                  piece token: underwater_ruin/big_
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Warm Ocean Ruins" too — one structure can only be checked for one feature, so this searched "Large Ocean Ruin"
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "trial chamber with the eruption room and the encounter hall"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: one chamber row kept, the other named - both rooms in ONE chamber isn't checkable
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Trial Chamber with Eruption Room within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Trial Chamber with Eruption Room  piece token: trial_chambers/chamber/eruption
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Trial Chamber with Encounter Hall" too — one structure can only be checked for one feature, so this searched "Trial Chamber with Eruption Room"
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "igloo basement please"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: loose name still resolves to the right row
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Igloo with Basement within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Igloo with Basement               piece token: igloo/bottom
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a cave full of diamonds and a village with a blacksmith"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: blacksmith -> WEAPONSMITH (the lava-and-chest house); the invented name is dropped and named
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Blacksmith within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Blacksmith                        piece token: weaponsmith|weapon_smith
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Diamond Cave" isn't something the search can look for; ℹ "Blacksmith" is the weaponsmith's house in this version — the one with the lava and the loot chest. That's what was searched for. (The armorer's blast furnace and the toolsmith's smithing table are separate buildings you can ask for by name.)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a village with a blacksmith"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: row renamed to what they TYPED, and the model's apology is dropped — this search works
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Blacksmith within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Blacksmith                        piece token: weaponsmith|weapon_smith
+[14:49:17] [main/INFO]: [STDOUT]:   -> explains: "Blacksmith" is the weaponsmith's house in this version — the one with the lava and the loot chest. That's what was searched for. (The armorer's blast furnace and the toolsmith's smithing table are separate buildings you can ask for by name.)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a village and a jungle please"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the model volunteered a slime search — IGNORED, because the player never mentioned it
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Surface Village within 64 + Jungle within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Surface Village                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Jungle                            any size
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "7 wood types near spawn"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: six are kept and the seventh is NAMED — it used to keep three and say nothing
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Forest within 64 + Birch Forest within 64 + Dark Forest within 64 + Taiga within 64 + Jungle within 64 + Savanna within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Forest                            any size
+[14:49:17] [main/INFO]: [STDOUT]:        Birch Forest                      any size
+[14:49:17] [main/INFO]: [STDOUT]:        Dark Forest                       any size
+[14:49:17] [main/INFO]: [STDOUT]:        Taiga                             any size
+[14:49:17] [main/INFO]: [STDOUT]:        Jungle                            any size
+[14:49:17] [main/INFO]: [STDOUT]:        Savanna                           any size
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "cherry_grove" was left out — a search can hold 6 biomes at once, and every extra one makes a seed with ALL of them near spawn rarer than the last
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "two shipwrecks near spawn"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the number is HONOURED now — it used to be dropped and one was searched for
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: 2× Shipwreck within 64
+[14:49:17] [main/INFO]: [STDOUT]:        2× Shipwreck                      (whole structure) · 2 of them
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "four villages each with an armorer"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: capped: four assemblies per seed is a hang, so it says what it did instead
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: 2× Village with Armorer within 64
+[14:49:17] [main/INFO]: [STDOUT]:        2× Village with Armorer           piece token: armorer · 2 of them
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: 4 of "Village with Armorer" would take far too long, so it looked for 2 instead
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "I want to open my eyes standing in a village"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the footprint test, not a distance — and it forces Exact mode
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Spawn inside Surface Village within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Spawn inside Surface Village      (whole structure) · spawn INSIDE it
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "spawn inside a nether fortress"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: refused with the real reason — you do not spawn in the Nether — and still searched
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Nether Fortress within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Nether Fortress                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "inside Nether Fortress" only makes sense in the overworld — you don't spawn in the nether — so it looked for one nearby instead
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a fortress next to a bastion"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: two STRUCTURES pair now — but these two share a structure set, so it must refuse
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Nether Fortress within 64 + Bastion Remnant within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Nether Fortress                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Bastion Remnant                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Nether Fortress" and "Bastion Remnant" can't be neighbours — the world places only one per region. Both near spawn does work.
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a village next to a pillager outpost"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: a structure pair that IS possible — different sets, so it wires up
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Surface Village within 64 + Pillager Outpost within 576 + Surface Village next to Pillager Outpost (within 512)
+[14:49:17] [main/INFO]: [STDOUT]:        Surface Village                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Pillager Outpost                  (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Pillager Outpost         within 512 of the Surface Village
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "somewhere to build a slime farm"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: no worldgen at all — and at 64 blocks it is a real filter
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: 3 slime chunks within 64
+[14:49:17] [main/INFO]: [STDOUT]:        3 slime chunks within 64          a real filter
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "3 slime chunks within 400 blocks"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: honoured, but told plainly that at 400 blocks it narrows nothing
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: 3 slime chunks within 400
+[14:49:17] [main/INFO]: [STDOUT]:        3 slime chunks within 400         <-- NARROWS NOTHING, nearly every seed has this
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: 3 slime chunks within 400 blocks is true of virtually every seed, so it didn't narrow anything — ask for them closer together if you want it to mean something
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a big village"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: size on a STRUCTURE, using the piece count statsDiag measured
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Big Surface Village within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Big Surface Village               (whole structure) · at least 126 pieces
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a big igloo"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: an igloo is the same size every time, so the size is dropped and named
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Igloo within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Igloo                             (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "big Igloo" — only villages can be searched by size, so the size was ignored
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a ruined portal that isn't buried"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the surface variant is its own row now, so "not buried" is a real search
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Surface Ruined Portal within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Surface Ruined Portal             (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "an underwater portal"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: placement is read off the piece, so ocean-floor portals are searchable too
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Underwater Ruined Portal within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Underwater Ruined Portal          (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "village with an armorer that's also abandoned"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: one village row kept - a zombie village AND an armorer can't be demanded together
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Village with Armorer within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Village with Armorer              piece token: armorer
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Abandoned Village" and "Village with Armorer" cannot both be true of one village: a zombie village builds from its own small house set and most profession buildings have no zombie version at all, so this searched "Village with Armorer"
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "outpost with allays and a treasure bastion and the end ship"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: three dimensions at once, all kept - different structures don't clash
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Outpost with Allay Cage within 64 + Treasure Bastion within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Outpost with Allay Cage           piece token: pillager_outpost/feature_cage_with_allays
+[14:49:17] [main/INFO]: [STDOUT]:        Treasure Bastion                  piece token: bastion/treasure/
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: The End isn't searchable — cities, the ship, the elytra. A structure placed there doesn't always really generate, so any coordinate would be a guess. The rest was searched.; "End City with Ship" isn't something the search can look for
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "an igloo but not the kind with the basement"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: a real wish with an EMPTY structures list - the without array carries it
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Igloo without Basement within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Igloo without Basement            must NOT contain: igloo/bottom
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a village with a library but no zombies"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the two halves MERGE - one village row carrying both the library and "not abandoned"
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Village with Librarian (not abandoned) within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Village with Librarian (not abandoned)piece token: library
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "an abandoned village with an armorer"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: refused as impossible, with the real reason - not "one feature at a time"
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Abandoned Village within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Abandoned Village                 start piece must be a zombie one
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Village with Armorer" and "Abandoned Village" cannot both be true of one village: a zombie village builds from its own small house set and most profession buildings have no zombie version at all, so this searched "Abandoned Village"
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a shipwreck that isn't capsized"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: no honest negative for this row - it is NAMED, never flipped to the positive
+[14:49:17] [main/INFO]: [STDOUT]:   -> NO SEARCH: That can't be found by a seed search: "not Capsized Shipwreck" — that one has no useful "without", so it was left out rather than searched the wrong way round
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a village and definitely no pillager outpost anywhere near"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: exclude is the WHOLE structure gone - not the same thing as without
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Surface Village within 64 + no Pillager Outpost
+[14:49:17] [main/INFO]: [STDOUT]:        Surface Village                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        NOT Pillager Outpost              must not be nearby
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "village in a huge jungle, no ocean nearby"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: structure + sized biome + an exclusion
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Surface Village within 64 + big Jungle within 64 + no Ocean
+[14:49:17] [main/INFO]: [STDOUT]:        Surface Village                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Jungle                            must span >= 192 blocks (its own p67)
+[14:49:17] [main/INFO]: [STDOUT]:        NOT Ocean                         must not be nearby
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "loads of diamonds in the vault"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: chamber searched, vault loot named exactly
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Trial Chambers within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Trial Chambers                    (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: what's in the vaults - vault loot is decided when you spend a key
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a good survival seed"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: 5 items, each with its OWN reach - not everything at 64
+[14:49:17] [main/INFO]: [STDOUT]:   -> NO SEARCH: That spreads things out (Surface Village 250, Ruined Portal 350, …). Exact is at spawn — switch to ⚡Fast.
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a cozy woodland base"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: a DIFFERENT bundle from the survival one - composed, not a preset
+[14:49:17] [main/INFO]: [STDOUT]:   -> NO SEARCH: That spreads things out (Surface Village 400, Woodland Mansion 600, …). Exact is at spawn — switch to ⚡Fast.
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "best speedrun seed"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: no stronghold in the search; the mention earns an honest note instead
+[14:49:17] [main/INFO]: [STDOUT]:   -> NO SEARCH: That spreads things out (Surface Village 200, Ruined Portal 300, …). Exact is at spawn — switch to ⚡Fast.
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a seed with an armorer village, a capsized wreck and an eruption chamber"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: THREE content rows - the third must be dropped and named (cap is 2)
+[14:49:17] [main/INFO]: [STDOUT]:   -> NO SEARCH: That spreads things out (Village with Armorer 300, Capsized Shipwreck 500, …). Exact is at spawn — switch to ⚡Fast.
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "village right on top of me and a mansion miles away"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: distances clamped to 64..2000 - 5 is impossible, 99999 isn't 'near spawn'
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Surface Village within 64 + Woodland Mansion within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Surface Village                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Woodland Mansion                  (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Woodland Mansion" was asked for up to 99999 blocks out, but Exact mode means AT spawn — it was searched within 64. Switch to Fast mode for a wider spread.
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a world where I spawn on a diamond block"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: nothing searchable at all - must be an ERROR, never an empty search
+[14:49:17] [main/INFO]: [STDOUT]:   -> NO SEARCH: That can't be found by a seed search: blocks at spawn can't be searched; "Diamond Block" isn't something the search can look for
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a big pale garden next to dark oak"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: LARGE tier on the pale garden (>=64, its own measured p67) + a 256-block pair
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: big Pale Garden within 64 + Dark Forest within 320 + Pale Garden next to Dark Forest (within 256)
+[14:49:17] [main/INFO]: [STDOUT]:        Pale Garden                       must span >= 64 blocks (its own p67)
+[14:49:17] [main/INFO]: [STDOUT]:        Dark Forest                       any size
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Dark Forest              within 256 of the Pale Garden
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "cherry blossom next to a village"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: biome-to-STRUCTURE, defaulting to the wider 512 - structures are sparser
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Surface Village within 576 + Cherry Grove within 64 + Cherry Grove next to Surface Village (within 512)
+[14:49:17] [main/INFO]: [STDOUT]:        Surface Village                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Cherry Grove                      any size
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Surface Village          within 512 of the Cherry Grove
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "plains next to plains"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: REFUSED with the real reason - a biome is always next to itself; plains still searched
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Plains within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Plains                            any size
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Plains next to Plains" isn't a search — a biome is always next to itself, so nothing would be narrowed down.
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "blossom next to a ruined portal"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the player's word "blossom" reaches cherry_grove through the biome glossary
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Ruined Portal within 576 + Cherry Grove within 64 + Cherry Grove next to Ruined Portal (within 512)
+[14:49:17] [main/INFO]: [STDOUT]:        Ruined Portal                     (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Cherry Grove                      any size
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Ruined Portal            within 512 of the Cherry Grove
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a small pale garden"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: SMALL is a real search now - a span CEILING, not a shrug
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: small Pale Garden within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Pale Garden                       must span <= 32 blocks (its own p33)
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a tiny cherry grove right beside a mangrove swamp"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: "tiny" maps to SMALL; 128 is under the tight threshold so it is warned about
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: small Cherry Grove within 64 + Mangrove Swamp within 192 + Cherry Grove next to Mangrove Swamp (within 128)
+[14:49:17] [main/INFO]: [STDOUT]:        Cherry Grove                      must span <= 64 blocks (its own p33)
+[14:49:17] [main/INFO]: [STDOUT]:        Mangrove Swamp                    any size
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Mangrove Swamp           within 128 of the Cherry Grove   <-- tight
+[14:49:17] [main/INFO]: [STDOUT]:   -> explains: 128 blocks apart is tighter than most seeds manage — this may take a while
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a huge deep ocean with a shipwreck in it"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the SAME word "huge" means >=512 here and >=64 for a pale garden - per biome
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Shipwreck within 576 + big Deep Ocean within 64 + Deep Ocean next to Shipwreck (within 512)
+[14:49:17] [main/INFO]: [STDOUT]:        Shipwreck                         (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Deep Ocean                        must span >= 512 blocks (its own p67)
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Shipwreck                within 512 of the Deep Ocean
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a big beach"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: beaches measured all one size - the beach is searched, the SIZE is dropped and named
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Beach within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Beach                             any size
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "big Beach" — that biome is all one size, so the size was ignored
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "mesa next to bamboo"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: two nicknames, neither of which is the id, both resolved by the biome glossary
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Badlands within 64 + Bamboo Jungle within 320 + Badlands next to Bamboo Jungle (within 256)
+[14:49:17] [main/INFO]: [STDOUT]:        Badlands                          any size
+[14:49:17] [main/INFO]: [STDOUT]:        Bamboo Jungle                     any size
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Bamboo Jungle            within 256 of the Badlands
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a village within 100 blocks of a jungle"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: an explicit tight distance is HONOURED, and warned about rather than quietly widened
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Surface Village within 164 + Jungle within 64 + Jungle next to Surface Village (within 100)
+[14:49:17] [main/INFO]: [STDOUT]:        Surface Village                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Jungle                            any size
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Surface Village          within 100 of the Jungle   <-- tight
+[14:49:17] [main/INFO]: [STDOUT]:   -> explains: 100 blocks apart is tighter than most seeds manage — this may take a while
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "the sculk biome next to a mansion"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: "sculk" -> deep_dark, searched underground (it was 5% at Y=64, and 0% found, before 1.44.2)
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Woodland Mansion within 576 + Deep Dark within 64 + Deep Dark next to Woodland Mansion (within 512)
+[14:49:17] [main/INFO]: [STDOUT]:        Woodland Mansion                  (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Deep Dark                         any size
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Woodland Mansion         within 512 of the Deep Dark
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "plains next to forest"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: searched exactly as asked - both are near spawn in 60/60 seeds, so it narrows little
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Plains within 64 + Forest within 320 + Plains next to Forest (within 256)
+[14:49:17] [main/INFO]: [STDOUT]:        Plains                            any size
+[14:49:17] [main/INFO]: [STDOUT]:        Forest                            any size
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Forest                   within 256 of the Plains
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a village next to a cherry grove (reply written backwards)"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: ends swapped back automatically - the biome has to be the anchor
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Surface Village within 576 + Cherry Grove within 64 + Cherry Grove next to Surface Village (within 512)
+[14:49:17] [main/INFO]: [STDOUT]:        Surface Village                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Cherry Grove                      any size
+[14:49:17] [main/INFO]: [STDOUT]:        next to: Surface Village          within 512 of the Cherry Grove
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: (nothing)
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a jungle next to a floating castle"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: the invented half is NAMED and dropped; the jungle is still searched
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Jungle within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Jungle                            any size
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "next to Floating Castle" — that isn't something the search can look for, so the rest of the wish was searched without it
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "dark oak next to a nether fortress"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: different dimensions - the PAIR is refused with the reason, both still searched
+[14:49:17] [main/INFO]: [STDOUT]:   -> searches: Nether Fortress within 64 + Dark Forest within 64
+[14:49:17] [main/INFO]: [STDOUT]:        Nether Fortress                   (whole structure)
+[14:49:17] [main/INFO]: [STDOUT]:        Dark Forest                       any size
+[14:49:17] [main/INFO]: [STDOUT]:   -> can't check: "Dark Forest" and "Nether Fortress" are in different worlds, so "next to" has no meaning between them.
+
+[14:49:17] [main/INFO]: [STDOUT]: WISH  "a big jungle next to a village, no desert anywhere"
+[14:49:17] [main/INFO]: [STDOUT]:   expected: size + pair + exclusion + per-item distances, all in one wish
+[14:49:17] [main/INFO]: [STDOUT]:   -> NO SEARCH: That spreads things out (Surface Village 400, jungle 300). Exact is at spawn — switch to ⚡Fast.
+
+[14:49:17] [main/INFO]: [STDOUT]: ran 54 wishes
+[14:49:17] [main/INFO]: [STDOUT]: Every row above is only a SEARCH SETTING. Whether a seed really has the
+[14:49:17] [main/INFO]: [STDOUT]: piece is decided by SeedCriteria.test, which assembles the structure.
+[14:49:17] [main/INFO]: [STDOUT]: ===============================================
+
+[14:49:17] [main/INFO]: [STDOUT]: ========== REPLIES THAT ARE NOT ONLY JSON ==========
+[14:49:17] [main/INFO]: [STDOUT]:   ok   the plain case: nothing but the object
+[14:49:17] [main/INFO]: [STDOUT]:         -> searches: Surface Village within 250 + Ruined Portal within 350 + Plains within 200
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a reasoning model: <think> … </think> then the answer
+[14:49:17] [main/INFO]: [STDOUT]:         -> searches: Surface Village within 250 + Ruined Portal within 350 + Plains within 200
+[14:49:17] [main/INFO]: [STDOUT]:   ok   reasoning with the opening tag already stripped by the provider
+[14:49:17] [main/INFO]: [STDOUT]:         -> searches: Surface Village within 250 + Ruined Portal within 350 + Plains within 200
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a discarded draft object before the real one
+[14:49:17] [main/INFO]: [STDOUT]:         -> searches: Surface Village within 250 + Ruined Portal within 350 + Plains within 200
+[14:49:17] [main/INFO]: [STDOUT]:   ok   fenced in markdown, as models often do
+[14:49:17] [main/INFO]: [STDOUT]:         -> searches: Surface Village within 250 + Ruined Portal within 350 + Plains within 200
+[14:49:17] [main/INFO]: [STDOUT]:   ok   cut off mid-object (ran out of output tokens)
+[14:49:17] [main/INFO]: [STDOUT]:         -> no search: The AI didn't answer with a search. It said: "{"structures":[{"name":"Surface Village…" — try simpler words, or pick below.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a fenced reply cut off by the token limit
+[14:49:17] [main/INFO]: [STDOUT]:         -> no search: The AI ran out of room before it finished the search — its reply was cut off. Try a shorter wish, or pick below.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   fenced and truncated, provider gave no finish_reason
+[14:49:17] [main/INFO]: [STDOUT]:         -> no search: The AI didn't answer with a search. It said: "```json" — try simpler words, or pick below.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   prose, no JSON at all
+[14:49:17] [main/INFO]: [STDOUT]:         -> no search: The AI didn't answer with a search. It said: "I'd be happy to help you find a great s…" — try simpler words, or pick below.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a provider error passed through
+[14:49:17] [main/INFO]: [STDOUT]:         -> no search: ⚠ GPT 400: json_validate_failed
+[14:49:17] [main/INFO]: [STDOUT]:   ok   the token-limit report AiVision now writes
+[14:49:17] [main/INFO]: [STDOUT]:         -> no search: ⚠ GPT ran out of output tokens before writing an answer (it spent them on internal reasoning) — finish_reason: length.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a fenced reply cut off by Claude's token limit
+[14:49:17] [main/INFO]: [STDOUT]:         -> no search: The AI ran out of room before it finished the search — its reply was cut off. Try a shorter wish, or pick below.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a fenced reply cut off by Gemini's token limit
+[14:49:17] [main/INFO]: [STDOUT]:         -> no search: The AI ran out of room before it finished the search — its reply was cut off. Try a shorter wish, or pick below.
+
+[14:49:17] [main/INFO]: [STDOUT]: ========== A WISH THAT MENTIONS THE END ==========
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "an end city with the elytra ship and a village near spawn"
+[14:49:17] [main/INFO]: [STDOUT]:         -> searches: Surface Village within 100
+        -> says: The End isn't searchable — cities, the ship, the elytra. A structure placed there doesn't always really generate, so any coordinate would be a guess. The rest was searched.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "find me an End City"
+[14:49:17] [main/INFO]: [STDOUT]:         -> no search
+        -> says: That can't be found by a seed search: The End isn't searchable — cities, the ship, the elytra. A structure placed there doesn't always really generate, so any coordinate would be a guess. The rest was searched.; "End City with Ship" isn't something the search can look for
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a seed with a good elytra spot and a jungle"
+[14:49:17] [main/INFO]: [STDOUT]:         -> searches: Jungle within 100
+        -> says: The End isn't searchable — cities, the ship, the elytra. A structure placed there doesn't always really generate, so any coordinate would be a guess. The rest was searched.
+
+[14:49:17] [main/INFO]: [STDOUT]: ========== THE REASONING STRIPPER (AiVision) ==========
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a matched pair is removed
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a dangling close takes everything before it with it
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a dangling open means there IS no answer yet
+[14:49:17] [main/INFO]: [STDOUT]:   ok   nothing but reasoning leaves nothing
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a reply with no tags is untouched
+
+[14:49:17] [main/INFO]: [STDOUT]:   OK — every reply shape handled
+[14:49:17] [main/INFO]: [STDOUT]: ====================================================
+
+[14:49:17] [main/INFO]: [STDOUT]: ========== DOES THE PROMPT TEACH ANYTHING WE DO NOT HAVE? ==========
+[14:49:17] [main/INFO]: [STDOUT]:   names written into worked examples : 18   every one allowed  OK
+[14:49:17] [main/INFO]: [STDOUT]:   invented End names put through the validator : 9   none resolved  OK
+[14:49:17] [main/INFO]: [STDOUT]:   prompt size : 28589 characters (7147 tokens, roughly) before the player's own words
+[14:49:17] [main/INFO]: [STDOUT]:   nothing in the prompt names anything the search cannot do  OK
+[14:49:17] [main/INFO]: [STDOUT]: ===================================================================
+
+[14:49:17] [main/INFO]: [STDOUT]: ========== DO THE EXAMPLES CONTRADICT THE PHRASE BOOK? ==========
+[14:49:17] [main/INFO]: [STDOUT]:   ok   a reply of Armorer for "a village with a blacksmith" is corrected to the weaponsmith
+[14:49:17] [main/INFO]: [STDOUT]:   ok   Exact mode refuses a spread-out bundle and names the spread
+[14:49:17] [main/INFO]: [STDOUT]:   ok   one stray distance is searched at spawn, and says so
+[14:49:17] [main/INFO]: [STDOUT]:   ok   but a wish that names the armorer keeps the armorer
+[14:49:17] [main/INFO]: [STDOUT]:   OK — 8 example phrases agree with the phrase book
+
+[14:49:17] [main/INFO]: [STDOUT]: ========== COMMON WISHES WITH NO AI ==========
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "village next to a cherry grove" -> [Surface Village, Cherry Grove]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "mansion + dark forest" -> [Dark Forest, Woodland Mansion]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a mansion in a dark forest" -> [Dark Forest, Woodland Mansion]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "igloo with a basement" -> [Igloo with Basement]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "village with a blacksmith" -> [Blacksmith]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "two shipwrecks near spawn" -> [2× Shipwreck]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "pale garden not next to a forest" -> [Pale Garden]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a big pale garden next to dark oak" -> [Dark Forest, Pale Garden]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "no ocean near spawn" -> []
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "slime chunks and a village" -> [Surface Village]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a giant portal and a trial chamber" -> [Giant Ruined Portal, Trial Chambers]
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "best survival seed" -> []  (not understood: [best, survival])
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a village where my friends can build a castle" -> [Surface Village]  (not understood: [friends, build, castle])
+[14:49:17] [main/INFO]: [STDOUT]:   OK — every common wish reads the same with no AI
+
+[14:49:17] [main/INFO]: [STDOUT]: ========== HOW MANY WORLDS (not how many of something) ==========
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "give me 3 worlds with a village" (no AI) -> 3 world(s), Surface Village ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "3 seeds that have a mansion" (no AI) -> 3 world(s), Woodland Mansion ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "five options for a cherry grove" (no AI) -> 5 world(s), Cherry Grove ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a couple of seeds with a village" (no AI) -> 2 world(s), Surface Village ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "3 or 4 seeds with a village" (no AI) -> 4 world(s), Surface Village ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "2 shipwrecks" (no AI) -> 0 world(s), Shipwreck ×2
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "two shipwrecks near spawn" (no AI) -> 0 world(s), Shipwreck ×2
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "3 seeds with 2 shipwrecks" (no AI) -> 3 world(s), Shipwreck ×2
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "20 seeds with a village" (no AI) -> 10 world(s), Surface Village ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "3 village seeds" (no AI) -> 0 world(s), Surface Village ×3
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "3 seeds with a village" (AI reply) -> 3 world(s), Surface Village ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "3 seeds with three villages" (AI reply) -> 3 world(s), Surface Village ×3
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a village and a jungle" (AI reply) -> 0 world(s), Surface Village ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "three survival worlds with a village" (AI reply) -> 3 world(s), Surface Village ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "give me 50 worlds with a village" (AI reply) -> 10 world(s), Surface Village ×1
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "2 shipwrecks" (AI reply) -> 0 world(s), Shipwreck ×2
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "3 seeds with 2 shipwrecks" (AI reply) -> 3 world(s), Shipwreck ×2
+[14:49:17] [main/INFO]: [STDOUT]:   ok   the prompt teaches the worlds field, the rule and its example
+[14:49:17] [main/INFO]: [STDOUT]:   OK — worlds and structure counts are read apart
+[14:49:17] [main/INFO]: [STDOUT]:   ok   control: the 1.47.0 line ("Can't check: what the armorer villager ends up trading") appended to a tooltip is caught
+[14:49:17] [main/INFO]: [STDOUT]:   OK — 115 row and biome tooltips carry no "can't check" line
+
+[14:49:17] [main/INFO]: [STDOUT]: ========== THE END AND STRONGHOLDS WITH NO AI ==========
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "find me an end city" -> no search: That can't be found by a seed search: The End isn't searchable — cities, the ship, the elytra. A structure placed there doesn't always really generate, so any coordinate would be a guess. The rest was searched.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "an end ship with elytra" -> no search: That can't be found by a seed search: The End isn't searchable — cities, the ship, the elytra. A structure placed there doesn't always really generate, so any coordinate would be a guess. The rest was searched.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a stronghold" -> no search: That can't be found by a seed search: 🧱 Strongholds can't be optimised — every seed has one ~1300+ blocks out and none are ever near spawn, so there's nothing to search for. Searching the rest of your wish.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a stronghold near an end portal" -> no search: That can't be found by a seed search: 🧱 Strongholds can't be optimised — every seed has one ~1300+ blocks out and none are ever near spawn, so there's nothing to search for. Searching the rest of your wish.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "eyes of ender" -> no search: That can't be found by a seed search: 🧱 Strongholds can't be optimised — every seed has one ~1300+ blocks out and none are ever near spawn, so there's nothing to search for. Searching the rest of your wish.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a village and an end city" -> [Surface Village] note: The End isn't searchable — cities, the ship, the elytra. A structure placed there doesn't always really generate, so any coordinate would be a guess. The rest was searched.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "village near a stronghold" -> [Surface Village] note: 🧱 Strongholds can't be optimised — every seed has one ~1300+ blocks out and none are ever near spawn, so there's nothing to search for. Searching the rest of your wish.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "two end cities and a village" -> [Surface Village] note: The End isn't searchable — cities, the ship, the elytra. A structure placed there doesn't always really generate, so any coordinate would be a guess. The rest was searched.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "an end portal and a desert pyramid" -> [Desert Pyramid] note: 🧱 Strongholds can't be optimised — every seed has one ~1300+ blocks out and none are ever near spawn, so there's nothing to search for. Searching the rest of your wish.
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "a village near a city" -> [Surface Village]  (not understood: [city])
+[14:49:17] [main/INFO]: [STDOUT]:   ok   "village with an eye" -> [Surface Village]  (not understood: [eye])
+[14:49:17] [main/INFO]: [STDOUT]:   ok   CONTROL: "a village near spawn" gets no End note
+[14:49:17] [FableVision-SeedFinder-Bootstrap/INFO]: Seed finder: built structure templates in 9ms
+[14:49:18] [main/INFO]: [STDOUT]:   ok   CONTROL: 1.47.2 on "find me an end city": found=false complete=false reply=null — not read, so the check fails on it, as it must
+[14:49:18] [main/INFO]: [STDOUT]:   info 1.47.2 read "an end ship with elytra" as: found=true complete=true reply={"structures":[{"name":"Shipwreck"}],"biomes":[],"adjacent":[],"exclude":[],"without":[],"stronghold_mentioned":false,"cant":""}
+[14:49:18] [main/INFO]: [STDOUT]:   info 1.47.2 read "a stronghold near an end portal" as: found=true complete=true reply={"structures":[{"name":"Ruined Portal"}],"biomes":[],"adjacent":[],"exclude":[],"without":[],"stronghold_mentioned":false,"cant":""}
+[14:49:18] [main/INFO]: [STDOUT]:   OK — the End and strongholds are answered offline as the AI path answers them
+==== joinDiag ====
+========== WHICH JOIN MESSAGE ==========
+  ok   Exact mode, Overworld only -> short
+  ok   ordinary Fast result (60-block gap) -> short
+  ok   an explanation note (?) -> short
+  ok   the stronghold explanation -> short
+  ok   a find in the Nether -> LONG
+  ok   a 380-block spawn-vs-origin gap -> LONG
+  ok   something dropped -> LONG
+  ok   no structured finds (slime / exclusion search) -> short
+  ok   explanation, then something dropped -> LONG
+  ok   something dropped, then an explanation -> LONG
+  ok   two explanations -> short
+  ok   first slime search: the note is shown
+  ok   second slime search: it is not
+  ok   nor in the wish parser's spelling
+  ok   and only the slime part of a combined note is dropped
+  ok   a note with no slime part is untouched
+  ok   hint names the map key
+  ok   the map that key opens (your own world) shows coordinates with the setting OFF
+  ok   the search-result map does NOT with the setting off, so the hint must not send people there
+  ok   hint names where the setting is for next time
+  ok   hint has no digits, so the spoiler filter cannot mangle it
+ALL CHECKS PASS
+==== joinRepro ====
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:49:24] [FableVision-SeedFinder-Bootstrap/INFO]: Seed finder: built structure templates in 17ms
+[14:49:24] [main/INFO]: [STDOUT]:   short  village   finds=1   why: -
+[14:49:25] [main/INFO]: [STDOUT]:   short  village with an armorer   finds=1   why: -
+[14:49:25] [main/INFO]: [STDOUT]:   short  pillager outpost   finds=1   why: -
+[14:49:26] [main/INFO]: [STDOUT]:   short  shipwreck   finds=1   why: -
+[14:49:26] [main/INFO]: [STDOUT]:   short  ruined portal   finds=1   why: -
+[14:49:26] [main/INFO]: [STDOUT]:   short  cherry grove   finds=1   why: -
+[14:49:26] [main/INFO]: [STDOUT]:   short  plains   finds=1   why: -
+[14:49:26] [main/INFO]: [STDOUT]:   short  desert   finds=1   why: -
+[14:49:26] [main/INFO]: [STDOUT]:   short  village next to a plains   finds=2   why: -
+[14:49:26] [main/INFO]: [STDOUT]:   short  village and a ruined portal   finds=2   why: -
+[14:49:26] [main/INFO]: [STDOUT]:   short  3 slime chunks   finds=0   why: NO STRUCTURED FINDS
+[14:49:26] [main/INFO]: [STDOUT]:   short  no desert   finds=0   why: NO STRUCTURED FINDS
+[14:49:26] [main/INFO]: [STDOUT]:   short  trial chambers   finds=1   why: -
+[14:49:26] [main/INFO]: [STDOUT]:   short  mineshaft   finds=1   why: -
+[14:49:26] [main/INFO]: [STDOUT]: ALL SHORT
+==== etaDiag ====
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:49:30] [FableVision-SeedFinder-Bootstrap/INFO]: Seed finder: built structure templates in 18ms
+[14:49:31] [main/INFO]: [STDOUT]: ========== SEARCH ETA: ESTIMATE AGAINST THE REAL SEARCH (Fast, 200 blocks) ==========
+  wish                                estimate 1 in  measured 1 in    ratio
+  village                                        20             20     1.0x  12 matches in 237
+  ruined portal and a shipwreck                  29             44     1.5x  (rough)  12 matches in 533
+  cherry grove                                   91             54     1.7x  12 matches in 648
+  village next to a plains                       19              5     3.5x  (rough)  12 matches in 65
+  village with an armorer                        61             49     1.2x  12 matches in 592
+  pillager outpost                              118             91     1.3x  12 matches in 1,092
+  village next to a ruined portal                22             12     1.8x  (rough)  12 matches in 144
+
+[14:49:44] [main/INFO]: [STDOUT]: ========== THE ESTIMATE STOPS WHEN IT IS TOLD TO ==========
+[14:49:45] [main/INFO]: [STDOUT]:   2s ceiling  : finished in 1265ms, estimate given (rough)
+[14:49:45] [main/INFO]: [STDOUT]:   told to stop: finished in 1ms, no estimate (correct)
+[14:49:45] [main/INFO]: [STDOUT]: ALL WITHIN 6.0x
+==== privacyDiag ====
+========== AI KEYS, CAPTURES AND COOLDOWNS ==========
+  ok   a stored key typed into a question is hidden
+  ok   provider-shaped key AIzaSyD� is hidden even when never stored
+  ok   provider-shaped key sk-ant-� is hidden even when never stored
+  ok   provider-shaped key sk-proj� is hidden even when never stored
+  ok   provider-shaped key sk-qqqq� is hidden even when never stored
+  ok   provider-shaped key gsk_kkk� is hidden even when never stored
+  ok   seeds, coordinates and model names are left alone
+gradlew.bat : WARNING: A restricted method in java.lang.System has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A rest...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: java.lang.System::load has been called by com.sun.jna.Native in an unnamed module (file:/C:/Users/safia/.gradl
+e/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0/33d12735bef894440780fce64f9758d420c7bae2/jna-5.17.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+  ok   the stored form does not contain the key
+  ok   and does not contain it base64-encoded either (on Windows)
+  ok   it reads back as the same key on this PC
+  ok   Windows uses the Data Protection API, not the plain form
+  ok   an entry this PC cannot decrypt reads as unreadable, not as garbage
+  ok   first G-panel request goes out
+  ok   a Custom-spawn request right after it is NOT on cooldown
+  ok   a second G-panel request right after IS on cooldown
+  ok   there is no "always allow capture" setting left to switch on
+  ok   OpenAI's 'model does not exist' reply is recognised as a retired model
+  ok   a 'decommissioned' reply is recognised too
+  ok   Gemini's 'models/x is not found' reply is recognised
+  ok   a bad key is NOT mistaken for a retired model
+  ok   a rate limit is NOT mistaken for a retired model
+  ok   speech and safety models are never picked as a chat replacement
+  ok   there is no Groq provider to pick
+  ok   the settings file has no Groq key or model field left
+  ok   a saved Groq choice is moved to Gemini, for both keysets
+  ok   and any other choice is left alone
+  ok   Gemini is labelled as the free option
+  ok   only one thread can write the settings file at a time
+  ok   and reading it is under the same lock
+  ok   the daily usage counters nothing ever read are gone
+ALL CHECKS PASS
+==== layoutDiag ====
+========== LAYOUT AND TEXT AT EVERY WINDOW SIZE ==========
+  checking: no two bands overlap, nothing escapes the panel, the top row's
+            title and buttons do not touch, a row is tall enough for both its
+            lines, every button label fits its button, and no sentence is cut
+            to nothing
+  text measured with the game's own font (widest ASCII glyph 7 px)
+
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:49:52] [main/INFO]: [STDOUT]:   worst strings, read from the live catalog:
+[14:49:52] [main/INFO]: [STDOUT]:      longest row name   : "Underwater Ruined Portal" (129px)
+[14:49:52] [main/INFO]: [STDOUT]:      longest row line 2 : "38% of seeds (within 2000) · size ✔ · slow search" (245px)
+[14:49:52] [main/INFO]: [STDOUT]:      longest pick line  : "160 blocks across or more — large for an old growth spruce taiga" (344px)
+[14:49:52] [main/INFO]: [STDOUT]:      longest tab title  : "Structures" (56px)
+[14:49:52] [main/INFO]: [STDOUT]:      longest row label  : "Trial Chamber with Encounter Hall" (169px)
+
+
+[14:49:53] [main/INFO]: [STDOUT]:   sizes checked          : 1440
+[14:49:53] [main/INFO]: [STDOUT]:   sizes with a problem   : 0
+[14:49:53] [main/INFO]: [STDOUT]:   sizes flagged TOO SMALL: 144   (these draw a 'make the window taller' message instead of a broken list)
+[14:49:53] [main/INFO]: [STDOUT]:   messages clipped for room: 32   (windows too short to grow the band without making the panel unusable)
+[14:49:53] [main/INFO]: [STDOUT]:   clipped at these window sizes (all below 427x270, which is the floor this has to hold at):
+[14:49:53] [main/INFO]: [STDOUT]:      320x240   32 message-heights
+[14:49:53] [main/INFO]: [STDOUT]:   found-worlds views checked: 2880 layouts (searching and results, every size and feedback height above), each with a 10-world list scrolled end to end
+[14:49:53] [main/INFO]: [STDOUT]:   worst ten-world list: 250 rows; smallest list area at a real size: 36 px
+[14:49:53] [main/INFO]: [STDOUT]:   control: a found-worlds layout broken on purpose (Use button 12 px, list 12 px) is caught, and the unbroken one passes
+
+[14:49:53] [main/INFO]: [STDOUT]:   -- the Create World screen: our buttons against vanilla's real layout --
+[14:49:53] [main/INFO]: [STDOUT]:   vanilla's constants match the model (210 / 310 / 44 / 24 / 33 …), Experiments button: not shown (release)
+[14:49:53] [main/INFO]: [STDOUT]:   Create World placements checked: 32020 (every width 320–1920 × 10 heights × with/without a count line), with a problem: 0
+[14:49:53] [main/INFO]: [STDOUT]:   where they went:
+[14:49:53] [main/INFO]: [STDOUT]:          82  ICON · nowhere
+[14:49:53] [main/INFO]: [STDOUT]:          82  ICON · nowhere · count in tooltip
+[14:49:53] [main/INFO]: [STDOUT]:         164  FULL · row above the footer
+[14:49:53] [main/INFO]: [STDOUT]:         152  FULL · row above the footer · count in tooltip
+[14:49:53] [main/INFO]: [STDOUT]:        1450  FULL · right, under the tabs
+[14:49:53] [main/INFO]: [STDOUT]:         583  FULL · right, under the tabs · count in tooltip
+[14:49:53] [main/INFO]: [STDOUT]:         867  FULL · right, under the tabs · count shown
+[14:49:53] [main/INFO]: [STDOUT]:          12  FULL · row above the footer · count shown
+[14:49:53] [main/INFO]: [STDOUT]:         378  ICON · right, under the tabs
+[14:49:53] [main/INFO]: [STDOUT]:         378  ICON · right, under the tabs · count in tooltip
+[14:49:53] [main/INFO]: [STDOUT]:           6  ICON · top right
+[14:49:53] [main/INFO]: [STDOUT]:           6  ICON · top right · count in tooltip
+[14:49:53] [main/INFO]: [STDOUT]:         378  SHORT · right, under the tabs
+[14:49:53] [main/INFO]: [STDOUT]:         378  SHORT · right, under the tabs · count in tooltip
+[14:49:53] [main/INFO]: [STDOUT]:         222  SHORT · top right
+[14:49:53] [main/INFO]: [STDOUT]:         202  SHORT · top right · count in tooltip
+[14:49:53] [main/INFO]: [STDOUT]:          20  SHORT · top right · count shown
+[14:49:53] [main/INFO]: [STDOUT]:       13330  FULL · top right
+[14:49:53] [main/INFO]: [STDOUT]:       13245  FULL · top right · count shown
+[14:49:53] [main/INFO]: [STDOUT]:          85  FULL · top right · count in tooltip
+[14:49:53] [main/INFO]: [STDOUT]:      427x240: SHORT, right, under the tabs, spawn Box[x=371, y=28, w=52, h=20], map Box[x=371, y=50, w=52, h=20], count in the map button's tooltip
+[14:49:53] [main/INFO]: [STDOUT]:      480x270: SHORT, right, under the tabs, spawn Box[x=424, y=28, w=52, h=20], map Box[x=424, y=50, w=52, h=20], count in the map button's tooltip
+[14:49:53] [main/INFO]: [STDOUT]:      640x360: FULL, top right, spawn Box[x=534, y=2, w=102, h=20], map Box[x=534, y=24, w=102, h=20], count Box[x=494, y=47, w=142, h=9]
+[14:49:53] [main/INFO]: [STDOUT]:      854x480: FULL, top right, spawn Box[x=748, y=2, w=102, h=20], map Box[x=748, y=24, w=102, h=20], count Box[x=708, y=47, w=142, h=9]
+[14:49:53] [main/INFO]: [STDOUT]:      320x240: FULL, row above the footer, spawn Box[x=110, y=183, w=102, h=20], map Box[x=214, y=183, w=102, h=20], count in the map button's tooltip
+[14:49:53] [main/INFO]: [STDOUT]:      1.46.1 at 427x240: Custom spawn Box[x=319, y=6, w=102, h=20] is drawn over vanilla's Box[x=276, y=0, w=124, h=24] (+4 more)
+[14:49:53] [main/INFO]: [STDOUT]:   control: the 1.46.1 fixed column at 427x240 (a found seed in the box) is caught (it overlaps vanilla), and the new placement there passes
+
+[14:49:53] [main/INFO]: [STDOUT]:   -- the searching screens: one alignment, no stranded words, nothing waited-on dropped --
+[14:49:55] [main/INFO]: [STDOUT]:   searching-screen layouts checked: 1440 (single search, several searching, results; every size, feedback height and worst estimate line), with a problem: 0
+[14:49:55] [main/INFO]: [STDOUT]:      greedy at 156 px ends on "64)"; the even wrap's lines: 4
+[14:49:55] [main/INFO]: [STDOUT]:   controls: the greedy wrap's lone "64)", a centred line and an unwrapped line are all caught, and the even wrap passes
+
+[14:49:55] [main/INFO]: [STDOUT]:   -- the action bar (one line, never wrapped) at 320 px --
+[14:49:55] [main/INFO]: [STDOUT]:      fits 264 px of 304: "The map only opens in your own single-player world"
+[14:49:55] [main/INFO]: [STDOUT]:      fits 233 px of 304: "The map only shows Default world type worlds"
+[14:49:55] [main/INFO]: [STDOUT]:   control: 1.46.1's action-bar sentence (535 px) is caught — too wide at 320 and at 427
+
+[14:49:55] [main/INFO]: [STDOUT]:   smallest workable height, by pair count:
+[14:49:55] [main/INFO]: [STDOUT]:      0 pair(s): 200 px   (inside Minecraft's own 320x240 floor)
+[14:49:55] [main/INFO]: [STDOUT]:      1 pair(s): 200 px   (inside Minecraft's own 320x240 floor)
+[14:49:55] [main/INFO]: [STDOUT]:      2 pair(s): 200 px   (inside Minecraft's own 320x240 floor)
+[14:49:55] [main/INFO]: [STDOUT]:      3 pair(s): 200 px   (inside Minecraft's own 320x240 floor)
+
+[14:49:55] [main/INFO]: [STDOUT]:   -- 854x480, 0 pair(s) --
+[14:49:55] [main/INFO]: [STDOUT]:      panel        107,10  640x460
+[14:49:55] [main/INFO]: [STDOUT]:      columns      left 117+336   right 461+276
+[14:49:55] [main/INFO]: [STDOUT]:      browse list  y 112–410   10 rows of 28
+[14:49:55] [main/INFO]: [STDOUT]:      chosen list  y 84–394   10 picks of 30
+[14:49:55] [main/INFO]: [STDOUT]:      bottom       toggle 402  buttons 440  feedback 426
+[14:49:55] [main/INFO]: [STDOUT]:      too small?   false
+[14:49:55] [main/INFO]: [STDOUT]:   -- 480x270, 1 pair(s) --
+[14:49:55] [main/INFO]: [STDOUT]:      panel        10,10  460x250
+[14:49:55] [main/INFO]: [STDOUT]:      columns      left 20+237   right 265+195
+[14:49:55] [main/INFO]: [STDOUT]:      browse list  y 112–200   3 rows of 28
+[14:49:55] [main/INFO]: [STDOUT]:      chosen list  y 84–146   2 picks of 30
+[14:49:55] [main/INFO]: [STDOUT]:      bottom       toggle 192  buttons 230  feedback 216
+[14:49:55] [main/INFO]: [STDOUT]:      too small?   false
+[14:49:55] [main/INFO]: [STDOUT]:   -- 320x240, 2 pair(s) --
+[14:49:55] [main/INFO]: [STDOUT]:      panel        0,10  320x220
+[14:49:55] [main/INFO]: [STDOUT]:      columns      left 10+160   right 178+132
+[14:49:55] [main/INFO]: [STDOUT]:      browse list  y 112–170   2 rows of 28
+[14:49:55] [main/INFO]: [STDOUT]:      chosen list  y 84–116   1 picks of 30
+[14:49:55] [main/INFO]: [STDOUT]:      bottom       toggle 162  buttons 200  feedback 186
+[14:49:55] [main/INFO]: [STDOUT]:      too small?   false
+[14:49:55] [main/INFO]: [STDOUT]: ================================================
+==== worldsDiag ====
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:49:59] [main/INFO]: [STDOUT]: ========== FIND N WORLDS ==========
+
+[14:49:59] [main/INFO]: [STDOUT]: -- the list --
+[14:49:59] [main/INFO]: [STDOUT]:   ok   an empty list, wanting 3
+[14:49:59] [main/INFO]: [STDOUT]:   ok   add the first
+[14:49:59] [main/INFO]: [STDOUT]:   ok   add the second
+[14:49:59] [main/INFO]: [STDOUT]:   ok   the SAME seed again is turned away
+[14:49:59] [main/INFO]: [STDOUT]:   ok     and the one kept is the first one
+[14:49:59] [main/INFO]: [STDOUT]:   ok   Stop keeps what was found
+[14:49:59] [main/INFO]: [STDOUT]:   ok   add the third
+[14:49:59] [main/INFO]: [STDOUT]:   ok   a fourth is past what was asked and is turned away
+[14:49:59] [main/INFO]: [STDOUT]:   ok   Copy all is one seed per line, in order
+[14:49:59] [main/INFO]: [STDOUT]:   ok   the worlds belong to the screen and registries they were found for
+[14:49:59] [main/INFO]: [STDOUT]:   ok     not to another Create World screen
+[14:49:59] [main/INFO]: [STDOUT]:   ok     nor to the same screen with other registries (data packs)
+[14:49:59] [main/INFO]: [STDOUT]:   ok     nor to nothing
+[14:49:59] [main/INFO]: [STDOUT]:   ok   Use on result 2 of 3 stores seed 222
+[14:49:59] [main/INFO]: [STDOUT]:   ok     with result 2's finds — and not 1's or 3's
+[14:49:59] [main/INFO]: [STDOUT]:   ok     with result 2's lines
+[14:49:59] [main/INFO]: [STDOUT]:   ok     with the seeds checked and time when result 2 was found
+[14:49:59] [main/INFO]: [STDOUT]:   ok     in the single search's wording
+[14:49:59] [main/INFO]: [STDOUT]:   ok     with the search's note
+[14:49:59] [main/INFO]: [STDOUT]:   ok     and the join message armed for that seed only
+[14:49:59] [main/INFO]: [STDOUT]:   ok   the list is still there after Use
+[14:49:59] [main/INFO]: [STDOUT]:   ok   Use on an index that is not there stores nothing
+[14:49:59] [main/INFO]: [STDOUT]:   ok   a single search's stored stats read as before ("searched 1,234,567 seeds in 2m 05s")
+[14:49:59] [main/INFO]: [STDOUT]:   ok   a new search forgets the applied seed and its finds, as before
+[14:49:59] [main/INFO]: [STDOUT]:   ok   clear empties it and it belongs to nothing
+[14:49:59] [main/INFO]: [STDOUT]:   ok   the Worlds button steps 1, 2, 3 … 10, then back to 1
+[14:49:59] [main/INFO]: [STDOUT]:   ok   back (right-click / shift-click) steps 10, 9 … 1, then round to 10
+[14:49:59] [main/INFO]: [STDOUT]:   ok   an unknown value goes to 1 forwards and 10 back
+[14:49:59] [main/INFO]: [STDOUT]:   ok   the button offers every number 1 to 10 and the cap is 10
+[14:49:59] [main/INFO]: [STDOUT]:   ok   asked for 50, the list holds at most 10
+
+[14:49:59] [main/INFO]: [STDOUT]: -- the time estimate --
+[14:49:59] [main/INFO]: [STDOUT]:   ok   one world: unchanged
+[14:49:59] [main/INFO]: [STDOUT]:   ok   one world, rough: unchanged
+[14:49:59] [main/INFO]: [STDOUT]:   ok   one world, past 4x: unchanged
+[14:49:59] [main/INFO]: [STDOUT]:   ok   one world, "rarer than": no time promise
+[14:49:59] [main/INFO]: [STDOUT]:   ok   "rarer than", under a second: "much longer than a second", never "at least under a second"
+[14:49:59] [main/INFO]: [STDOUT]:   ok   the screenshot: 105M seeds past a 1-in-210,632 bound, none found, says so and gives no time
+[14:49:59] [main/INFO]: [STDOUT]:   ok     …and with some found it says how many
+[14:49:59] [main/INFO]: [STDOUT]:   ok     …and within 4x per world still wanted it is still the bound
+[14:49:59] [main/INFO]: [STDOUT]:   ok   one world, a long wait: no warning, as before
+[14:49:59] [main/INFO]: [STDOUT]:   ok   the N-world form with N = 1 is the one-world line
+[14:49:59] [main/INFO]: [STDOUT]:   ok   3 worlds: "about 2 min for 3 worlds"
+[14:49:59] [main/INFO]: [STDOUT]:   ok   3 worlds of a rare wish: 50 min, and it says that is long
+[14:49:59] [main/INFO]: [STDOUT]:   ok   3 worlds, 160,001 seeds, none found: past the first world's allowance
+[14:49:59] [main/INFO]: [STDOUT]:   ok   3 worlds, 160,001 seeds, 2 found: within the allowance for the third
+
+[14:49:59] [main/INFO]: [STDOUT]: -- the lines under each world --
+[14:49:59] [main/INFO]: [STDOUT]:   ok   Coords shown: the join message's line
+[14:49:59] [main/INFO]: [STDOUT]:   ok   Coords hidden: the numbers go, the distance stays
+[14:49:59] [main/INFO]: [STDOUT]:   ok   a Nether find is tagged in the list
+[14:49:59] [main/INFO]: [STDOUT]:   ok     and not in the join message
+[14:49:59] [main/INFO]: [STDOUT]:   ok   nothing to point at: what was verified, after the spawn line
+
+[14:49:59] [main/INFO]: [STDOUT]: -- the engine, through SeedFinder.consider (real world-gen) --
+[14:50:00] [main/INFO]: [STDOUT]:   ok   a count of 2 does NOT force Exact: requiresExact is false and a Fast job stays Fast
+[14:50:00] [main/INFO]: [STDOUT]:   ok   spawn-inside DOES force Exact: requiresExact, and a job asked for Fast runs Exact
+[14:50:00] [main/INFO]: Seed finder: built structure templates in 16ms
+[14:50:00] [main/INFO]: [STDOUT]:   3 worlds, Fast: 3 in 150 ms, 272 seeds checked
+[14:50:00] [main/INFO]: [STDOUT]:   ok   a search for 3 stops by itself with exactly 3
+[14:50:00] [main/INFO]: [STDOUT]:   ok     3 DIFFERENT seeds
+[14:50:00] [main/INFO]: [STDOUT]:   ok     counted 3 found
+[14:50:00] [main/INFO]: [STDOUT]:   ok     each with the seeds-checked and time it was found at
+[14:50:00] [main/INFO]: [STDOUT]:   ok     each with its own finds
+[14:50:00] [main/INFO]: [STDOUT]:   ok   the list takes all 3 from the job
+[14:50:00] [main/INFO]: [STDOUT]:   ok     in the order found, with the same finds
+[14:50:00] [main/INFO]: [STDOUT]:   ok   syncing again adds nothing
+[14:50:00] [main/INFO]: [STDOUT]:   ok   USE RESULT 2 OF 3: the stored seed is result 2's
+[14:50:00] [main/INFO]: [STDOUT]:   ok     the stored finds are result 2's
+[14:50:00] [main/INFO]: [STDOUT]:   ok     and differ from results 1 and 3
+[14:50:00] [main/INFO]: [STDOUT]:   ok     the stored lines are result 2's
+[14:50:00] [main/INFO]: [STDOUT]:   ok     the stored count is when result 2 was found
+[14:50:00] [main/INFO]: [STDOUT]:   ok   the same seed through the real path twice: one result, still searching
+[14:50:00] [main/INFO]: [STDOUT]:   ok     a different one makes 2 of 2 and stops it
+[14:50:00] [main/INFO]: [STDOUT]:   ok   a search for 1 stops on its first find
+[14:50:00] [main/INFO]: [STDOUT]:   ok   pregen's unbounded stream is unchanged: both accepted, nothing recorded per seed
+
+[14:50:00] [main/INFO]: [STDOUT]: ALL 68 CHECKS PASS
+==== multiDiag|3 both worlds threads=1,auto,max ====
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:50:05] [main/INFO]: Seed finder: built structure templates in 18ms
+
+[14:50:05] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Exact, 1 worker) ==========
+[14:50:05] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[14:50:09] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 59 seeds checked in 3 s, stream 4587522
+
+[14:50:09] [main/INFO]: [STDOUT]:   SEED 1587639235903991331   spawn 71, 9 (the printed spawn agrees)
+[14:50:09] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          189 of 400      OK — within the distance asked, from the real spawn
+[14:50:09] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          112, -176       OK — village_taiga contains weaponsmith|weapon_smith
+[14:50:09] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          112, -176       OK — village_taiga contains weaponsmith|weapon_smith
+
+[14:50:09] [main/INFO]: [STDOUT]:   SEED -5175937199721715715   spawn 0, 0 (the printed spawn agrees)
+[14:50:09] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          208 of 400      OK — within the distance asked, from the real spawn
+[14:50:09] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          80, 192         OK — village_plains contains weaponsmith|weapon_smith
+[14:50:09] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          80, 192         OK — village_plains contains weaponsmith|weapon_smith
+
+[14:50:09] [main/INFO]: [STDOUT]:   SEED 2928251533487603223   spawn -17, 68 (the printed spawn agrees)
+[14:50:09] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          213 of 400      OK — within the distance asked, from the real spawn
+[14:50:10] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          0, -144         OK — village_taiga contains weaponsmith|weapon_smith
+[14:50:10] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          0, -144         OK — village_taiga contains weaponsmith|weapon_smith
+
+[14:50:10] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Fast, 1 worker) ==========
+[14:50:10] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[14:50:11] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 14 seeds checked in 0 s, stream 4587523
+
+[14:50:11] [main/INFO]: [STDOUT]:   SEED -971322007979628348   spawn -53, 50 (the printed spawn agrees)
+[14:50:11] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          391 of 400      OK — within the distance asked, from the real spawn
+[14:50:11] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+[14:50:11] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+
+[14:50:11] [main/INFO]: [STDOUT]:   SEED 8250022317763262707   spawn 72, -58 (the printed spawn agrees)
+[14:50:11] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          183 of 400      OK — within the distance asked, from the real spawn
+[14:50:11] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          224, -160       OK — village_taiga contains weaponsmith|weapon_smith
+[14:50:11] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          224, -160       OK — village_taiga contains weaponsmith|weapon_smith
+
+[14:50:11] [main/INFO]: [STDOUT]:   SEED -6316625817246108944   spawn 12, 41 (the printed spawn agrees)
+[14:50:11] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          266 of 400      OK — within the distance asked, from the real spawn
+[14:50:11] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -144, 256       OK — village_plains contains weaponsmith|weapon_smith
+[14:50:11] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -144, 256       OK — village_plains contains weaponsmith|weapon_smith
+
+[14:50:11] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Exact, 1 worker) ==========
+[14:50:11] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[14:50:11] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 22 seeds checked in 0 s, stream 4587524
+
+[14:50:11] [main/INFO]: [STDOUT]:   SEED -7403621761679286121   spawn -31, -38 (the printed spawn agrees)
+[14:50:11] [main/INFO]: [STDOUT]:      dist  Surface Village                   286 of 400      OK — within the distance asked, from the real spawn
+[14:50:11] [main/INFO]: [STDOUT]:      dist  Shipwreck                         290 of 400      OK — within the distance asked, from the real spawn
+[14:50:11] [main/INFO]: [STDOUT]:      line  Surface Village                   16, -320        OK — village_plains, 117 pieces
+[14:50:11] [main/INFO]: [STDOUT]:      find  Surface Village                   16, -320        OK — village_plains, 117 pieces
+[14:50:11] [main/INFO]: [STDOUT]:      line  Shipwreck                         240, 64         OK — shipwreck, 1 pieces
+[14:50:11] [main/INFO]: [STDOUT]:      find  Shipwreck                         240, 64         OK — shipwreck, 1 pieces
+
+[14:50:11] [main/INFO]: [STDOUT]:   SEED 3393898121541017679   spawn -145, 42 (the printed spawn agrees)
+[14:50:11] [main/INFO]: [STDOUT]:      dist  Surface Village                   302 of 400      OK — within the distance asked, from the real spawn
+[14:50:11] [main/INFO]: [STDOUT]:      dist  Shipwreck                         236 of 400      OK — within the distance asked, from the real spawn
+[14:50:12] [main/INFO]: [STDOUT]:      line  Surface Village                   -336, -192      OK — village_plains, 155 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      find  Surface Village                   -336, -192      OK — village_plains, 155 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      line  Shipwreck                         80, 112         OK — shipwreck, 1 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      find  Shipwreck                         80, 112         OK — shipwreck, 1 pieces
+
+[14:50:12] [main/INFO]: [STDOUT]:   SEED -8942381704682327771   spawn 0, 0 (the printed spawn agrees)
+[14:50:12] [main/INFO]: [STDOUT]:      dist  Surface Village                   209 of 400      OK — within the distance asked, from the real spawn
+[14:50:12] [main/INFO]: [STDOUT]:      dist  Shipwreck                         285 of 400      OK — within the distance asked, from the real spawn
+[14:50:12] [main/INFO]: [STDOUT]:      line  Surface Village                   112, 176        OK — village_plains, 90 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      find  Surface Village                   112, 176        OK — village_plains, 90 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      line  Shipwreck                         224, 176        OK — shipwreck_beached, 1 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      find  Shipwreck                         224, 176        OK — shipwreck_beached, 1 pieces
+
+[14:50:12] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Fast, 1 worker) ==========
+[14:50:12] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[14:50:12] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 33 seeds checked in 0 s, stream 4587525
+
+[14:50:12] [main/INFO]: [STDOUT]:   SEED -8348320925972103268   spawn 0, 0 (the printed spawn agrees)
+[14:50:12] [main/INFO]: [STDOUT]:      dist  Surface Village                   344 of 400      OK — within the distance asked, from the real spawn
+[14:50:12] [main/INFO]: [STDOUT]:      dist  Shipwreck                         165 of 400      OK — within the distance asked, from the real spawn
+[14:50:12] [main/INFO]: [STDOUT]:      line  Surface Village                   304, -160       OK — village_savanna, 102 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      find  Surface Village                   304, -160       OK — village_savanna, 102 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      line  Shipwreck                         -80, 144        OK — shipwreck, 1 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      find  Shipwreck                         -80, 144        OK — shipwreck, 1 pieces
+
+[14:50:12] [main/INFO]: [STDOUT]:   SEED 8774192721995701016   spawn -13, 20 (the printed spawn agrees)
+[14:50:12] [main/INFO]: [STDOUT]:      dist  Surface Village                   325 of 400      OK — within the distance asked, from the real spawn
+[14:50:12] [main/INFO]: [STDOUT]:      dist  Shipwreck                         170 of 400      OK — within the distance asked, from the real spawn
+[14:50:12] [main/INFO]: [STDOUT]:      line  Surface Village                   16, -304        OK — village_taiga, 139 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      find  Surface Village                   16, -304        OK — village_taiga, 139 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      line  Shipwreck                         -144, 128       OK — shipwreck, 1 pieces
+[14:50:12] [main/INFO]: [STDOUT]:      find  Shipwreck                         -144, 128       OK — shipwreck, 1 pieces
+
+[14:50:12] [main/INFO]: [STDOUT]:   SEED -5413146111241964457   spawn 0, 0 (the printed spawn agrees)
+[14:50:12] [main/INFO]: [STDOUT]:      dist  Surface Village                   68 of 400       OK — within the distance asked, from the real spawn
+[14:50:12] [main/INFO]: [STDOUT]:      dist  Shipwreck                         311 of 400      OK — within the distance asked, from the real spawn
+[14:50:13] [main/INFO]: [STDOUT]:      line  Surface Village                   48, 48          OK — village_plains, 190 pieces
+[14:50:13] [main/INFO]: [STDOUT]:      find  Surface Village                   48, 48          OK — village_plains, 190 pieces
+[14:50:13] [main/INFO]: [STDOUT]:      line  Shipwreck                         256, 176        OK — shipwreck, 1 pieces
+[14:50:13] [main/INFO]: [STDOUT]:      find  Shipwreck                         256, 176        OK — shipwreck, 1 pieces
+
+[14:50:13] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Exact, 1 worker) ==========
+[14:50:13] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[14:50:16] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 37 seeds checked in 3 s, stream 4587526
+
+[14:50:16] [main/INFO]: [STDOUT]:   SEED 3543744453118253825   spawn -13, 20 (the printed spawn agrees)
+[14:50:16] [main/INFO]: [STDOUT]:      dist  Village with Armorer              251 of 400      OK — within the distance asked, from the real spawn
+[14:50:16] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     298 of 400      OK — within the distance asked, from the real spawn
+[14:50:17] [main/INFO]: [STDOUT]:      line  Village with Armorer              -160, 224       OK — village_plains contains armorer
+[14:50:17] [main/INFO]: [STDOUT]:      find  Village with Armorer              -160, 224       OK — village_plains contains armorer
+[14:50:17] [main/INFO]: [STDOUT]:      line  Ruined Portal                     48, -272        OK — ruined_portal, 1 pieces
+[14:50:17] [main/INFO]: [STDOUT]:      find  Ruined Portal                     48, -272        OK — ruined_portal, 1 pieces
+
+[14:50:17] [main/INFO]: [STDOUT]:   SEED 7579377868130403502   spawn 0, 0 (the printed spawn agrees)
+[14:50:17] [main/INFO]: [STDOUT]:      dist  Village with Armorer              80 of 400       OK — within the distance asked, from the real spawn
+[14:50:17] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     330 of 400      OK — within the distance asked, from the real spawn
+[14:50:17] [main/INFO]: [STDOUT]:      line  Village with Armorer              64, 48          OK — village_plains contains armorer
+[14:50:17] [main/INFO]: [STDOUT]:      find  Village with Armorer              64, 48          OK — village_plains contains armorer
+[14:50:17] [main/INFO]: [STDOUT]:      line  Ruined Portal                     256, 208        OK — ruined_portal, 1 pieces
+[14:50:17] [main/INFO]: [STDOUT]:      find  Ruined Portal                     256, 208        OK — ruined_portal, 1 pieces
+
+[14:50:17] [main/INFO]: [STDOUT]:   SEED 9115970627494372145   spawn -127, -56 (the printed spawn agrees)
+[14:50:17] [main/INFO]: [STDOUT]:      dist  Village with Armorer              355 of 400      OK — within the distance asked, from the real spawn
+[14:50:17] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     337 of 400      OK — within the distance asked, from the real spawn
+[14:50:18] [main/INFO]: [STDOUT]:      line  Village with Armorer              -448, 96        OK — village_plains contains armorer
+[14:50:18] [main/INFO]: [STDOUT]:      find  Village with Armorer              -448, 96        OK — village_plains contains armorer
+[14:50:18] [main/INFO]: [STDOUT]:      line  Ruined Portal                     -336, -320      OK — ruined_portal, 1 pieces
+[14:50:18] [main/INFO]: [STDOUT]:      find  Ruined Portal                     -336, -320      OK — ruined_portal, 1 pieces
+
+[14:50:18] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Fast, 1 worker) ==========
+[14:50:18] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[14:50:19] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 28 seeds checked in 1 s, stream 4587527
+
+[14:50:19] [main/INFO]: [STDOUT]:   SEED -5137675136940946060   spawn 0, 0 (the printed spawn agrees)
+[14:50:19] [main/INFO]: [STDOUT]:      dist  Village with Armorer              179 of 400      OK — within the distance asked, from the real spawn
+[14:50:19] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     115 of 400      OK — within the distance asked, from the real spawn
+[14:50:20] [main/INFO]: [STDOUT]:      line  Village with Armorer              80, 160         OK — village_plains contains armorer
+[14:50:20] [main/INFO]: [STDOUT]:      find  Village with Armorer              80, 160         OK — village_plains contains armorer
+[14:50:20] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 96          OK — ruined_portal, 1 pieces
+[14:50:20] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 96          OK — ruined_portal, 1 pieces
+
+[14:50:20] [main/INFO]: [STDOUT]:   SEED 6817476587190715039   spawn -44, 113 (the printed spawn agrees)
+[14:50:20] [main/INFO]: [STDOUT]:      dist  Village with Armorer              117 of 400      OK — within the distance asked, from the real spawn
+[14:50:20] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     233 of 400      OK — within the distance asked, from the real spawn
+[14:50:20] [main/INFO]: [STDOUT]:      line  Village with Armorer              -160, 128       OK — village_snowy contains armorer
+[14:50:20] [main/INFO]: [STDOUT]:      find  Village with Armorer              -160, 128       OK — village_snowy contains armorer
+[14:50:20] [main/INFO]: [STDOUT]:      line  Ruined Portal                     -272, 64        OK — ruined_portal_ocean, 1 pieces
+[14:50:20] [main/INFO]: [STDOUT]:      find  Ruined Portal                     -272, 64        OK — ruined_portal_ocean, 1 pieces
+
+[14:50:20] [main/INFO]: [STDOUT]:   SEED -3165487319106366369   spawn 0, 0 (the printed spawn agrees)
+[14:50:20] [main/INFO]: [STDOUT]:      dist  Village with Armorer              226 of 400      OK — within the distance asked, from the real spawn
+[14:50:20] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     311 of 400      OK — within the distance asked, from the real spawn
+[14:50:20] [main/INFO]: [STDOUT]:      line  Village with Armorer              -160, -160      OK — village_savanna contains armorer
+[14:50:20] [main/INFO]: [STDOUT]:      find  Village with Armorer              -160, -160      OK — village_savanna contains armorer
+[14:50:20] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 304         OK — ruined_portal, 1 pieces
+[14:50:20] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 304         OK — ruined_portal, 1 pieces
+
+[14:50:20] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Exact, 12 workers) ==========
+[14:50:20] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[14:50:22] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 93 seeds checked in 1 s, stream 4587522
+
+[14:50:22] [main/INFO]: [STDOUT]:   SEED 4417295699456912946   spawn 0, 0 (the printed spawn agrees)
+[14:50:22] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          163 of 400      OK — within the distance asked, from the real spawn
+[14:50:22] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -160, 32        OK — village_taiga contains weaponsmith|weapon_smith
+[14:50:22] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -160, 32        OK — village_taiga contains weaponsmith|weapon_smith
+
+[14:50:22] [main/INFO]: [STDOUT]:   SEED -7992216159604608755   spawn 147, 326 (the printed spawn agrees)
+[14:50:22] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          138 of 400      OK — within the distance asked, from the real spawn
+[14:50:22] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          16, 368         OK — village_savanna contains weaponsmith|weapon_smith
+[14:50:22] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          16, 368         OK — village_savanna contains weaponsmith|weapon_smith
+
+[14:50:22] [main/INFO]: [STDOUT]:   SEED 1814541481786047728   spawn -720, -33 (the printed spawn agrees)
+[14:50:22] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          363 of 400      OK — within the distance asked, from the real spawn
+[14:50:22] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -976, 224       OK — village_taiga contains weaponsmith|weapon_smith
+[14:50:22] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -976, 224       OK — village_taiga contains weaponsmith|weapon_smith
+
+[14:50:22] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Fast, 12 workers) ==========
+[14:50:22] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[14:50:23] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 78 seeds checked in 1 s, stream 4587523
+
+[14:50:23] [main/INFO]: [STDOUT]:   SEED -971322007979628348   spawn -53, 50 (the printed spawn agrees)
+[14:50:23] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          391 of 400      OK — within the distance asked, from the real spawn
+[14:50:23] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+[14:50:24] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+
+[14:50:24] [main/INFO]: [STDOUT]:   SEED -4927764927825922250   spawn 0, 0 (the printed spawn agrees)
+[14:50:24] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          340 of 400      OK — within the distance asked, from the real spawn
+[14:50:24] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          224, -256       OK — village_taiga contains weaponsmith|weapon_smith
+[14:50:24] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          224, -256       OK — village_taiga contains weaponsmith|weapon_smith
+
+[14:50:24] [main/INFO]: [STDOUT]:   SEED 3959439842442258228   spawn 53, 35 (the printed spawn agrees)
+[14:50:24] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          218 of 400      OK — within the distance asked, from the real spawn
+[14:50:24] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          0, -176         OK — village_plains contains weaponsmith|weapon_smith
+[14:50:24] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          0, -176         OK — village_plains contains weaponsmith|weapon_smith
+
+[14:50:24] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Exact, 12 workers) ==========
+[14:50:24] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[14:50:24] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 54 seeds checked in 0 s, stream 4587524
+
+[14:50:24] [main/INFO]: [STDOUT]:   SEED 260200656568614252   spawn 0, 0 (the printed spawn agrees)
+[14:50:24] [main/INFO]: [STDOUT]:      dist  Surface Village                   260 of 400      OK — within the distance asked, from the real spawn
+[14:50:24] [main/INFO]: [STDOUT]:      dist  Shipwreck                         182 of 400      OK — within the distance asked, from the real spawn
+[14:50:24] [main/INFO]: [STDOUT]:      line  Surface Village                   48, -256        OK — village_plains, 112 pieces
+[14:50:24] [main/INFO]: [STDOUT]:      find  Surface Village                   48, -256        OK — village_plains, 112 pieces
+[14:50:24] [main/INFO]: [STDOUT]:      line  Shipwreck                         -112, 144       OK — shipwreck, 1 pieces
+[14:50:24] [main/INFO]: [STDOUT]:      find  Shipwreck                         -112, 144       OK — shipwreck, 1 pieces
+
+[14:50:24] [main/INFO]: [STDOUT]:   SEED 1587631944017370348   spawn 5, -6 (the printed spawn agrees)
+[14:50:24] [main/INFO]: [STDOUT]:      dist  Surface Village                   250 of 400      OK — within the distance asked, from the real spawn
+[14:50:24] [main/INFO]: [STDOUT]:      dist  Shipwreck                         354 of 400      OK — within the distance asked, from the real spawn
+[14:50:24] [main/INFO]: [STDOUT]:      line  Surface Village                   0, -256         OK — village_plains, 143 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Surface Village                   0, -256         OK — village_plains, 143 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      line  Shipwreck                         -192, 288       OK — shipwreck_beached, 1 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Shipwreck                         -192, 288       OK — shipwreck_beached, 1 pieces
+
+[14:50:25] [main/INFO]: [STDOUT]:   SEED -7403621761679286121   spawn -31, -38 (the printed spawn agrees)
+[14:50:25] [main/INFO]: [STDOUT]:      dist  Surface Village                   286 of 400      OK — within the distance asked, from the real spawn
+[14:50:25] [main/INFO]: [STDOUT]:      dist  Shipwreck                         290 of 400      OK — within the distance asked, from the real spawn
+[14:50:25] [main/INFO]: [STDOUT]:      line  Surface Village                   16, -320        OK — village_plains, 117 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Surface Village                   16, -320        OK — village_plains, 117 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      line  Shipwreck                         240, 64         OK — shipwreck, 1 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Shipwreck                         240, 64         OK — shipwreck, 1 pieces
+
+[14:50:25] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Fast, 12 workers) ==========
+[14:50:25] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[14:50:25] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 133 seeds checked in 0 s, stream 4587525
+
+[14:50:25] [main/INFO]: [STDOUT]:   SEED 4758571272822038794   spawn -42, -25 (the printed spawn agrees)
+[14:50:25] [main/INFO]: [STDOUT]:      dist  Surface Village                   274 of 400      OK — within the distance asked, from the real spawn
+[14:50:25] [main/INFO]: [STDOUT]:      dist  Shipwreck                         342 of 400      OK — within the distance asked, from the real spawn
+[14:50:25] [main/INFO]: [STDOUT]:      line  Surface Village                   144, 176        OK — village_taiga, 110 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Surface Village                   144, 176        OK — village_taiga, 110 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      line  Shipwreck                         272, -160       OK — shipwreck, 1 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Shipwreck                         272, -160       OK — shipwreck, 1 pieces
+
+[14:50:25] [main/INFO]: [STDOUT]:   SEED -1351601151890507818   spawn 0, 0 (the printed spawn agrees)
+[14:50:25] [main/INFO]: [STDOUT]:      dist  Surface Village                   97 of 400       OK — within the distance asked, from the real spawn
+[14:50:25] [main/INFO]: [STDOUT]:      dist  Shipwreck                         336 of 400      OK — within the distance asked, from the real spawn
+[14:50:25] [main/INFO]: [STDOUT]:      line  Surface Village                   16, 96          OK — village_snowy, 106 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Surface Village                   16, 96          OK — village_snowy, 106 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      line  Shipwreck                         -336, 16        OK — shipwreck_beached, 1 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Shipwreck                         -336, 16        OK — shipwreck_beached, 1 pieces
+
+[14:50:25] [main/INFO]: [STDOUT]:   SEED 3782023508115798955   spawn 0, 0 (the printed spawn agrees)
+[14:50:25] [main/INFO]: [STDOUT]:      dist  Surface Village                   324 of 400      OK — within the distance asked, from the real spawn
+[14:50:25] [main/INFO]: [STDOUT]:      dist  Shipwreck                         314 of 400      OK — within the distance asked, from the real spawn
+[14:50:25] [main/INFO]: [STDOUT]:      line  Surface Village                   -176, 272       OK — village_snowy, 175 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Surface Village                   -176, 272       OK — village_snowy, 175 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      line  Shipwreck                         -304, -80       OK — shipwreck, 1 pieces
+[14:50:25] [main/INFO]: [STDOUT]:      find  Shipwreck                         -304, -80       OK — shipwreck, 1 pieces
+
+[14:50:25] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Exact, 12 workers) ==========
+[14:50:25] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[14:50:26] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 86 seeds checked in 0 s, stream 4587526
+
+[14:50:26] [main/INFO]: [STDOUT]:   SEED -4426847573723983027   spawn 0, 0 (the printed spawn agrees)
+[14:50:26] [main/INFO]: [STDOUT]:      dist  Village with Armorer              195 of 400      OK — within the distance asked, from the real spawn
+[14:50:26] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     72 of 400       OK — within the distance asked, from the real spawn
+[14:50:26] [main/INFO]: [STDOUT]:      line  Village with Armorer              112, 160        OK — village_taiga contains armorer
+[14:50:26] [main/INFO]: [STDOUT]:      find  Village with Armorer              112, 160        OK — village_taiga contains armorer
+[14:50:26] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 32          OK — ruined_portal, 1 pieces
+[14:50:26] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 32          OK — ruined_portal, 1 pieces
+
+[14:50:26] [main/INFO]: [STDOUT]:   SEED 3005265737208908222   spawn 74, 357 (the printed spawn agrees)
+[14:50:26] [main/INFO]: [STDOUT]:      dist  Village with Armorer              242 of 400      OK — within the distance asked, from the real spawn
+[14:50:26] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     133 of 400      OK — within the distance asked, from the real spawn
+[14:50:26] [main/INFO]: [STDOUT]:      line  Village with Armorer              16, 592         OK — village_savanna contains armorer
+[14:50:27] [main/INFO]: [STDOUT]:      find  Village with Armorer              16, 592         OK — village_savanna contains armorer
+[14:50:27] [main/INFO]: [STDOUT]:      line  Ruined Portal                     160, 256        OK — ruined_portal_ocean, 1 pieces
+[14:50:27] [main/INFO]: [STDOUT]:      find  Ruined Portal                     160, 256        OK — ruined_portal_ocean, 1 pieces
+
+[14:50:27] [main/INFO]: [STDOUT]:   SEED -2453508682600180313   spawn -28, 48 (the printed spawn agrees)
+[14:50:27] [main/INFO]: [STDOUT]:      dist  Village with Armorer              206 of 400      OK — within the distance asked, from the real spawn
+[14:50:27] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     128 of 400      OK — within the distance asked, from the real spawn
+[14:50:27] [main/INFO]: [STDOUT]:      line  Village with Armorer              -224, 112       OK — village_savanna contains armorer
+[14:50:27] [main/INFO]: [STDOUT]:      find  Village with Armorer              -224, 112       OK — village_savanna contains armorer
+[14:50:27] [main/INFO]: [STDOUT]:      line  Ruined Portal                     96, 16          OK — ruined_portal_ocean, 1 pieces
+[14:50:27] [main/INFO]: [STDOUT]:      find  Ruined Portal                     96, 16          OK — ruined_portal_ocean, 1 pieces
+
+[14:50:27] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Fast, 12 workers) ==========
+[14:50:27] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[14:50:28] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 110 seeds checked in 1 s, stream 4587527
+
+[14:50:28] [main/INFO]: [STDOUT]:   SEED 7649822100076540263   spawn 0, 0 (the printed spawn agrees)
+[14:50:28] [main/INFO]: [STDOUT]:      dist  Village with Armorer              193 of 400      OK — within the distance asked, from the real spawn
+[14:50:28] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     345 of 400      OK — within the distance asked, from the real spawn
+[14:50:28] [main/INFO]: [STDOUT]:      line  Village with Armorer              176, 80         OK — village_snowy contains armorer
+[14:50:28] [main/INFO]: [STDOUT]:      find  Village with Armorer              176, 80         OK — village_snowy contains armorer
+[14:50:28] [main/INFO]: [STDOUT]:      line  Ruined Portal                     128, -320       OK — ruined_portal, 1 pieces
+[14:50:28] [main/INFO]: [STDOUT]:      find  Ruined Portal                     128, -320       OK — ruined_portal, 1 pieces
+
+[14:50:28] [main/INFO]: [STDOUT]:   SEED -4095549723907756916   spawn 0, 0 (the printed spawn agrees)
+[14:50:28] [main/INFO]: [STDOUT]:      dist  Village with Armorer              161 of 400      OK — within the distance asked, from the real spawn
+[14:50:28] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     137 of 400      OK — within the distance asked, from the real spawn
+[14:50:28] [main/INFO]: [STDOUT]:      line  Village with Armorer              16, 160         OK — village_plains contains armorer
+[14:50:28] [main/INFO]: [STDOUT]:      find  Village with Armorer              16, 160         OK — village_plains contains armorer
+[14:50:28] [main/INFO]: [STDOUT]:      line  Ruined Portal                     48, 128         OK — ruined_portal_swamp, 1 pieces
+[14:50:28] [main/INFO]: [STDOUT]:      find  Ruined Portal                     48, 128         OK — ruined_portal_swamp, 1 pieces
+
+[14:50:28] [main/INFO]: [STDOUT]:   SEED -5137675136940946060   spawn 0, 0 (the printed spawn agrees)
+[14:50:28] [main/INFO]: [STDOUT]:      dist  Village with Armorer              179 of 400      OK — within the distance asked, from the real spawn
+[14:50:28] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     115 of 400      OK — within the distance asked, from the real spawn
+[14:50:28] [main/INFO]: [STDOUT]:      line  Village with Armorer              80, 160         OK — village_plains contains armorer
+[14:50:29] [main/INFO]: [STDOUT]:      find  Village with Armorer              80, 160         OK — village_plains contains armorer
+[14:50:29] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 96          OK — ruined_portal, 1 pieces
+[14:50:29] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 96          OK — ruined_portal, 1 pieces
+
+[14:50:29] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Exact, 16 workers) ==========
+[14:50:29] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[14:50:30] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 109 seeds checked in 1 s, stream 4587522
+
+[14:50:30] [main/INFO]: [STDOUT]:   SEED 4417295699456912946   spawn 0, 0 (the printed spawn agrees)
+[14:50:30] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          163 of 400      OK — within the distance asked, from the real spawn
+[14:50:30] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -160, 32        OK — village_taiga contains weaponsmith|weapon_smith
+[14:50:30] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -160, 32        OK — village_taiga contains weaponsmith|weapon_smith
+
+[14:50:30] [main/INFO]: [STDOUT]:   SEED 4255460277719788549   spawn -121, 499 (the printed spawn agrees)
+[14:50:30] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          235 of 400      OK — within the distance asked, from the real spawn
+[14:50:30] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          -352, 544       OK — village_desert contains weaponsmith|weapon_smith
+[14:50:30] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          -352, 544       OK — village_desert contains weaponsmith|weapon_smith
+
+[14:50:30] [main/INFO]: [STDOUT]:   SEED -7992216159604608755   spawn 147, 326 (the printed spawn agrees)
+[14:50:30] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          138 of 400      OK — within the distance asked, from the real spawn
+[14:50:30] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          16, 368         OK — village_savanna contains weaponsmith|weapon_smith
+[14:50:31] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          16, 368         OK — village_savanna contains weaponsmith|weapon_smith
+
+[14:50:31] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row  (Fast, 16 workers) ==========
+[14:50:31] [main/INFO]: [STDOUT]:   searching: Village with Weaponsmith within 400
+[14:50:32] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 127 seeds checked in 1 s, stream 4587523
+
+[14:50:32] [main/INFO]: [STDOUT]:   SEED -4927764927825922250   spawn 0, 0 (the printed spawn agrees)
+[14:50:32] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          340 of 400      OK — within the distance asked, from the real spawn
+[14:50:32] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          224, -256       OK — village_taiga contains weaponsmith|weapon_smith
+[14:50:32] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          224, -256       OK — village_taiga contains weaponsmith|weapon_smith
+
+[14:50:32] [main/INFO]: [STDOUT]:   SEED -971322007979628348   spawn -53, 50 (the printed spawn agrees)
+[14:50:32] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          391 of 400      OK — within the distance asked, from the real spawn
+[14:50:32] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+[14:50:32] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          112, -304       OK — village_snowy contains weaponsmith|weapon_smith
+
+[14:50:32] [main/INFO]: [STDOUT]:   SEED 3959439842442258228   spawn 53, 35 (the printed spawn agrees)
+[14:50:32] [main/INFO]: [STDOUT]:      dist  Village with Weaponsmith          218 of 400      OK — within the distance asked, from the real spawn
+[14:50:32] [main/INFO]: [STDOUT]:      line  Village with Weaponsmith          0, -176         OK — village_plains contains weaponsmith|weapon_smith
+[14:50:33] [main/INFO]: [STDOUT]:      find  Village with Weaponsmith          0, -176         OK — village_plains contains weaponsmith|weapon_smith
+
+[14:50:33] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Exact, 16 workers) ==========
+[14:50:33] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[14:50:33] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 75 seeds checked in 0 s, stream 4587524
+
+[14:50:33] [main/INFO]: [STDOUT]:   SEED 260200656568614252   spawn 0, 0 (the printed spawn agrees)
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Surface Village                   260 of 400      OK — within the distance asked, from the real spawn
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Shipwreck                         182 of 400      OK — within the distance asked, from the real spawn
+[14:50:33] [main/INFO]: [STDOUT]:      line  Surface Village                   48, -256        OK — village_plains, 112 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      find  Surface Village                   48, -256        OK — village_plains, 112 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      line  Shipwreck                         -112, 144       OK — shipwreck, 1 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      find  Shipwreck                         -112, 144       OK — shipwreck, 1 pieces
+
+[14:50:33] [main/INFO]: [STDOUT]:   SEED 1587631944017370348   spawn 5, -6 (the printed spawn agrees)
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Surface Village                   250 of 400      OK — within the distance asked, from the real spawn
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Shipwreck                         354 of 400      OK — within the distance asked, from the real spawn
+[14:50:33] [main/INFO]: [STDOUT]:      line  Surface Village                   0, -256         OK — village_plains, 143 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      find  Surface Village                   0, -256         OK — village_plains, 143 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      line  Shipwreck                         -192, 288       OK — shipwreck_beached, 1 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      find  Shipwreck                         -192, 288       OK — shipwreck_beached, 1 pieces
+
+[14:50:33] [main/INFO]: [STDOUT]:   SEED 3550795732094166247   spawn 418, 297 (the printed spawn agrees)
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Surface Village                   384 of 400      OK — within the distance asked, from the real spawn
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Shipwreck                         260 of 400      OK — within the distance asked, from the real spawn
+[14:50:33] [main/INFO]: [STDOUT]:      line  Surface Village                   336, 672        OK — village_plains, 70 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      find  Surface Village                   336, 672        OK — village_plains, 70 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      line  Shipwreck                         672, 240        OK — shipwreck, 1 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      find  Shipwreck                         672, 240        OK — shipwreck, 1 pieces
+
+[14:50:33] [main/INFO]: [STDOUT]: ========== 3 WORLDS: two-row combo  (Fast, 16 workers) ==========
+[14:50:33] [main/INFO]: [STDOUT]:   searching: Surface Village within 400 + Shipwreck within 400
+[14:50:33] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 161 seeds checked in 0 s, stream 4587525
+
+[14:50:33] [main/INFO]: [STDOUT]:   SEED -6492441189746048529   spawn -28, 48 (the printed spawn agrees)
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Surface Village                   344 of 400      OK — within the distance asked, from the real spawn
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Shipwreck                         281 of 400      OK — within the distance asked, from the real spawn
+[14:50:33] [main/INFO]: [STDOUT]:      line  Surface Village                   48, 384         OK — village_taiga, 132 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      find  Surface Village                   48, 384         OK — village_taiga, 132 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      line  Shipwreck                         -144, 304       OK — shipwreck, 1 pieces
+[14:50:33] [main/INFO]: [STDOUT]:      find  Shipwreck                         -144, 304       OK — shipwreck, 1 pieces
+
+[14:50:33] [main/INFO]: [STDOUT]:   SEED -8445163758734307371   spawn 0, 0 (the printed spawn agrees)
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Surface Village                   322 of 400      OK — within the distance asked, from the real spawn
+[14:50:33] [main/INFO]: [STDOUT]:      dist  Shipwreck                         208 of 400      OK — within the distance asked, from the real spawn
+[14:50:34] [main/INFO]: [STDOUT]:      line  Surface Village                   -144, 288       OK — village_savanna, 153 pieces
+[14:50:34] [main/INFO]: [STDOUT]:      find  Surface Village                   -144, 288       OK — village_savanna, 153 pieces
+[14:50:34] [main/INFO]: [STDOUT]:      line  Shipwreck                         192, 80         OK — shipwreck, 1 pieces
+[14:50:34] [main/INFO]: [STDOUT]:      find  Shipwreck                         192, 80         OK — shipwreck, 1 pieces
+
+[14:50:34] [main/INFO]: [STDOUT]:   SEED -1351601151890507818   spawn 0, 0 (the printed spawn agrees)
+[14:50:34] [main/INFO]: [STDOUT]:      dist  Surface Village                   97 of 400       OK — within the distance asked, from the real spawn
+[14:50:34] [main/INFO]: [STDOUT]:      dist  Shipwreck                         336 of 400      OK — within the distance asked, from the real spawn
+[14:50:34] [main/INFO]: [STDOUT]:      line  Surface Village                   16, 96          OK — village_snowy, 106 pieces
+[14:50:34] [main/INFO]: [STDOUT]:      find  Surface Village                   16, 96          OK — village_snowy, 106 pieces
+[14:50:34] [main/INFO]: [STDOUT]:      line  Shipwreck                         -336, 16        OK — shipwreck_beached, 1 pieces
+[14:50:34] [main/INFO]: [STDOUT]:      find  Shipwreck                         -336, 16        OK — shipwreck_beached, 1 pieces
+
+[14:50:34] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Exact, 16 workers) ==========
+[14:50:34] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[14:50:35] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 121 seeds checked in 0 s, stream 4587526
+
+[14:50:35] [main/INFO]: [STDOUT]:   SEED -4426847573723983027   spawn 0, 0 (the printed spawn agrees)
+[14:50:35] [main/INFO]: [STDOUT]:      dist  Village with Armorer              195 of 400      OK — within the distance asked, from the real spawn
+[14:50:35] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     72 of 400       OK — within the distance asked, from the real spawn
+[14:50:35] [main/INFO]: [STDOUT]:      line  Village with Armorer              112, 160        OK — village_taiga contains armorer
+[14:50:35] [main/INFO]: [STDOUT]:      find  Village with Armorer              112, 160        OK — village_taiga contains armorer
+[14:50:35] [main/INFO]: [STDOUT]:      line  Ruined Portal                     64, 32          OK — ruined_portal, 1 pieces
+[14:50:35] [main/INFO]: [STDOUT]:      find  Ruined Portal                     64, 32          OK — ruined_portal, 1 pieces
+
+[14:50:35] [main/INFO]: [STDOUT]:   SEED 3005265737208908222   spawn 74, 357 (the printed spawn agrees)
+[14:50:35] [main/INFO]: [STDOUT]:      dist  Village with Armorer              242 of 400      OK — within the distance asked, from the real spawn
+[14:50:35] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     133 of 400      OK — within the distance asked, from the real spawn
+[14:50:35] [main/INFO]: [STDOUT]:      line  Village with Armorer              16, 592         OK — village_savanna contains armorer
+[14:50:35] [main/INFO]: [STDOUT]:      find  Village with Armorer              16, 592         OK — village_savanna contains armorer
+[14:50:35] [main/INFO]: [STDOUT]:      line  Ruined Portal                     160, 256        OK — ruined_portal_ocean, 1 pieces
+[14:50:35] [main/INFO]: [STDOUT]:      find  Ruined Portal                     160, 256        OK — ruined_portal_ocean, 1 pieces
+
+[14:50:35] [main/INFO]: [STDOUT]:   SEED -2453508682600180313   spawn -28, 48 (the printed spawn agrees)
+[14:50:35] [main/INFO]: [STDOUT]:      dist  Village with Armorer              206 of 400      OK — within the distance asked, from the real spawn
+[14:50:35] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     128 of 400      OK — within the distance asked, from the real spawn
+[14:50:35] [main/INFO]: [STDOUT]:      line  Village with Armorer              -224, 112       OK — village_savanna contains armorer
+[14:50:35] [main/INFO]: [STDOUT]:      find  Village with Armorer              -224, 112       OK — village_savanna contains armorer
+[14:50:35] [main/INFO]: [STDOUT]:      line  Ruined Portal                     96, 16          OK — ruined_portal_ocean, 1 pieces
+[14:50:35] [main/INFO]: [STDOUT]:      find  Ruined Portal                     96, 16          OK — ruined_portal_ocean, 1 pieces
+
+[14:50:35] [main/INFO]: [STDOUT]: ========== 3 WORLDS: content row + plain row  (Fast, 16 workers) ==========
+[14:50:35] [main/INFO]: [STDOUT]:   searching: Village with Armorer within 400 + Ruined Portal within 400
+[14:50:37] [main/INFO]: [STDOUT]:   ok, 3 different seeds — 128 seeds checked in 1 s, stream 4587527
+
+[14:50:37] [main/INFO]: [STDOUT]:   SEED 1214850261768750826   spawn 0, 0 (the printed spawn agrees)
+[14:50:37] [main/INFO]: [STDOUT]:      dist  Village with Armorer              294 of 400      OK — within the distance asked, from the real spawn
+[14:50:37] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     181 of 400      OK — within the distance asked, from the real spawn
+[14:50:37] [main/INFO]: [STDOUT]:      line  Village with Armorer              256, 144        OK — village_plains contains armorer
+[14:50:37] [main/INFO]: [STDOUT]:      find  Village with Armorer              256, 144        OK — village_plains contains armorer
+[14:50:37] [main/INFO]: [STDOUT]:      line  Ruined Portal                     128, 128        OK — ruined_portal, 1 pieces
+[14:50:37] [main/INFO]: [STDOUT]:      find  Ruined Portal                     128, 128        OK — ruined_portal, 1 pieces
+
+[14:50:37] [main/INFO]: [STDOUT]:   SEED 7649822100076540263   spawn 0, 0 (the printed spawn agrees)
+[14:50:37] [main/INFO]: [STDOUT]:      dist  Village with Armorer              193 of 400      OK — within the distance asked, from the real spawn
+[14:50:37] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     345 of 400      OK — within the distance asked, from the real spawn
+[14:50:37] [main/INFO]: [STDOUT]:      line  Village with Armorer              176, 80         OK — village_snowy contains armorer
+[14:50:37] [main/INFO]: [STDOUT]:      find  Village with Armorer              176, 80         OK — village_snowy contains armorer
+[14:50:37] [main/INFO]: [STDOUT]:      line  Ruined Portal                     128, -320       OK — ruined_portal, 1 pieces
+[14:50:37] [main/INFO]: [STDOUT]:      find  Ruined Portal                     128, -320       OK — ruined_portal, 1 pieces
+
+[14:50:37] [main/INFO]: [STDOUT]:   SEED -4095549723907756916   spawn 0, 0 (the printed spawn agrees)
+[14:50:37] [main/INFO]: [STDOUT]:      dist  Village with Armorer              161 of 400      OK — within the distance asked, from the real spawn
+[14:50:37] [main/INFO]: [STDOUT]:      dist  Ruined Portal                     137 of 400      OK — within the distance asked, from the real spawn
+[14:50:37] [main/INFO]: [STDOUT]:      line  Village with Armorer              16, 160         OK — village_plains contains armorer
+[14:50:37] [main/INFO]: [STDOUT]:      find  Village with Armorer              16, 160         OK — village_plains contains armorer
+[14:50:37] [main/INFO]: [STDOUT]:      line  Ruined Portal                     48, 128         OK — ruined_portal_swamp, 1 pieces
+[14:50:37] [main/INFO]: [STDOUT]:      find  Ruined Portal                     48, 128         OK — ruined_portal_swamp, 1 pieces
+
+[14:50:37] [main/INFO]: [STDOUT]: ========== TOTAL ==========
+[14:50:37] [main/INFO]: [STDOUT]:   seeds returned by the finder : 54
+[14:50:37] [main/INFO]: [STDOUT]:   individual row claims checked: 324
+[14:50:37] [main/INFO]: [STDOUT]:   FALSE MATCHES                : 0
+[14:50:37] [main/INFO]: [STDOUT]:   could not verify either way  : 0
+[14:50:37] [main/INFO]: [STDOUT]:   N-world searches             : 18 run, 0 that did not return 3 different seeds
+[14:50:37] [main/INFO]: [STDOUT]:   A false match is a row the finder reported and that is NOT really there.
+[14:50:37] [main/INFO]: [STDOUT]: ===========================
+==== threadsDiag ====
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:50:42] [main/INFO]: Seed finder: built structure templates in 18ms
+[14:50:42] [main/INFO]: [STDOUT]: ========== THE BOTS SETTING ==========
+[14:50:42] [main/INFO]: [STDOUT]:   this machine: 16 logical processors, heap 6,144 MB → auto 12, maximum 16 (WORKER_MB 32, HEAP_SHARE 50%)
+
+[14:50:42] [main/INFO]: [STDOUT]: -- 1. memory per worker (live heap after a full GC, while the workers search; Exact, villages assembled) --
+[14:50:47] [main/INFO]: [STDOUT]:   no workers: 100 MB live
+[14:50:54] [main/INFO]: [STDOUT]:    1 worker(s): live   100 MB →   0.0 MB a worker kept · heap in use at the peak   452 MB (67 seeds)
+[14:51:02] [main/INFO]: [STDOUT]:    2 worker(s): live   100 MB →   0.0 MB a worker kept · heap in use at the peak   332 MB (131 seeds)
+[14:51:10] [main/INFO]: [STDOUT]:    4 worker(s): live   104 MB →   1.0 MB a worker kept · heap in use at the peak   537 MB (234 seeds)
+[14:51:18] [main/INFO]: [STDOUT]:    8 worker(s): live   109 MB →   1.1 MB a worker kept · heap in use at the peak   338 MB (455 seeds)
+[14:51:27] [main/INFO]: [STDOUT]:   12 worker(s): live   102 MB →   0.2 MB a worker kept · heap in use at the peak   409 MB (569 seeds)
+[14:51:36] [main/INFO]: [STDOUT]:   16 worker(s): live   103 MB →   0.2 MB a worker kept · heap in use at the peak   359 MB (706 seeds)
+[14:51:36] [main/INFO]: [STDOUT]:   what a worker KEEPS: slope 0.2 MB a worker, most 1.1
+[14:51:36] [main/INFO]: [STDOUT]:   ok   a worker keeps (live after a full GC) under a tenth of WORKER_MB (32 MB)
+[14:51:36] [main/INFO]: [STDOUT]:   what a worker NEEDS (its garbage included) is checked by running them in exactly the heap the rule allows: threadsDiag -Pheap=512M --args="gc 16" (16 x 32 MB), with a 96 MB control
+[14:51:36] [main/INFO]: [STDOUT]:   so in the vanilla launcher's default 2 GB heap the maximum is 16 workers; in 4 GB, 16; in 8 GB, 16 (each capped at the logical processors)
+
+[14:51:36] [main/INFO]: [STDOUT]: -- 2. how many workers a setting starts --
+[14:51:36] [main/INFO]: [STDOUT]:   ok   auto on 16 threads is 15 → capped at 12, as before
+[14:51:36] [main/INFO]: [STDOUT]:   ok   auto on 8 threads is 7
+[14:51:36] [main/INFO]: [STDOUT]:   ok   auto on 2 threads is 1, on 1 thread is 1
+[14:51:36] [main/INFO]: [STDOUT]:   ok   1 is 1
+[14:51:36] [main/INFO]: [STDOUT]:   ok   a number is taken as asked (7 of 16)
+[14:51:36] [main/INFO]: [STDOUT]:   ok   never more than the logical processors (32 asked on 16)
+[14:51:36] [main/INFO]: [STDOUT]:   ok   never more than the logical processors (14 asked on 8)
+[14:51:36] [main/INFO]: [STDOUT]:   ok   may exceed auto's 12 when the CPU and the heap allow (16 on 16, big heap)
+[14:51:36] [main/INFO]: [STDOUT]:   ok   never more than fits in half the heap (16 asked, 16 threads, 512 MB heap → 8)
+[14:51:36] [main/INFO]: [STDOUT]:   ok   never more than 16, the most tested (32 asked on 32 threads, 64 on 64, huge heap → 16)
+[14:51:36] [main/INFO]: [STDOUT]:   ok   CONTROL: 1.47.2's rule starts 32 workers for 32 asked on 32 threads — past 16
+[14:51:36] [main/INFO]: [STDOUT]:   ok   auto is unchanged by the cap (64 threads → 12; 4 threads → 3)
+[14:51:36] [main/INFO]: [STDOUT]:   ok   a job has a slot for the most any setting can start
+[14:51:36] [main/INFO]: [STDOUT]:   ok   a tiny heap still allows one
+[14:51:36] [main/INFO]: [STDOUT]:   ok   busy() is exactly 'more than auto'
+[14:51:36] [main/INFO]: [STDOUT]:   ok   the Bots button steps auto, 1, 2 … 16, auto — and back the other way
+[14:51:36] [main/INFO]: [STDOUT]:   ok   a saved number above this machine's maximum steps from the maximum
+[14:51:36] [main/INFO]: [STDOUT]:   ok   the setting is read where the search starts: auto → 12, 1 → 1, 999 → 16
+
+[14:51:36] [main/INFO]: [STDOUT]: -- 3. Stop, at 1 worker, auto and the maximum (Exact, villages assembled — the slowest seeds there are) --
+[14:51:40] [main/INFO]: [STDOUT]:   ok    1 worker(s): every one out of its loop 67 ms after Stop (50 seeds checked)
+[14:51:44] [main/INFO]: [STDOUT]:   ok   12 worker(s): every one out of its loop 663 ms after Stop (375 seeds checked)
+[14:51:49] [main/INFO]: [STDOUT]:   ok   16 worker(s): every one out of its loop 477 ms after Stop (386 seeds checked)
+
+[14:51:49] [main/INFO]: [STDOUT]: -- 4. the watchdog, at 1 worker, auto and the maximum --
+[14:51:49] [main/INFO]: [STDOUT]:   ok   1 worker(s): the job has a slot for every one
+[14:51:49] [main/INFO]: [STDOUT]:   ok   1 worker(s): quiet while healthy, then worker 0 (the last) reported stuck on its seed
+[14:51:49] [main/INFO]: [STDOUT]:   ok   12 worker(s): the job has a slot for every one
+[14:51:49] [main/INFO]: [STDOUT]:   ok   12 worker(s): quiet while healthy, then worker 11 (the last) reported stuck on its seed
+[14:51:49] [main/INFO]: [STDOUT]:   ok   16 worker(s): the job has a slot for every one
+[14:51:49] [main/INFO]: [STDOUT]:   ok   16 worker(s): quiet while healthy, then worker 15 (the last) reported stuck on its seed
+
+[14:51:49] [main/INFO]: [STDOUT]: ALL CHECKS PASS
+==== stopDiag|10 ====
+gradlew.bat : WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+At C:\Users\safia\AppData\Local\Temp\claude\D--Projects-FableVision\467ab4d0-9a25-4218-95d1-cef1f271cee2\scratchpad\reg
+ress.ps1:24 char:4
++    & .\gradlew.bat @cmd *>> $Log
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A term...has been called:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/C:/Users/safia/.gr
+adle/caches/modules-2/files-2.1/org.joml/joml/1.10.9/438e036486bad66b189bff385dd07dea4f74a146/joml-1.10.9.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:51:54] [main/INFO]: Seed finder: built structure templates in 18ms
+[14:51:54] [main/INFO]: [STDOUT]: ========== STOP WHILE A WORKER IS MID-ASSEMBLY ==========
+[14:51:54] [main/INFO]: [STDOUT]:   12 workers (auto), 10 trials a case; times from the Stop flag
+[14:52:27] [main/INFO]: [STDOUT]:   Mansion with Lava Vault, Exact 64                the worker caught assembling: median     3 ms, worst   174 ms · every worker out: median     3 ms, worst   174 ms · that worker's seed was 5-16 ms old (10 trials)
+[14:52:32] [main/INFO]: [STDOUT]:   Mansion with Lava Vault, Fast 800                the worker caught assembling: median     1 ms, worst     5 ms · every worker out: median     4 ms, worst     9 ms · that worker's seed was 0-8 ms old, 1 caught in a hit's re-check (10 trials)
+[14:52:38] [main/INFO]: [STDOUT]:   Trial Chamber with Eruption Room, Exact 64       the worker caught assembling: median    38 ms, worst    97 ms · every worker out: median    88 ms, worst    97 ms · that worker's seed was 5-59 ms old, 6 caught in a hit's re-check (10 trials)
+[14:52:47] [main/INFO]: [STDOUT]:   Trial Chamber with Eruption Room, Fast 800       the worker caught assembling: median   116 ms, worst   310 ms · every worker out: median   390 ms, worst   509 ms · that worker's seed was 1-261 ms old, 6 caught in a hit's re-check (10 trials)
+[14:52:47] [main/INFO]: [STDOUT]:   WORST: every worker out of its loop 509 ms after Stop — within the ~1 s line

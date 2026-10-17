@@ -1,0 +1,31 @@
+layoutDiag  exit 0  5 s
+iconDiag  exit 0  5 s
+streamDiag  exit 0  1 s
+slimeDiag  exit 0  4 s
+repro  exit 0  113 s
+radiusDiag  exit 0  174 s
+netherDiag  exit 0  16 s
+strictDiag  exit 0  21 s
+featureDiag|6 400 both  exit 0  287 s
+professionDiag|verify  exit 0  220 s
+smithDiag  exit 0  30 s
+wishDiag  exit 0  5 s
+privacyDiag  exit 0  2 s
+etaDiag  exit 0  19 s
+mapDiag  exit 0  8 s
+mapTruthDiag|6 1200  exit 0  21 s
+mapTruthDiag|4 2800|OVERWORLD  exit 0  40 s
+joinDiag  exit 0  1 s
+joinRepro  exit 0  7 s
+caveDiag  exit 0  8 s
+tieDiag|40 1200  exit 0  16 s
+mapReplay|-4172144997902289642  exit 0  13 s
+mapReplay|1  exit 0  13 s
+mapReplay|7777777  exit 0  13 s
+watchdogDiag  exit 0  4 s
+samplerDiag  exit 0  6 s
+villageDiag  exit 0  47 s
+rateDiag  exit 0  333 s
+portalDiag|120  exit 0  8 s
+statsDiag|village 1000  exit 0  98 s
+focusDiag  exit 0  4 s

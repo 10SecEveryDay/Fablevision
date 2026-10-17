@@ -1,0 +1,10 @@
+﻿widest ASCII glyph: 7px (TextFit assumed 6)
+ 269px  (TextFit  300)  ✨ Custom spawn — for the NEW world you're creating
+ 195px  (TextFit  210)  ✨ Custom spawn — for your NEW world
+ 146px  (TextFit  156)  ✨ Custom spawn — NEW world
+ 144px  (TextFit  156)  ✨ Spawn for your NEW world
+  95px  (TextFit  102)  ✨ NEW world spawn
+  95px  (TextFit  102)  ✨ New world spawn
+  97px  (TextFit  114)  Mode: ⚡Fast ▸ Exact
+  98px  (TextFit  120)  Mode: 🎯Exact ▸ Fast
+  54px  (TextFit   66)  Within 1000
