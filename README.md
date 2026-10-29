@@ -7,7 +7,7 @@ what you want near spawn ("a village next to a cherry grove", "a mansion in a da
 
 ## What it does
 
-On the **Create New World** screen, click **âœ¨ Custom spawn**. Describe what you want, or tick rows from a list.
+On the **Create New World** screen, click **Custom spawn**. Describe what you want, or tick rows from a list.
 FableVision then:
 
 1. Picks candidate seeds from a random number generator.
@@ -24,11 +24,11 @@ and a **Bots** setting for how many search threads to use. Plain wishes work wit
 It is **not** a seed cracker. It works only on the Create World screen, for a NEW world, Default world type.
 It cannot read the seed of a server, a LAN world, or any world that already exists, and it has no input for
 observed structures and no reverse solver. The one gate is `SeedAccess.java`, and it fails closed.
-Full detail, with the file for every claim: [SEED-FINDER-SCOPE.md](code-26.3/SEED-FINDER-SCOPE.md).
+Full detail, with the file for every claim: [SEED-FINDER-SCOPE.md](SEED-FINDER-SCOPE.md).
 
-## Folders
+## Source
 
-`code-26.3/` is the mod (Minecraft 26.3). The latest release notes are in `SHIPPED-1.47.3.md`.
+The mod's source is in `src/`. Release notes for the current version: [SHIPPED-1.47.3.md](SHIPPED-1.47.3.md).
 
 ## Install
 
@@ -36,19 +36,3 @@ Download `fablevision-1.47.3.jar` from the **Releases** page and put it in your 
 Use only one `fablevision-<version>.jar` at a time.
 
 ## Build
-
-```
-cd code-26.3
-./gradlew build
-```
-
-The jar is written to `code-26.3/build/libs/`. Needs JDK 25.
-
-## Testing
-
-The project has headless diagnostics (`./gradlew <name>Diag`), each with a control that must be able to fail.
-Minecraft itself can't be launched in them, so changes are also play-tested by hand.
-
-## License
-
-MIT. See [LICENSE](LICENSE).
