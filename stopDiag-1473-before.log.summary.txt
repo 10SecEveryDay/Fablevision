@@ -1,1 +1,0 @@
-﻿stopDiag|10  exit 0  73 s

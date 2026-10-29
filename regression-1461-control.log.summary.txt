@@ -1,6 +1,0 @@
-﻿mapTruthDiag|4 2800|-Pnowarm  exit 1  44 s
-mapTruthDiag|4 2800|-Pnowarm  exit 1  44 s
-mapTruthDiag|4 2800|-Pnowarm  exit 1  44 s
-mapTruthDiag|4 2800  exit 0  44 s
-mapTruthDiag|4 2800  exit 0  45 s
-mapTruthDiag|4 2800  exit 0  44 s
