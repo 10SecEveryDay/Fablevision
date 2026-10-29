@@ -36,3 +36,14 @@ Download `fablevision-1.47.3.jar` from the **Releases** page and put it in your 
 Use only one `fablevision-<version>.jar` at a time.
 
 ## Build
+
+Run `./gradlew build` (needs JDK 25). The jar is written to `build/libs/`.
+
+## Testing
+
+The project has headless diagnostics (`./gradlew <name>Diag`), each with a control that must be able to fail.
+Minecraft itself can't be launched in them, so changes are also play-tested by hand.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
